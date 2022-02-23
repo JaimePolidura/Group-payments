@@ -1,4 +1,4 @@
-package es.grouppayments.backend.roommembers._shared.domain;
+package es.grouppayments.backend.gruopsmembers._shared.domain;
 
 import es.jaime.javaddd.domain.Aggregate;
 import lombok.AllArgsConstructor;
@@ -8,15 +8,15 @@ import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
-public class RoomMember extends Aggregate {
+public class GroupMember extends Aggregate {
     @Getter private final UUID userId;
-    @Getter private final UUID roomId;
+    @Getter private final UUID groupId;
 
     @Override
     public Map<String, Object> toPrimitives() {
         return Map.of(
                 "userId", this.userId.toString(),
-                "roomId", this.roomId.toString()
+                "groupId", this.groupId.toString()
         );
     }
 }
