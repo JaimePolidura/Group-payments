@@ -1,4 +1,4 @@
-package es.grouppayments.backend.authentication;
+package es.grouppayments.backend.users;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
