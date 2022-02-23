@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -18,7 +16,7 @@ public class Room extends Aggregate {
     @Getter private final LocalDateTime createdDate;
     @Getter private final double money;
     @Getter private final RoomStatus status;
-    @Getter private final User admin;
+    @Getter private final UUID adminUserId;
 
     @Override
     public Map<String, Object> toPrimitives() {
@@ -27,8 +25,8 @@ public class Room extends Aggregate {
                 "title", title,
                 "createdDate", this.createdDate.toString(),
                 "money", money,
-                "status", status,
-                "admin", admin
+                "status", status.toString(),
+                "adminUserId", adminUserId.toString()
         );
     }
 }
