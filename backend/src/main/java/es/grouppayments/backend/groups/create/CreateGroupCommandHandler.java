@@ -1,6 +1,6 @@
 package es.grouppayments.backend.groups.create;
 
-import es.grouppayments.backend.gruopsmembers._shared.domain.GroupMemberService;
+import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
 import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
 import es.jaime.javaddd.domain.cqrs.command.CommandHandler;
@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @Service
-public class CreateRoomCommandHandler implements CommandHandler<CreateGroupCommand> {
+public class CreateGroupCommandHandler implements CommandHandler<CreateGroupCommand> {
     private final GroupService groupService;
     private final GroupMemberService groupMembersService;
 
@@ -21,6 +21,7 @@ public class CreateRoomCommandHandler implements CommandHandler<CreateGroupComma
         ensureNotAlreadyInGroupOrLeaveGroup(createGroupCommand.getUserId());
 
         this.groupService.create(
+                createGroupCommand.getGroupId(),
                 createGroupCommand.getTitle(),
                 createGroupCommand.getMoney(),
                 createGroupCommand.getUserId()
@@ -28,11 +29,11 @@ public class CreateRoomCommandHandler implements CommandHandler<CreateGroupComma
     }
 
     private void ensureNotAlreadyInGroupOrLeaveGroup(UUID userId){
-        deleteRoomIfIsAdmin(userId);
+        deleteGroupIfIsAdmin(userId);
         leaveGroupIfMember(userId);
     }
 
-    private void deleteRoomIfIsAdmin(UUID userId){
+    private void deleteGroupIfIsAdmin(UUID userId){
         Optional<Group> groupAdminOptional = this.groupService.findByUsernameHost(userId);
         boolean isAdminOfGroup = groupAdminOptional.isPresent();
 

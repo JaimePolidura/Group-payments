@@ -16,12 +16,10 @@ public class GroupService {
     private final GroupRepository groups;
     private final EventBus eventBus;
 
-    public void create(String title, double money, UUID adminUserId){
-        UUID gruopId = UUID.randomUUID();
+    public void create(UUID groupId, String title, double money, UUID adminUserId){
+        groups.save(new Group(groupId, title, LocalDateTime.now(), money, GroupStatus.CREATED, adminUserId));
 
-        groups.save(new Group(gruopId, title, LocalDateTime.now(), money, GroupStatus.CREATED, adminUserId));
-
-        this.eventBus.publish(new GroupCreated(gruopId));
+        this.eventBus.publish(new GroupCreated(groupId));
     }
 
     public Optional<Group> findById(UUID groupId){

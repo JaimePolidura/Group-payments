@@ -1,4 +1,4 @@
-package es.grouppayments.backend.gruopsmembers._shared.domain;
+package es.grouppayments.backend.groupmembers._shared.domain;
 
 import es.jaime.javaddd.domain.Aggregate;
 import lombok.AllArgsConstructor;

@@ -16,20 +16,20 @@ public final class GroupsRepositoryInMemory implements GroupRepository {
 
     @Override
     public void save(Group group) {
-        this.save(group);
+        this.groups.add(group);
     }
 
     @Override
     public Optional<Group> findById(UUID groupId) {
         return this.groups.stream()
-                .filter(group -> group.getGroupId().equals(group))
+                .filter(group -> group.getGroupId().equals(groupId))
                 .findFirst();
     }
 
     @Override
     public Optional<Group> findByUsernameHost(UUID userId) {
         return this.groups.stream()
-                .filter(group -> group.getGroupId().equals(group))
+                .filter(group -> group.getAdminUserId().equals(userId))
                 .findFirst();
     }
 

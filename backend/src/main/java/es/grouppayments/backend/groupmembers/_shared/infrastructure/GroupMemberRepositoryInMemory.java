@@ -1,17 +1,17 @@
-package es.grouppayments.backend.gruopsmembers._shared.infrastructure;
+package es.grouppayments.backend.groupmembers._shared.infrastructure;
 
-import es.grouppayments.backend.gruopsmembers._shared.domain.GroupMember;
-import es.grouppayments.backend.gruopsmembers._shared.domain.GroupMemberRepository;
+import es.grouppayments.backend.groupmembers._shared.domain.GroupMember;
+import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
-public class RoomMemberRepositoryInMemory implements GroupMemberRepository {
+public class GroupMemberRepositoryInMemory implements GroupMemberRepository {
     private final Set<GroupMember> roomMembers;
 
-    public RoomMemberRepositoryInMemory(){
+    public GroupMemberRepositoryInMemory(){
         this.roomMembers = new HashSet<>();
     }
 
@@ -38,5 +38,10 @@ public class RoomMemberRepositoryInMemory implements GroupMemberRepository {
     @Override
     public void deleteByUserId(UUID userId) {
         this.roomMembers.removeIf(roomMember -> roomMember.getUserId().equals(userId));
+    }
+
+    @Override
+    public void deleteByGroupId(UUID groupId) {
+        this.roomMembers.removeIf(groupMember -> groupMember.getGroupId().equals(groupId));
     }
 }
