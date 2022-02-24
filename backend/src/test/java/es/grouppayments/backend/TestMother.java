@@ -1,52 +1,32 @@
-package es.grouppayments.backend.gruops;
+package es.grouppayments.backend;
 
 import _shared.FakeEventBus;
 import _shared.TestEventBus;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMember;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberRepository;
-import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
 import es.grouppayments.backend.groupmembers._shared.infrastructure.GroupMemberRepositoryInMemory;
 import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups._shared.domain.GroupRepository;
-import es.grouppayments.backend.groups._shared.domain.GroupService;
 import es.grouppayments.backend.groups._shared.domain.GroupStatus;
 import es.grouppayments.backend.groups._shared.infrastructure.GroupsRepositoryInMemory;
-import es.grouppayments.backend.groups.create.CreateGroupCommand;
-import es.grouppayments.backend.groups.create.CreateGroupCommandHandler;
 import es.jaime.javaddd.domain.event.DomainEvent;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.Assert.assertTrue;
 
-public class CreateGroupTestMother {
+public class TestMother {
     protected GroupRepository groupRepository;
     protected TestEventBus testEventBus;
     protected GroupMemberRepository groupMemberRepository;
-    protected CreateGroupCommandHandler createGroupCommandHandler;
 
-    public CreateGroupTestMother(){
+    public TestMother(){
         this.groupRepository = new GroupsRepositoryInMemory();
         this.testEventBus = new FakeEventBus();
         this.groupMemberRepository = new GroupMemberRepositoryInMemory();
-
-        this.createGroupCommandHandler = new CreateGroupCommandHandler(
-                new GroupService(this.groupRepository, this.testEventBus),
-                new GroupMemberService(this.groupMemberRepository, this.testEventBus)
-        );
-    }
-
-    protected void executeCreateGroupCommandHandler(UUID idOfGroupToCreate){
-        this.createGroupCommandHandler.handle(
-                new CreateGroupCommand(idOfGroupToCreate, UUID.randomUUID(), 100, "group")
-        );
-    }
-
-    protected void executeCreateGroupCommandHandler(UUID idOfGroupToCreate, UUID userId){
-        this.createGroupCommandHandler.handle(
-                new CreateGroupCommand(idOfGroupToCreate, userId, 100, "group")
-        );
     }
 
     protected void addGroup(UUID groupId, UUID userId){
@@ -61,8 +41,14 @@ public class CreateGroupTestMother {
         assertTrue(this.groupRepository.findById(groupId).isPresent());
     }
 
-    protected void assertEventRaised(Class<? extends DomainEvent> event){
-        assertTrue(this.testEventBus.isRaised(event));
+    protected void assertMemberInGroup(UUID groupId, UUID userId){
+        Optional<UUID> groupMemberOptional = groupMemberRepository.findGroupIdByUserId(userId);
+
+        assertTrue(groupMemberOptional.isPresent() || groupMemberOptional.get().equals(groupId));
     }
 
+    @SafeVarargs
+    protected final void assertEventRaised(Class<? extends DomainEvent>... events){
+        Arrays.stream(events).forEach(event -> assertTrue(testEventBus.isRaised(event)));
+    }
 }

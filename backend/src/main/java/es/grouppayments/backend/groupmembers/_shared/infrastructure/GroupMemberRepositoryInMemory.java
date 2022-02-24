@@ -23,7 +23,7 @@ public class GroupMemberRepositoryInMemory implements GroupMemberRepository {
     @Override
     public List<GroupMember> findMembersByGroupId(UUID groupId) {
         return this.roomMembers.stream()
-                .filter(room -> room.getGroupId().equals(room))
+                .filter(room -> room.getGroupId().equals(groupId))
                 .collect(Collectors.toList());
     }
 

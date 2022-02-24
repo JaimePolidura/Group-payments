@@ -1,7 +1,7 @@
 package es.grouppayments.backend.groupmembers.ongroupdeleted;
 
-import es.grouppayments.backend.groups._shared.domain.events.GroupDeleted;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
+import es.grouppayments.backend.groups._shared.domain.events.GroupDeleted;
 import lombok.AllArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;

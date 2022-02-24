@@ -29,25 +29,7 @@ public class CreateGroupCommandHandler implements CommandHandler<CreateGroupComm
     }
 
     private void ensureNotAlreadyInGroupOrLeaveGroup(UUID userId){
-        deleteGroupIfIsAdmin(userId);
-        leaveGroupIfMember(userId);
-    }
-
-    private void deleteGroupIfIsAdmin(UUID userId){
-        Optional<Group> groupAdminOptional = this.groupService.findByUsernameHost(userId);
-        boolean isAdminOfGroup = groupAdminOptional.isPresent();
-
-        if(isAdminOfGroup){
-            this.groupService.deleteById(groupAdminOptional.get().getGroupId());
-        }
-    }
-
-    private void leaveGroupIfMember(UUID userId){
-         Optional<UUID> groupMemberOptional = groupMembersService.findGroupIdByUserId(userId);
-         boolean isMemberOfGroup = groupMemberOptional.isPresent();
-
-        if(isMemberOfGroup){
-            this.groupMembersService.deleteByUserId(userId);
-        }
+        groupService.deleteGroupIfIsAdmin(userId);
+        groupMembersService.leaveGroupIfMember(userId);
     }
 }

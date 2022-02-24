@@ -35,4 +35,13 @@ public class GroupService {
 
         this.eventBus.publish(new GroupDeleted(gropId));
     }
+
+    public void deleteGroupIfIsAdmin(UUID userId){
+        Optional<Group> groupAdminOptional = findByUsernameHost(userId);
+        boolean isAdminOfGroup = groupAdminOptional.isPresent();
+
+        if(isAdminOfGroup){
+            deleteById(groupAdminOptional.get().getGroupId());
+        }
+    }
 }

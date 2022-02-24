@@ -38,4 +38,13 @@ public class GroupMemberService {
     public void deleteByGroupId(UUID groupId) {
         this.groupMembers.deleteByGroupId(groupId);
     }
+
+    public void leaveGroupIfMember(UUID userId){
+        Optional<UUID> groupMemberOptional = findGroupIdByUserId(userId);
+        boolean isMemberOfGroup = groupMemberOptional.isPresent();
+
+        if(isMemberOfGroup){
+            deleteByUserId(userId);
+        }
+    }
 }

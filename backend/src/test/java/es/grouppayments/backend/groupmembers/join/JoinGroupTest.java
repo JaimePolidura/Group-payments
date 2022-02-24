@@ -1,37 +1,39 @@
-package es.grouppayments.backend.gruops.create;
+package es.grouppayments.backend.groupmembers.join;
 
 import es.grouppayments.backend.groupmembers._shared.domain.events.GroupMemberLeft;
-import es.grouppayments.backend.groupmembers.join.GroupMemberJoined;
 import es.grouppayments.backend.groups._shared.domain.events.GroupCreated;
 import es.grouppayments.backend.groups._shared.domain.events.GroupDeleted;
 import org.junit.Test;
 
 import java.util.UUID;
 
-
-public class CreateGroupTest extends CreateGroupTestMother {
+public class JoinGroupTest extends JoinGroupTestMother{
     @Test
-    public void shouldCreateGroup(){
+    public void shouldJoinMember(){
         UUID groupId = UUID.randomUUID();
-        executeCreateGroupCommandHandler(groupId);
+        UUID userId = UUID.randomUUID();
+        addGroup(groupId, UUID.randomUUID());
 
-        assertGroupCreated(groupId);
+        executeJoinGroupCommandHandler(groupId, userId);
+
+        assertMemberInGroup(groupId, userId);
         assertEventRaised(GroupMemberJoined.class);
     }
 
     @Test
-    public void shouldCreateGroupWhenMemberOfOtherGroup(){
+    public void shouldJoinGroupWhenMemberOfOtherGroup(){
         UUID groupIdToLeave = UUID.randomUUID();
-        UUID groupIdToCreate = UUID.randomUUID();
+        UUID groupIdToJoin = UUID.randomUUID();
         UUID userId = UUID.randomUUID();
 
         addGroup(groupIdToLeave, UUID.randomUUID());
+        addGroup(groupIdToJoin, UUID.randomUUID());
         addMember(groupIdToLeave, userId);
 
-        executeCreateGroupCommandHandler(groupIdToCreate, userId);
+        executeJoinGroupCommandHandler(groupIdToJoin, userId);
 
-        assertGroupCreated(groupIdToCreate);
-        assertEventRaised(GroupCreated.class, GroupMemberLeft.class);
+        assertMemberInGroup(groupIdToJoin, userId);
+        assertEventRaised(GroupMemberJoined.class, GroupMemberLeft.class);
     }
 
     @Test
@@ -42,7 +44,7 @@ public class CreateGroupTest extends CreateGroupTestMother {
 
         addGroup(groupIdToLeave, userId);
 
-        executeCreateGroupCommandHandler(groupIdToCreate, userId);
+        executeJoinGroupCommandHandler(groupIdToCreate, userId);
 
         assertGroupCreated(groupIdToCreate);
         assertEventRaised(GroupCreated.class, GroupDeleted.class);
