@@ -1,7 +1,6 @@
 package es.grouppayments.backend.groupmembers.join;
 
 import es.grouppayments.backend.groupmembers._shared.domain.events.GroupMemberLeft;
-import es.grouppayments.backend.groups._shared.domain.events.GroupCreated;
 import es.grouppayments.backend.groups._shared.domain.events.GroupDeleted;
 import org.junit.Test;
 
