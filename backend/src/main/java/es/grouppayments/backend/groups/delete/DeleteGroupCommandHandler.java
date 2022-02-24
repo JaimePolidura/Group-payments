@@ -3,6 +3,7 @@ package es.grouppayments.backend.groups.delete;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
 import es.jaime.javaddd.domain.cqrs.command.CommandHandler;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
+import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,15 +16,15 @@ public class DeleteGroupCommandHandler implements CommandHandler<DeleteGroupComm
 
     @Override
     public void handle(DeleteGroupCommand deleteGroupCommand) {
-        ensureAdminOfGroup(deleteGroupCommand.getGroupId(), deleteGroupCommand.getUserId());
+        ensureGroupExistsAndAdminOfGroup(deleteGroupCommand.getGroupId(), deleteGroupCommand.getUserId());
 
         this.groupService.deleteById(deleteGroupCommand.getGroupId());
     }
 
-    private void ensureAdminOfGroup(UUID groupId, UUID userId){
+    private void ensureGroupExistsAndAdminOfGroup(UUID groupId, UUID userId){
         boolean isAdmin = groupService.findByUsernameHost(userId)
-                .orElseThrow(() -> new NotTheOwner("Your are not the admin of the gruop"))
-                .getAdminUserId().equals(groupId);
+                .orElseThrow(() -> new NotTheOwner("Group not found"))
+                .getGroupId().equals(groupId);
 
         if(!isAdmin){
             throw new NotTheOwner("Your are not the admin of the gruop");

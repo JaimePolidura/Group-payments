@@ -47,6 +47,10 @@ public class TestMother {
         assertTrue(groupMemberOptional.isPresent() || groupMemberOptional.get().equals(groupId));
     }
 
+    protected void assertGroupDeleted(UUID groupId){
+        assertTrue(this.groupRepository.findById(groupId).isEmpty());
+    }
+
     @SafeVarargs
     protected final void assertEventRaised(Class<? extends DomainEvent>... events){
         Arrays.stream(events).forEach(event -> assertTrue(testEventBus.isRaised(event)));
