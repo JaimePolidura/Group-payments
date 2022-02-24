@@ -37,16 +37,17 @@ public class JoinGroupTest extends JoinGroupTestMother{
     }
 
     @Test
-    public void shouldCreateGroupWhenAdminOfOtherGroup(){
+    public void shouldJoinGroupWhenAdminOfOtherGroup(){
         UUID groupIdToLeave = UUID.randomUUID();
-        UUID groupIdToCreate = UUID.randomUUID();
+        UUID groupIdToJoin = UUID.randomUUID();
         UUID userId = UUID.randomUUID();
 
         addGroup(groupIdToLeave, userId);
+        addGroup(groupIdToJoin, UUID.randomUUID());
 
-        executeJoinGroupCommandHandler(groupIdToCreate, userId);
+        executeJoinGroupCommandHandler(groupIdToJoin, userId);
 
-        assertGroupCreated(groupIdToCreate);
-        assertEventRaised(GroupCreated.class, GroupDeleted.class);
+        assertGroupCreated(groupIdToJoin);
+        assertEventRaised(GroupMemberJoined.class, GroupDeleted.class);
     }
 }
