@@ -4,14 +4,17 @@ import es.grouppayments.backend.groupmembers._shared.domain.GroupMember;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
 import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
+import es.grouppayments.backend.payments.PaymentDone;
 import es.grouppayments.backend.payments.PaymentService;
 import es.jaime.javaddd.domain.cqrs.command.CommandHandler;
+import es.jaime.javaddd.domain.event.EventBus;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -19,23 +22,32 @@ public class MakePaymentCommandHandler implements CommandHandler<MakePaymentComm
     private final GroupService groupService;
     private final GroupMemberService groupMembers;
     private final PaymentService paymentService;
+    private final EventBus eventBus;
 
     @Override
     public void handle(MakePaymentCommand makePaymentCommand) {
         Group group = ensureGroupExistsAndGet(makePaymentCommand.getGruopId());
 
-        List<UUID> membersUsersId = groupMembers.findMembersByGroupId(makePaymentCommand.getGruopId()).stream()
-                .map(GroupMember::getUserId)
-                .toList();
-        double moneyToPayPerMember = group.getMoney() / membersUsersId.size();
+        List<GroupMember> groupMembers = this.groupMembers.findMembersByGroupId(makePaymentCommand.getGruopId());
+        double moneyToPayPerMember = group.getMoney() / groupMembers.size();
 
-        paymentService.makePayment(membersUsersId, moneyToPayPerMember);
+        for (GroupMember groupMember : groupMembers) {
+            this.paymentService.makePayment(groupMember.getUserId(), moneyToPayPerMember);
+        }
 
         groupService.deleteById(makePaymentCommand.getGruopId());
+
+        eventBus.publish(new PaymentDone(getUsersIdFromGroupMembers(groupMembers), moneyToPayPerMember));
     }
 
     private Group ensureGroupExistsAndGet(UUID uuid){
         return this.groupService.findById(uuid)
                 .orElseThrow(() -> new ResourceNotFound("Group not found"));
+    }
+
+    private List<UUID> getUsersIdFromGroupMembers(List<GroupMember> groupMembers){
+        return groupMembers.stream()
+                .map(GroupMember::getUserId)
+                .collect(Collectors.toList());
     }
 }
