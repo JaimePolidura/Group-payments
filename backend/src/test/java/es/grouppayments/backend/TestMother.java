@@ -16,7 +16,9 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Function;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class TestMother {
@@ -32,6 +34,14 @@ public class TestMother {
 
     protected void addGroup(UUID groupId, UUID userId){
         this.groupRepository.save(new Group(groupId, "as", LocalDateTime.now(), 1, GroupStatus.CREATED, userId));
+
+        addMember(groupId, userId, GroupMemberRole.ADMIN);
+    }
+
+    protected void addGroup(UUID groupId, UUID userId, double money){
+        this.groupRepository.save(new Group(groupId, "as", LocalDateTime.now(), money, GroupStatus.CREATED, userId));
+
+        addMember(groupId, userId, GroupMemberRole.ADMIN);
     }
 
     protected void addMember(UUID groupId, UUID userId){
@@ -59,5 +69,9 @@ public class TestMother {
     @SafeVarargs
     protected final void assertEventRaised(Class<? extends DomainEvent>... events){
         Arrays.stream(events).forEach(event -> assertTrue(testEventBus.isRaised(event)));
+    }
+
+    protected <T extends DomainEvent> void assertContentOfEventEquals(Class<T> event, Function<T, Object> dataAccessor, Object toEq){
+        assertEquals(dataAccessor.apply((T) testEventBus.getEvent(event)), toEq);
     }
 }
