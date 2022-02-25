@@ -4,6 +4,7 @@ import _shared.FakeEventBus;
 import _shared.TestEventBus;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMember;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberRepository;
+import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberRole;
 import es.grouppayments.backend.groupmembers._shared.infrastructure.GroupMemberRepositoryInMemory;
 import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups._shared.domain.GroupRepository;
@@ -34,7 +35,11 @@ public class TestMother {
     }
 
     protected void addMember(UUID groupId, UUID userId){
-        this.groupMemberRepository.save(new GroupMember(userId, groupId));
+        this.groupMemberRepository.save(new GroupMember(userId, groupId, GroupMemberRole.USER));
+    }
+
+    protected void addMember(UUID groupId, UUID userId, GroupMemberRole role){
+        this.groupMemberRepository.save(new GroupMember(userId, groupId, role));
     }
 
     protected void assertGroupCreated(UUID groupId){

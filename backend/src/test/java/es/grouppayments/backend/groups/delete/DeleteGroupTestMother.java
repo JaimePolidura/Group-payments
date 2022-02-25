@@ -1,9 +1,7 @@
-package es.grouppayments.backend.gruops.delete;
+package es.grouppayments.backend.groups.delete;
 
 import es.grouppayments.backend.TestMother;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
-import es.grouppayments.backend.groups.delete.DeleteGroupCommand;
-import es.grouppayments.backend.groups.delete.DeleteGroupCommandHandler;
 
 import java.util.UUID;
 

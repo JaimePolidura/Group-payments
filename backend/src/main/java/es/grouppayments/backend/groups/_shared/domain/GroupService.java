@@ -19,7 +19,7 @@ public class GroupService {
     public void create(UUID groupId, String title, double money, UUID adminUserId){
         groups.save(new Group(groupId, title, LocalDateTime.now(), money, GroupStatus.CREATED, adminUserId));
 
-        this.eventBus.publish(new GroupCreated(groupId));
+        this.eventBus.publish(new GroupCreated(groupId, adminUserId));
     }
 
     public Optional<Group> findById(UUID groupId){

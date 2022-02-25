@@ -1,10 +1,8 @@
-package es.grouppayments.backend.gruops.create;
+package es.grouppayments.backend.groups.create;
 
 import es.grouppayments.backend.TestMother;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
-import es.grouppayments.backend.groups.create.CreateGroupCommand;
-import es.grouppayments.backend.groups.create.CreateGroupCommandHandler;
 
 import java.util.UUID;
 

@@ -8,4 +8,5 @@ import java.util.UUID;
 @Data
 public class GroupCreated extends DomainEvent {
     private final UUID groupId;
+    private final UUID amdinUserId;
 }

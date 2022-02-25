@@ -1,4 +1,4 @@
-package es.grouppayments.backend.gruops.create;
+package es.grouppayments.backend.groups.create;
 
 import es.grouppayments.backend.groupmembers._shared.domain.events.GroupMemberLeft;
 import es.grouppayments.backend.groupmembers.join.GroupMemberJoined;
@@ -16,7 +16,7 @@ public class CreateGroupTest extends CreateGroupTestMother {
         executeCreateGroupCommandHandler(groupId);
 
         assertGroupCreated(groupId);
-        assertEventRaised(GroupMemberJoined.class);
+        assertEventRaised(GroupCreated.class);
     }
 
     @Test

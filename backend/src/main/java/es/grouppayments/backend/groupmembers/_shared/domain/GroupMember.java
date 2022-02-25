@@ -11,12 +11,14 @@ import java.util.UUID;
 public class GroupMember extends Aggregate {
     @Getter private final UUID userId;
     @Getter private final UUID groupId;
+    @Getter private final GroupMemberRole role;
 
     @Override
     public Map<String, Object> toPrimitives() {
         return Map.of(
                 "userId", this.userId.toString(),
-                "groupId", this.groupId.toString()
+                "groupId", this.groupId.toString(),
+                "role", this.role.toString()
         );
     }
 }

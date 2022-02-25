@@ -3,7 +3,6 @@ package es.grouppayments.backend.groups.delete;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
 import es.jaime.javaddd.domain.cqrs.command.CommandHandler;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

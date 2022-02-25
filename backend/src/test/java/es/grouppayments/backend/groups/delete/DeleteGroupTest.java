@@ -1,8 +1,7 @@
-package es.grouppayments.backend.gruops.delete;
+package es.grouppayments.backend.groups.delete;
 
 import es.grouppayments.backend.groups._shared.domain.events.GroupDeleted;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import org.junit.Test;
 
 import java.util.UUID;

@@ -1,6 +1,7 @@
 package es.grouppayments.backend.groupmembers.join;
 
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMember;
+import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberRole;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
 import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
@@ -27,8 +28,9 @@ public final class JoinGroupCommandHandler implements CommandHandler<JoinGroupCo
 
         this.groupMemberService.save(new GroupMember(
                 command.getUserId(),
-                command.getGroupId())
-        );
+                command.getGroupId(),
+                GroupMemberRole.USER
+        ));
 
         this.eventBus.publish(new GroupMemberJoined(command.getUserId(), command.getGroupId()));
     }
