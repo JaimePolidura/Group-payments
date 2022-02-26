@@ -1,8 +1,6 @@
 package es.grouppayments.backend.groupmembers.findmembersbygroupid;
 
-import es.grouppayments.backend.groups.findgroupbyuserid.FindGroupByUserQueryResponse;
 import es.grouppayments.backend.users._shared.domain.User;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;
