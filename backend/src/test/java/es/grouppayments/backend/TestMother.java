@@ -10,10 +10,14 @@ import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups._shared.domain.GroupRepository;
 import es.grouppayments.backend.groups._shared.domain.GroupStatus;
 import es.grouppayments.backend.groups._shared.infrastructure.GroupsRepositoryInMemory;
+import es.grouppayments.backend.users._shared.domain.User;
+import es.grouppayments.backend.users._shared.domain.UserRepository;
+import es.grouppayments.backend.users._shared.infrastructure.UserRepositoryInMemory;
 import es.jaime.javaddd.domain.event.DomainEvent;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
@@ -24,9 +28,11 @@ import static org.junit.Assert.assertTrue;
 public class TestMother {
     protected GroupRepository groupRepository;
     protected TestEventBus testEventBus;
+    protected UserRepository userRepository;
     protected GroupMemberRepository groupMemberRepository;
 
     public TestMother(){
+        this.userRepository = new UserRepositoryInMemory();
         this.groupRepository = new GroupsRepositoryInMemory();
         this.testEventBus = new FakeEventBus();
         this.groupMemberRepository = new GroupMemberRepositoryInMemory();
@@ -52,6 +58,14 @@ public class TestMother {
         this.groupMemberRepository.save(new GroupMember(userId, groupId, role));
     }
 
+    public void addUser(UUID userId){
+        this.userRepository.save(new User(userId, "sa", "jhksa", LocalDateTime.now()));
+    }
+
+    public void addUser(UUID... userId){
+        Arrays.stream(userId).forEach(this::addUser);
+    }
+
     protected void assertGroupCreated(UUID groupId){
         assertTrue(this.groupRepository.findById(groupId).isPresent());
     }
@@ -73,5 +87,9 @@ public class TestMother {
 
     protected <T extends DomainEvent> void assertContentOfEventEquals(Class<T> event, Function<T, Object> dataAccessor, Object toEq){
         assertEquals(dataAccessor.apply((T) testEventBus.getEvent(event)), toEq);
+    }
+
+    protected void assertEmptyCollection(Collection<?> collection){
+        assertTrue(collection.isEmpty());
     }
 }
