@@ -50,8 +50,10 @@ public class TestMother {
         addMember(groupId, userId, GroupMemberRole.ADMIN);
     }
 
-    protected void addMember(UUID groupId, UUID userId){
-        this.groupMemberRepository.save(new GroupMember(userId, groupId, GroupMemberRole.USER));
+    protected void addMember(UUID groupId, UUID... usersId){
+        Arrays.stream(usersId).forEach(userId -> {
+            this.groupMemberRepository.save(new GroupMember(userId, groupId, GroupMemberRole.USER));
+        });
     }
 
     protected void addMember(UUID groupId, UUID userId, GroupMemberRole role){
@@ -68,6 +70,12 @@ public class TestMother {
 
     protected void assertGroupCreated(UUID groupId){
         assertTrue(this.groupRepository.findById(groupId).isPresent());
+    }
+
+    protected void assertMemberDeleted(UUID... membersId){
+        Arrays.stream(membersId).forEach(memberId -> {
+            assertTrue(groupMemberRepository.findGroupIdByUserId(memberId).isEmpty());
+        });
     }
 
     protected void assertMemberInGroup(UUID groupId, UUID userId){
