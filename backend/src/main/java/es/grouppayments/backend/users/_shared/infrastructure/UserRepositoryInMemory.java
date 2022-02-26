@@ -5,7 +5,9 @@ import es.grouppayments.backend.users._shared.domain.UserRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 @Repository
 public final class UserRepositoryInMemory implements UserRepository {
@@ -18,6 +20,13 @@ public final class UserRepositoryInMemory implements UserRepository {
     @Override
     public void save(User user) {
         this.users.add(user);
+    }
+
+    @Override
+    public Optional<User> findByUserId(UUID id) {
+        return this.users.stream()
+                .filter(user -> user.getUserId().equals(id))
+                .findFirst();
     }
 
     @Override
