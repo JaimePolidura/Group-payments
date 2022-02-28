@@ -3,6 +3,7 @@ package es.grouppayments.backend.groups.makepayment;
 import es.grouppayments.backend.groups._shared.domain.events.GroupDeleted;
 import es.grouppayments.backend.payments.PaymentDone;
 import es.grouppayments.backend.payments.UnprocessablePayment;
+import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import org.junit.Test;
 
@@ -12,9 +13,9 @@ import java.util.UUID;
 public class MakePaymentTest extends MakePaymentMother{
     @Test
     public void shouldMakePayment(){
-        final int numberOfMembers = 3;
+        final int numberOfMembersNotAdmin = 2;
         final double moneyOfGroup = 60;
-        final double moneyPerMember = moneyOfGroup / numberOfMembers;
+        final double moneyPerMember = moneyOfGroup / numberOfMembersNotAdmin;
 
         UUID groupId = UUID.randomUUID();
         addGroup(groupId, UUID.randomUUID(), moneyOfGroup);
@@ -31,6 +32,14 @@ public class MakePaymentTest extends MakePaymentMother{
     @Test(expected = ResourceNotFound.class)
     public void shouldntMakePaymentGroupNotExists(){
         makePayment(UUID.randomUUID());
+    }
+
+    @Test(expected = IllegalQuantity.class)
+    public void shouldntMakePaymentGroupOnlyOneMember(){
+        UUID groupId = UUID.randomUUID();
+        addGroup(groupId, UUID.randomUUID(), 10);
+
+        makePayment(groupId);
     }
 
     @Test(expected = UnprocessablePayment.class)

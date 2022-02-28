@@ -17,7 +17,7 @@ public class FakePaymentService implements PaymentService{
     }
 
     @Override
-    public void makePayment(UUID memberUserId, double moneyPerMember) {
+    public void makePayment(UUID payerUserId, UUID paidUserId, double moneyPerMember) {
         if(fail){
             throw new UnprocessablePayment("Error");
         }

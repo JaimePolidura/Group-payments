@@ -9,12 +9,14 @@ import es.grouppayments.backend.payments.PaymentDone;
 import es.grouppayments.backend.payments.PaymentService;
 import es.jaime.javaddd.domain.cqrs.command.CommandHandler;
 import es.jaime.javaddd.domain.event.EventBus;
+import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,22 +30,32 @@ public class MakePaymentCommandHandler implements CommandHandler<MakePaymentComm
     @Override
     public void handle(MakePaymentCommand makePaymentCommand) {
         Group group = ensureGroupExistsAndGet(makePaymentCommand.getGruopId());
+        List<GroupMember> groupMembersNotAdmin = ensureAtLeastOneMemberExceptAdminAndGet(group);
+        double moneyToPayPerMember = group.getMoney() / groupMembersNotAdmin.size();
 
-        List<GroupMember> groupMembers = this.groupMembers.findMembersByGroupId(makePaymentCommand.getGruopId());
-        double moneyToPayPerMember = group.getMoney() / groupMembers.size();
-
-        for (GroupMember groupMember : groupMembers) {
-            this.paymentService.makePayment(groupMember.getUserId(), moneyToPayPerMember);
+        for (GroupMember groupMember : groupMembersNotAdmin) {
+            this.paymentService.makePayment(groupMember.getUserId(), group.getAdminUserId(), moneyToPayPerMember);
         }
 
         groupService.deleteById(makePaymentCommand.getGruopId());
 
         eventBus.publish(new PaymentDone(
-                getUsersIdFromGroupMembers(groupMembers),
+                getUsersIdFromGroupMembers(groupMembersNotAdmin),
                 group.getAdminUserId(),
                 group.getDescription(),
                 moneyToPayPerMember
         ));
+    }
+
+    private List<GroupMember> ensureAtLeastOneMemberExceptAdminAndGet(Group group){
+        List<GroupMember> members = groupMembers.findMembersByGroupId(group.getGroupId());
+
+        if(members.size() <= 1)
+            throw new IllegalQuantity("The group should have least one member");
+
+        return members.stream()
+                .filter(notAdmin())
+                .collect(Collectors.toList());
     }
 
     private Group ensureGroupExistsAndGet(UUID uuid){
@@ -51,9 +63,12 @@ public class MakePaymentCommandHandler implements CommandHandler<MakePaymentComm
                 .orElseThrow(() -> new ResourceNotFound("Group not found"));
     }
 
+    private Predicate<? super GroupMember> notAdmin(){
+        return groupMember -> groupMember.getRole().equals(GroupMemberRole.USER);
+    }
+
     private List<UUID> getUsersIdFromGroupMembers(List<GroupMember> groupMembers){
         return groupMembers.stream()
-                .filter(groupMember -> groupMember.getRole().equals(GroupMemberRole.USER))
                 .map(GroupMember::getUserId)
                 .collect(Collectors.toList());
     }
