@@ -14,7 +14,6 @@ public class Group extends Aggregate {
     @Getter private final String title;
     @Getter private final LocalDateTime createdDate;
     @Getter private final double money;
-    @Getter private final GroupStatus status;
     @Getter private final UUID adminUserId;
 
     @Override
@@ -24,7 +23,6 @@ public class Group extends Aggregate {
                 "title", title,
                 "createdDate", this.createdDate.toString(),
                 "money", money,
-                "status", status.toString(),
                 "adminUserId", adminUserId.toString()
         );
     }

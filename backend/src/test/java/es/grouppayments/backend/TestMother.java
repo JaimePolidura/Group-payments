@@ -8,7 +8,6 @@ import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberRole;
 import es.grouppayments.backend.groupmembers._shared.infrastructure.GroupMemberRepositoryInMemory;
 import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups._shared.domain.GroupRepository;
-import es.grouppayments.backend.groups._shared.domain.GroupStatus;
 import es.grouppayments.backend.groups._shared.infrastructure.GroupsRepositoryInMemory;
 import es.grouppayments.backend.users._shared.domain.User;
 import es.grouppayments.backend.users._shared.domain.UserRepository;
@@ -39,13 +38,13 @@ public class TestMother {
     }
 
     protected void addGroup(UUID groupId, UUID userId){
-        this.groupRepository.save(new Group(groupId, "as", LocalDateTime.now(), 1, GroupStatus.CREATED, userId));
+        this.groupRepository.save(new Group(groupId, "as", LocalDateTime.now(), 1, userId));
 
         addMember(groupId, userId, GroupMemberRole.ADMIN);
     }
 
     protected void addGroup(UUID groupId, UUID userId, double money){
-        this.groupRepository.save(new Group(groupId, "as", LocalDateTime.now(), money, GroupStatus.CREATED, userId));
+        this.groupRepository.save(new Group(groupId, "as", LocalDateTime.now(), money, userId));
 
         addMember(groupId, userId, GroupMemberRole.ADMIN);
     }

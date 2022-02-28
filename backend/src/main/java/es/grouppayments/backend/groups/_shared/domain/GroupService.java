@@ -17,7 +17,7 @@ public class GroupService {
     private final EventBus eventBus;
 
     public void create(UUID groupId, String title, double money, UUID adminUserId){
-        groups.save(new Group(groupId, title, LocalDateTime.now(), money, GroupStatus.CREATED, adminUserId));
+        groups.save(new Group(groupId, title, LocalDateTime.now(), money, adminUserId));
 
         this.eventBus.publish(new GroupCreated(groupId, adminUserId));
     }
