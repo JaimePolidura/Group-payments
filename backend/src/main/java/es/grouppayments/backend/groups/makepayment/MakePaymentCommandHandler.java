@@ -5,8 +5,8 @@ import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberRole;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
 import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
-import es.grouppayments.backend.payments.PaymentDone;
-import es.grouppayments.backend.payments.PaymentService;
+import es.grouppayments.backend.payments._shared.domain.PaymentDone;
+import es.grouppayments.backend.payments._shared.domain.PaymentMakerService;
 import es.jaime.javaddd.domain.cqrs.command.CommandHandler;
 import es.jaime.javaddd.domain.event.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class MakePaymentCommandHandler implements CommandHandler<MakePaymentCommand> {
     private final GroupService groupService;
     private final GroupMemberService groupMembers;
-    private final PaymentService paymentService;
+    private final PaymentMakerService paymentService;
     private final EventBus eventBus;
 
     @Override

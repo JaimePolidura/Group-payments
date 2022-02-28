@@ -1,11 +1,13 @@
-package es.grouppayments.backend.payments;
+package es.grouppayments.backend.payments._shared.infrastructure;
 
+import es.grouppayments.backend.payments._shared.domain.PaymentMakerService;
+import es.grouppayments.backend.payments._shared.domain.UnprocessablePayment;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 @Service
-public class FakePaymentService implements PaymentService{
+public class FakePaymentMakerService implements PaymentMakerService {
     private boolean fail;
 
     public void willFail(){

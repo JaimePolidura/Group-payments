@@ -1,19 +1,18 @@
 package es.grouppayments.backend.groups.makepayment;
 
-import com.sun.security.auth.UnixNumericUserPrincipal;
 import es.grouppayments.backend.TestMother;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
-import es.grouppayments.backend.payments.FakePaymentService;
+import es.grouppayments.backend.payments._shared.infrastructure.FakePaymentMakerService;
 
 import java.util.UUID;
 
 public class MakePaymentMother extends TestMother {
     private final MakePaymentCommandHandler makePaymentCommandHandler;
-    private final FakePaymentService fakePaymentService;
+    private final FakePaymentMakerService fakePaymentService;
 
     public MakePaymentMother() {
-        this.fakePaymentService = new FakePaymentService();
+        this.fakePaymentService = new FakePaymentMakerService();
 
         this.makePaymentCommandHandler = new MakePaymentCommandHandler(
                 new GroupService(groupRepository, testEventBus),

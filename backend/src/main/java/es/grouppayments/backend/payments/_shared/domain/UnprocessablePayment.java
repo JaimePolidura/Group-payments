@@ -1,4 +1,4 @@
-package es.grouppayments.backend.payments;
+package es.grouppayments.backend.payments._shared.domain;
 
 import es.jaime.javaddd.domain.exceptions.DomainException;
 

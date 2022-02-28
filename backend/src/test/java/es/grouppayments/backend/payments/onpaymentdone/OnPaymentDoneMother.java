@@ -1,15 +1,15 @@
-package es.grouppayments.backend.paymenttransaction.onpaymentdone;
+package es.grouppayments.backend.payments.onpaymentdone;
 
 import es.grouppayments.backend.TestMother;
-import es.grouppayments.backend.payments.PaymentDone;
-import es.grouppayments.backend.paymenttransaction._shared.domain.PaymentTransactionsService;
+import es.grouppayments.backend.payments._shared.domain.PaymentDone;
+import es.grouppayments.backend.payments._shared.domain.PaymentHistoricalService;
 
 public class OnPaymentDoneMother extends TestMother {
     private final OnPaymentDone onPaymentDone;
 
     public OnPaymentDoneMother(){
         this.onPaymentDone = new OnPaymentDone(
-                new PaymentTransactionsService(super.paymentTransactionRepository)
+                new PaymentHistoricalService(super.paymentTransactionRepository)
         );
     }
 

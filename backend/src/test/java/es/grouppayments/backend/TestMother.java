@@ -9,8 +9,8 @@ import es.grouppayments.backend.groupmembers._shared.infrastructure.GroupMemberR
 import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups._shared.domain.GroupRepository;
 import es.grouppayments.backend.groups._shared.infrastructure.GroupsRepositoryInMemory;
-import es.grouppayments.backend.paymenttransaction._shared.domain.PaymentTransactionRepository;
-import es.grouppayments.backend.paymenttransaction._shared.infrastructure.PaymentTransactionRepositoryInMemory;
+import es.grouppayments.backend.payments._shared.domain.PaymentRepository;
+import es.grouppayments.backend.payments._shared.infrastructure.PaymentRepositoryInMemory;
 import es.grouppayments.backend.users._shared.domain.User;
 import es.grouppayments.backend.users._shared.domain.UserRepository;
 import es.grouppayments.backend.users._shared.infrastructure.UserRepositoryInMemory;
@@ -29,14 +29,14 @@ public class TestMother {
     protected TestEventBus testEventBus;
     protected UserRepository userRepository;
     protected GroupMemberRepository groupMemberRepository;
-    protected PaymentTransactionRepository paymentTransactionRepository;
+    protected PaymentRepository paymentTransactionRepository;
 
     public TestMother(){
         this.userRepository = new UserRepositoryInMemory();
         this.groupRepository = new GroupsRepositoryInMemory();
         this.testEventBus = new FakeEventBus();
         this.groupMemberRepository = new GroupMemberRepositoryInMemory();
-        this.paymentTransactionRepository = new PaymentTransactionRepositoryInMemory();
+        this.paymentTransactionRepository = new PaymentRepositoryInMemory();
     }
 
     protected void addGroup(UUID groupId, UUID userId){

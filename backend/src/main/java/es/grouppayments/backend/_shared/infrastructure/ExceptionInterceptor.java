@@ -1,7 +1,7 @@
 package es.grouppayments.backend._shared.infrastructure;
 
 import com.google.common.collect.ImmutableMap;
-import es.grouppayments.backend.payments.UnprocessablePayment;
+import es.grouppayments.backend.payments._shared.domain.UnprocessablePayment;
 import es.jaime.javaddd.domain.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
-package es.grouppayments.backend.paymenttransaction.onpaymentdone;
+package es.grouppayments.backend.payments.onpaymentdone;
 
-import es.grouppayments.backend.payments.PaymentDone;
-import es.grouppayments.backend.paymenttransaction._shared.domain.PaymentTransactionsService;
+import es.grouppayments.backend.payments._shared.domain.PaymentDone;
+import es.grouppayments.backend.payments._shared.domain.PaymentHistoricalService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class OnPaymentDone {
-    private final PaymentTransactionsService paymentTransactions;
+    private final PaymentHistoricalService paymentTransactions;
     
     @EventListener({PaymentDone.class})
     public void on(PaymentDone event){

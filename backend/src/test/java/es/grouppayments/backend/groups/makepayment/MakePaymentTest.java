@@ -1,8 +1,8 @@
 package es.grouppayments.backend.groups.makepayment;
 
 import es.grouppayments.backend.groups._shared.domain.events.GroupDeleted;
-import es.grouppayments.backend.payments.PaymentDone;
-import es.grouppayments.backend.payments.UnprocessablePayment;
+import es.grouppayments.backend.payments._shared.domain.PaymentDone;
+import es.grouppayments.backend.payments._shared.domain.UnprocessablePayment;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import org.junit.Test;

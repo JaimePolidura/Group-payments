@@ -1,7 +1,7 @@
-package es.grouppayments.backend.paymenttransaction.onpaymentdone;
+package es.grouppayments.backend.payments.onpaymentdone;
 
-import es.grouppayments.backend.payments.PaymentDone;
-import es.grouppayments.backend.paymenttransaction._shared.domain.PaymentTransaction;
+import es.grouppayments.backend.payments._shared.domain.PaymentDone;
+import es.grouppayments.backend.payments._shared.domain.Payment;
 import org.junit.Test;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public class OnPaymentDoneTest extends OnPaymentDoneMother {
         execute(new PaymentDone(List.of(user1, user2), userAdmin, "payment", 10));
 
         //It will get all transactions
-        List<PaymentTransaction> transactions = paymentTransactionRepository.findByUserIdPaid(userAdmin);
+        List<Payment> transactions = paymentTransactionRepository.findByUserIdPaid(userAdmin);
 
         assertCollectionSize(transactions, 2);
         assertContentListMatches(transactions, transaction -> transaction.getDescription().equalsIgnoreCase("payment"));
