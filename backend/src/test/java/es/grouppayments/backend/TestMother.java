@@ -9,17 +9,17 @@ import es.grouppayments.backend.groupmembers._shared.infrastructure.GroupMemberR
 import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups._shared.domain.GroupRepository;
 import es.grouppayments.backend.groups._shared.infrastructure.GroupsRepositoryInMemory;
+import es.grouppayments.backend.paymenttransaction._shared.domain.PaymentTransactionRepository;
+import es.grouppayments.backend.paymenttransaction._shared.infrastructure.PaymentTransactionRepositoryInMemory;
 import es.grouppayments.backend.users._shared.domain.User;
 import es.grouppayments.backend.users._shared.domain.UserRepository;
 import es.grouppayments.backend.users._shared.infrastructure.UserRepositoryInMemory;
 import es.jaime.javaddd.domain.event.DomainEvent;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -29,12 +29,14 @@ public class TestMother {
     protected TestEventBus testEventBus;
     protected UserRepository userRepository;
     protected GroupMemberRepository groupMemberRepository;
+    protected PaymentTransactionRepository paymentTransactionRepository;
 
     public TestMother(){
         this.userRepository = new UserRepositoryInMemory();
         this.groupRepository = new GroupsRepositoryInMemory();
         this.testEventBus = new FakeEventBus();
         this.groupMemberRepository = new GroupMemberRepositoryInMemory();
+        this.paymentTransactionRepository = new PaymentTransactionRepositoryInMemory();
     }
 
     protected void addGroup(UUID groupId, UUID userId){
@@ -98,5 +100,13 @@ public class TestMother {
 
     protected void assertEmptyCollection(Collection<?> collection){
         assertTrue(collection.isEmpty());
+    }
+
+    protected <T> void assertContentListMatches(List<T> list, Predicate<T> matcher){
+        assertTrue(list.stream().allMatch(matcher));
+    }
+
+    protected void assertCollectionSize(Collection<?> collection, int size){
+        assertEquals(collection.size(), size);
     }
 }
