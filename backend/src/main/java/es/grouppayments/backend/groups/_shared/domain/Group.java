@@ -11,7 +11,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class Group extends Aggregate {
     @Getter private final UUID groupId;
-    @Getter private final String title;
+    @Getter private final String description;
     @Getter private final LocalDateTime createdDate;
     @Getter private final double money;
     @Getter private final UUID adminUserId;
@@ -20,7 +20,7 @@ public class Group extends Aggregate {
     public Map<String, Object> toPrimitives() {
         return Map.of(
                 "groupId", groupId.toString(),
-                "title", title,
+                "description", description,
                 "createdDate", this.createdDate.toString(),
                 "money", money,
                 "adminUserId", adminUserId.toString()

@@ -1,6 +1,7 @@
 package es.grouppayments.backend.groups.makepayment;
 
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMember;
+import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberRole;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
 import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
@@ -37,7 +38,12 @@ public class MakePaymentCommandHandler implements CommandHandler<MakePaymentComm
 
         groupService.deleteById(makePaymentCommand.getGruopId());
 
-        eventBus.publish(new PaymentDone(getUsersIdFromGroupMembers(groupMembers), moneyToPayPerMember));
+        eventBus.publish(new PaymentDone(
+                getUsersIdFromGroupMembers(groupMembers),
+                group.getAdminUserId(),
+                group.getDescription(),
+                moneyToPayPerMember
+        ));
     }
 
     private Group ensureGroupExistsAndGet(UUID uuid){
@@ -47,6 +53,7 @@ public class MakePaymentCommandHandler implements CommandHandler<MakePaymentComm
 
     private List<UUID> getUsersIdFromGroupMembers(List<GroupMember> groupMembers){
         return groupMembers.stream()
+                .filter(groupMember -> groupMember.getRole().equals(GroupMemberRole.USER))
                 .map(GroupMember::getUserId)
                 .collect(Collectors.toList());
     }

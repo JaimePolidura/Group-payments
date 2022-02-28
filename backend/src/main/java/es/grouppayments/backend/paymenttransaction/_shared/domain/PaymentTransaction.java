@@ -15,7 +15,7 @@ public class PaymentTransaction extends Aggregate {
     @Getter private final UUID userIdPayer;
     @Getter private final double money;
     @Getter private final LocalDateTime payDate;
-    @Getter private final String paymentReference;
+    @Getter private final String description;
 
     @Override
     public Map<String, Object> toPrimitives() {
@@ -25,7 +25,7 @@ public class PaymentTransaction extends Aggregate {
                 "userIdPayer", userIdPayer.toString(),
                 "money", money,
                 "payDate", payDate.toString(),
-                "paymentReference", paymentReference
+                "description", description
         );
     }
 }

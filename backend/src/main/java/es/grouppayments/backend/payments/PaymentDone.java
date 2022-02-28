@@ -9,6 +9,8 @@ import java.util.UUID;
 
 @AllArgsConstructor
 public class PaymentDone extends DomainEvent {
-    @Getter private final List<UUID> usersId;
+    @Getter private final List<UUID> membersUsersId;
+    @Getter private final UUID adminUserId;
+    @Getter private final String description;
     @Getter private final double moneyPaidPerUser;
 }
