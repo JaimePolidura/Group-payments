@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import java.util.UUID;
 
-public class OnGroupCreaedTest extends OnGroupCreaedMother{
+public class OnGroupCreatedTest extends OnGroupCreatedMother {
     @Test
     public void shouldAddMemberAdmin(){
         UUID groupId = UUID.randomUUID();

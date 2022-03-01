@@ -1,6 +1,5 @@
 package _shared;
 
-import es.jaime.javaddd.domain.cqrs.command.CommandBus;
 import es.jaime.javaddd.domain.event.DomainEvent;
 
 import java.util.HashMap;

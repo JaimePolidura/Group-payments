@@ -15,9 +15,8 @@ public class FindMembersByGroupIdTest extends FindMembersByGroupIdMother {
         UUID user2 = UUID.randomUUID();
         UUID groupId = UUID.randomUUID();
 
+        addGroup(groupId, user1, 10, user2);
         addUser(user1, user2);
-        addGroup(groupId, user1);
-        addMember(groupId, user2);
 
         List<User> usersResponse = executeQuery(groupId)
                 .getUsers();

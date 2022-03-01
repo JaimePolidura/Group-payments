@@ -1,14 +1,15 @@
 package es.grouppayments.backend.groupmembers.ongruopcreated;
 
-import es.grouppayments.backend.TestMother;
+import _shared.TestMother;
+import es.grouppayments.backend.groupmembers.GroupMembersTestMother;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
 import es.grouppayments.backend.groupmembers.ongroupcreated.OnGroupCreated;
 import es.grouppayments.backend.groups._shared.domain.events.GroupCreated;
 
-public class OnGroupCreaedMother extends TestMother {
+public class OnGroupCreatedMother extends GroupMembersTestMother {
     private final OnGroupCreated eventListener;
 
-    public OnGroupCreaedMother (){
+    public OnGroupCreatedMother(){
         this.eventListener = new OnGroupCreated(
                 new GroupMemberService(groupMemberRepository, testEventBus)
         );

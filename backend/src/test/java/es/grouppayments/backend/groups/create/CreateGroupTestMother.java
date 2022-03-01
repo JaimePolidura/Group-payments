@@ -1,21 +1,18 @@
 package es.grouppayments.backend.groups.create;
 
-import es.grouppayments.backend.TestMother;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
+import es.grouppayments.backend.groups.GroupTestMother;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
 
 import java.util.UUID;
 
-
-public class CreateGroupTestMother extends TestMother {
+public class CreateGroupTestMother extends GroupTestMother {
     protected CreateGroupCommandHandler createGroupCommandHandler;
 
     public CreateGroupTestMother(){
-        super();
-
         this.createGroupCommandHandler = new CreateGroupCommandHandler(
-                new GroupService(super.groupRepository, this.testEventBus),
-                new GroupMemberService(super.groupMemberRepository, this.testEventBus)
+                new GroupService(groupRepository(), this.testEventBus),
+                new GroupMemberService(groupMemberRepository(), this.testEventBus)
         );
     }
 

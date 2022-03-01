@@ -9,23 +9,22 @@ import java.util.UUID;
 public class DeleteGroupTest extends DeleteGroupTestMother{
     @Test
     public void shouldDeleteGroup(){
-        UUID gruopId = UUID.randomUUID();
+        UUID groupId = UUID.randomUUID();
         UUID userId = UUID.randomUUID();
 
-        addGroup(gruopId, userId);
-        executeDeleteGroup(gruopId, userId);
+        addGroup(groupId, userId);
+        executeDeleteGroup(groupId, userId);
 
-        assertGroupDeleted(gruopId);
+        assertGroupDeleted(groupId);
         assertEventRaised(GroupDeleted.class);
     }
 
     @Test(expected = NotTheOwner.class)
     public void shouldntDeleteGroupWhenNotTheAdmin(){
-        UUID gruopId = UUID.randomUUID();
+        UUID groupId = UUID.randomUUID();
+        addGroup(groupId, UUID.randomUUID());
 
-        addGroup(gruopId, UUID.randomUUID());
-
-        executeDeleteGroup(gruopId, UUID.randomUUID());
+        executeDeleteGroup(groupId, UUID.randomUUID());
     }
 
     @Test(expected = NotTheOwner.class)

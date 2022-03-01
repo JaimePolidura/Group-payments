@@ -5,9 +5,9 @@ import es.grouppayments.backend.groupmembers.join.GroupMemberJoined;
 import es.grouppayments.backend.groups._shared.domain.events.GroupCreated;
 import es.grouppayments.backend.groups._shared.domain.events.GroupDeleted;
 import org.junit.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.UUID;
-
 
 public class CreateGroupTest extends CreateGroupTestMother {
     @Test
@@ -25,8 +25,7 @@ public class CreateGroupTest extends CreateGroupTestMother {
         UUID groupIdToCreate = UUID.randomUUID();
         UUID userId = UUID.randomUUID();
 
-        addGroup(groupIdToLeave, UUID.randomUUID());
-        addMember(groupIdToLeave, userId);
+        addGroup(groupIdToLeave, UUID.randomUUID(), 1, userId);
 
         executeCreateGroupCommandHandler(groupIdToCreate, userId);
 

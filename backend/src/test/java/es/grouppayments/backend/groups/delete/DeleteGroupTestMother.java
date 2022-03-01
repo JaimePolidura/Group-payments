@@ -1,16 +1,16 @@
 package es.grouppayments.backend.groups.delete;
 
-import es.grouppayments.backend.TestMother;
+import es.grouppayments.backend.groups.GroupTestMother;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
 
 import java.util.UUID;
 
-public class DeleteGroupTestMother extends TestMother {
+public class DeleteGroupTestMother extends GroupTestMother {
     private final DeleteGroupCommandHandler deleteGroupCommandHandler;
 
     public DeleteGroupTestMother(){
         this.deleteGroupCommandHandler = new DeleteGroupCommandHandler(
-                new GroupService(super.groupRepository, super.testEventBus)
+                new GroupService(groupRepository(), super.testEventBus)
         );
     }
 

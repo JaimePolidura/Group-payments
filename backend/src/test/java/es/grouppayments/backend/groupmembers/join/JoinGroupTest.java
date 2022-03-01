@@ -25,9 +25,8 @@ public class JoinGroupTest extends JoinGroupTestMother{
         UUID groupIdToJoin = UUID.randomUUID();
         UUID userId = UUID.randomUUID();
 
-        addGroup(groupIdToLeave, UUID.randomUUID());
+        addGroup(groupIdToLeave, UUID.randomUUID(), 10, userId);
         addGroup(groupIdToJoin, UUID.randomUUID());
-        addMember(groupIdToLeave, userId);
 
         executeJoinGroupCommandHandler(groupIdToJoin, userId);
 

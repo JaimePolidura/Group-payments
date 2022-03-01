@@ -16,11 +16,8 @@ public class MakePaymentTest extends MakePaymentMother{
         final int numberOfMembersNotAdmin = 2;
         final double moneyOfGroup = 60;
         final double moneyPerMember = moneyOfGroup / numberOfMembersNotAdmin;
-
         UUID groupId = UUID.randomUUID();
-        addGroup(groupId, UUID.randomUUID(), moneyOfGroup);
-        addMember(groupId, UUID.randomUUID());
-        addMember(groupId, UUID.randomUUID());
+        addGroup(groupId, UUID.randomUUID(), moneyOfGroup, UUID.randomUUID(), UUID.randomUUID());
 
         makePayment(groupId);
 
@@ -43,7 +40,7 @@ public class MakePaymentTest extends MakePaymentMother{
     }
 
     @Test(expected = UnprocessablePayment.class)
-    public void shountMakePaymentUnprocessable(){
+    public void shouldntMakePaymentUnprocessable(){
         UUID groupId = UUID.randomUUID();
         addGroup(groupId, UUID.randomUUID(), 10);
         addMember(groupId, UUID.randomUUID());

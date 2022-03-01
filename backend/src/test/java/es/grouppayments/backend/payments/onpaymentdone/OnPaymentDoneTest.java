@@ -18,12 +18,12 @@ public class OnPaymentDoneTest extends OnPaymentDoneMother {
         execute(new PaymentDone(List.of(user1, user2), userAdmin, "payment", 10));
 
         //It will get all transactions
-        List<Payment> transactions = paymentTransactionRepository.findByUserIdPaid(userAdmin);
+        List<Payment> transactions = paymentRepository().findByUserIdPaid(userAdmin);
 
         assertCollectionSize(transactions, 2);
         assertContentListMatches(transactions, transaction -> transaction.getDescription().equalsIgnoreCase("payment"));
         assertContentListMatches(transactions, transaction -> transaction.getMoney() == 10);
 
-        assertEmptyCollection(paymentTransactionRepository.findByUserIdPaid(user1));
+        assertEmptyCollection(paymentRepository().findByUserIdPaid(user1));
     }
 }

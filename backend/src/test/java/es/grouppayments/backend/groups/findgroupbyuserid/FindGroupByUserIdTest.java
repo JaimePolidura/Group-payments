@@ -1,6 +1,5 @@
 package es.grouppayments.backend.groups.findgroupbyuserid;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.UUID;
@@ -11,13 +10,12 @@ public class FindGroupByUserIdTest extends FindGroupByUserIdMother{
     @Test
     public void shouldFind(){
         UUID userId = UUID.randomUUID();
-        UUID gruopId = UUID.randomUUID();
-        addGroup(gruopId, userId);
-        addGroup(UUID.randomUUID(), UUID.randomUUID());
+        UUID groupId = UUID.randomUUID();
+        addGroup(groupId, userId);
 
         FindGroupByUserQueryResponse response = executeQuery(userId);
 
-        assertEquals(gruopId, response.getGroup().getGroupId());
+        assertEquals(groupId, response.getGroup().getGroupId());
     }
 
     @Test

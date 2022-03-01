@@ -1,12 +1,13 @@
 package es.grouppayments.backend.groupmembers.join;
 
-import es.grouppayments.backend.TestMother;
+import _shared.TestMother;
+import es.grouppayments.backend.groupmembers.GroupMembersTestMother;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
 
 import java.util.UUID;
 
-public class JoinGroupTestMother extends TestMother {
+public class JoinGroupTestMother extends GroupMembersTestMother {
     protected JoinGroupCommandHandler joinGroupCommandHandler;
 
     public JoinGroupTestMother(){
