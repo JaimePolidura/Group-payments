@@ -10,7 +10,7 @@ import static org.junit.Assert.assertTrue;
 
 public interface UsingTestEventBus {
     TestEventBus testEventBus();
-
+    
     default void assertEventRaised(Class<? extends DomainEvent>... events){
         Arrays.stream(events).forEach(event -> assertTrue(testEventBus().isRaised(event)));
     }

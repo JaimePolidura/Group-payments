@@ -1,5 +1,6 @@
 package es.grouppayments.backend.groups.makepayment;
 
+import es.grouppayments.backend._shared.domain.Utils;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMember;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberRole;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
@@ -7,6 +8,7 @@ import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
 import es.grouppayments.backend.payments._shared.domain.PaymentDone;
 import es.grouppayments.backend.payments._shared.domain.PaymentMakerService;
+import es.grouppayments.backend.payments._shared.domain.UnprocessablePayment;
 import es.jaime.javaddd.domain.cqrs.command.CommandHandler;
 import es.jaime.javaddd.domain.event.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
@@ -33,6 +35,8 @@ public class MakePaymentCommandHandler implements CommandHandler<MakePaymentComm
         List<GroupMember> groupMembersNotAdmin = ensureAtLeastOneMemberExceptAdminAndGet(group);
         double moneyToPayPerMember = group.getMoney() / groupMembersNotAdmin.size();
 
+        ensureAllHaveEnoughBalance(groupMembersNotAdmin, moneyToPayPerMember);
+
         for (GroupMember groupMember : groupMembersNotAdmin) {
             this.paymentService.makePayment(groupMember.getUserId(), group.getAdminUserId(), moneyToPayPerMember);
         }
@@ -45,6 +49,12 @@ public class MakePaymentCommandHandler implements CommandHandler<MakePaymentComm
                 group.getDescription(),
                 moneyToPayPerMember
         ));
+    }
+
+    private void ensureAllHaveEnoughBalance(List<GroupMember> payerMembers, double money){
+        Utils.allMatchOrThrow(payerMembers,
+                member -> paymentService.enoughBalance(member.getUserId(), money),
+                UnprocessablePayment.of("Not enough balance"));
     }
 
     private List<GroupMember> ensureAtLeastOneMemberExceptAdminAndGet(Group group){

@@ -14,14 +14,16 @@ public class FakePaymentMakerService implements PaymentMakerService {
         this.fail = true;
     }
 
-    public void wontFail(){
-        this.fail = false;
+    @Override
+    public void makePayment(UUID payerUserId, UUID paidUserId, double moneyPerMember) {
     }
 
     @Override
-    public void makePayment(UUID payerUserId, UUID paidUserId, double moneyPerMember) {
+    public boolean enoughBalance(UUID payerUserId, double money) {
         if(fail){
             throw new UnprocessablePayment("Error");
         }
+
+        return true;
     }
 }
