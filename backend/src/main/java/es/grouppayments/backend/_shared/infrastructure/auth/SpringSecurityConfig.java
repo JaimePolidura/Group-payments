@@ -1,4 +1,4 @@
-package es.grouppayments.backend._shared.infrastructure;
+package es.grouppayments.backend._shared.infrastructure.auth;
 
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;

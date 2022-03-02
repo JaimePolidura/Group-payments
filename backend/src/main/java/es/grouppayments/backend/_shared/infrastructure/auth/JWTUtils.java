@@ -1,4 +1,4 @@
-package es.grouppayments.backend._shared.infrastructure;
+package es.grouppayments.backend._shared.infrastructure.auth;
 
 
 import io.jsonwebtoken.Claims;

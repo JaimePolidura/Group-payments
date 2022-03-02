@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import {GoogleLoginProvider, SocialAuthService, SocialUser} from "angularx-social-login";
 import {HttpClient} from "@angular/common/http";
-import {LoginResponse} from "../models/login-response";
+import {LoginResponse} from "./responses/login-response";
+import {LoginRequest} from "./request/login-request";
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,7 @@ export class Authentication {
   async signInWithGoogle(onSuccess: (() => void)) {
     try{
       const dataFromOAuthProvider = await this.oauthProvider.signIn(GoogleLoginProvider.PROVIDER_ID);
-      const responseFromBackend = await this.verifyTokenAndGetJWT(dataFromOAuthProvider.idToken, dataFromOAuthProvider.name);
+      const responseFromBackend = await this.verifyTokenAndGetJWT({username: dataFromOAuthProvider.name, token: dataFromOAuthProvider.idToken});
 
       this.logged = true;
       this.loggedUser = dataFromOAuthProvider;
@@ -34,8 +35,8 @@ export class Authentication {
     }
   }
 
-  async verifyTokenAndGetJWT(tokenFromOauthProvider: string, name: string): Promise<any |  LoginResponse>{
-    return this.http.post<LoginResponse>('http://localhost:8080/oauth/google', {token: tokenFromOauthProvider, username: name})
+  async verifyTokenAndGetJWT(loginRequest: LoginRequest): Promise<any | LoginResponse>{
+    return this.http.post<LoginResponse>('http://localhost:8080/oauth/google', loginRequest)
       .toPromise();
   }
 
@@ -68,6 +69,10 @@ export class Authentication {
 
   getPhotoURL(): string{
     return this.loggedUser.photoUrl;
+  }
+
+  getToken(): string{
+    return this.token;
   }
 
 }

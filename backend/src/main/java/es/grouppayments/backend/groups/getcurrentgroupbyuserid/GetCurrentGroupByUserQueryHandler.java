@@ -1,4 +1,4 @@
-package es.grouppayments.backend.groups.findgroupbyuserid;
+package es.grouppayments.backend.groups.getcurrentgroupbyuserid;
 
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
@@ -11,16 +11,16 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class FindGroupByUserQueryHandler implements QueryHandler<FindGroupByUserQuery, FindGroupByUserQueryResponse> {
+public class GetCurrentGroupByUserQueryHandler implements QueryHandler<GetCurrentGroupByUserQuery, GetCurrentGroupByUserQueryResponse> {
     private final GroupMemberService groupMemberService;
     private final GroupService groupService;
 
     @Override
-    public FindGroupByUserQueryResponse handle(FindGroupByUserQuery findByUserQuery) {
+    public GetCurrentGroupByUserQueryResponse handle(GetCurrentGroupByUserQuery findByUserQuery) {
         Optional<UUID> optionalGorupId = groupMemberService.findGroupIdByUserId(findByUserQuery.getUserId());
 
         return optionalGorupId
-                .map(uuid -> new FindGroupByUserQueryResponse(groupService.findById(uuid).get()))
-                .orElseGet(() -> new FindGroupByUserQueryResponse(null));
+                .map(uuid -> new GetCurrentGroupByUserQueryResponse(groupService.findById(uuid).get()))
+                .orElseGet(() -> new GetCurrentGroupByUserQueryResponse(null));
     }
 }

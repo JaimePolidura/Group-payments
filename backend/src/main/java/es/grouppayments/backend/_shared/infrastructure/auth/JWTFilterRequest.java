@@ -1,5 +1,6 @@
-package es.grouppayments.backend._shared.infrastructure;
+package es.grouppayments.backend._shared.infrastructure.auth;
 
+import es.grouppayments.backend._shared.infrastructure.UserDetailsImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,8 +26,7 @@ public class JWTFilterRequest extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         String authorizationHeader = request.getHeader("Authorization");
 
-        if (isJWT(authorizationHeader) && isNotEmpty(authorizationHeader)) {
-
+        if (hasJWT(authorizationHeader) && isNotEmpty(authorizationHeader)) {
             String jwt = authorizationHeader.substring(7);
             UUID userId = jwtUtils.getUserId(jwt);
 
@@ -45,7 +45,7 @@ public class JWTFilterRequest extends OncePerRequestFilter {
         chain.doFilter(request, response);
     }
 
-    private boolean isJWT(String authorizationHeader) {
+    private boolean hasJWT(String authorizationHeader) {
         return authorizationHeader != null && authorizationHeader.startsWith("Bearer");
     }
 
