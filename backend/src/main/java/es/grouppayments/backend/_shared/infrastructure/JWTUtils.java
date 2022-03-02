@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
-@AllArgsConstructor
 @Service
 public class JWTUtils {
     @Value("${jwt.secretkey}")
