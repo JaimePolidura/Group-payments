@@ -4,6 +4,9 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import es.grouppayments.backend._shared.infrastructure.JWTUtils;
+import es.grouppayments.backend.users._shared.domain.User;
+import es.grouppayments.backend.users._shared.domain.UsersService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,8 +23,16 @@ public class OAuthController {
     @Value("${google.clientId}")
     private String googleClientId;
 
+    private final UsersService usersService;
+    private final JWTUtils jwtUtils;
+
+    public OAuthController(UsersService usersService, JWTUtils jwtUtils) {
+        this.usersService = usersService;
+        this.jwtUtils = jwtUtils;
+    }
+
     @PostMapping("/google")
-    public ResponseEntity<?> googleOAuth(@RequestBody Request request) throws IOException {
+    public ResponseEntity<Response> googleOAuth(@RequestBody Request request) throws IOException {
         var netHttpTransport = new NetHttpTransport();
         var jacksonFactory = JacksonFactory.getDefaultInstance();
 
@@ -31,11 +42,20 @@ public class OAuthController {
         var googleIdToken = GoogleIdToken.parse(verifier.getJsonFactory(), request.token);
         var payload = googleIdToken.getPayload();
 
-        return ResponseEntity.ok(payload);
+        usersService.save(request.name, payload.getEmail());
+        String newToken = jwtUtils.generateToken(request.name);
+
+        return ResponseEntity.ok(new Response(newToken));
     }
 
     @AllArgsConstructor
     private static class Request {
+        @Getter private String name;
+        @Getter private String token;
+    }
+
+    @AllArgsConstructor
+    private static class Response{
         @Getter private String token;
     }
 }

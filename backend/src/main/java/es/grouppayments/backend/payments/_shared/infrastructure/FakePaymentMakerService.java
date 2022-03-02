@@ -19,7 +19,7 @@ public class FakePaymentMakerService implements PaymentMakerService {
     }
 
     @Override
-    public boolean enoughBalance(UUID payerUserId, double money) {
+    public boolean isValid(UUID payerUserId, double money) {
         if(fail){
             throw new UnprocessablePayment("Error");
         }

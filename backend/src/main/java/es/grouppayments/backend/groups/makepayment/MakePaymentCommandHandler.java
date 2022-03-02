@@ -53,7 +53,7 @@ public class MakePaymentCommandHandler implements CommandHandler<MakePaymentComm
 
     private void ensureAllHaveEnoughBalance(List<GroupMember> payerMembers, double money){
         Utils.allMatchOrThrow(payerMembers,
-                member -> paymentService.enoughBalance(member.getUserId(), money),
+                member -> paymentService.isValid(member.getUserId(), money),
                 UnprocessablePayment.of("Not enough balance"));
     }
 
