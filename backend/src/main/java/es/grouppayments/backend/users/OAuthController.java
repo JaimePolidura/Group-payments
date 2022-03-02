@@ -5,7 +5,6 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import es.grouppayments.backend._shared.infrastructure.JWTUtils;
-import es.grouppayments.backend.users._shared.domain.User;
 import es.grouppayments.backend.users._shared.domain.UsersService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin
@@ -42,20 +42,28 @@ public class OAuthController {
         var googleIdToken = GoogleIdToken.parse(verifier.getJsonFactory(), request.token);
         var payload = googleIdToken.getPayload();
 
-        usersService.save(request.name, payload.getEmail());
-        String newToken = jwtUtils.generateToken(request.name);
+        UUID userId = createNewUserIfNotExistsAndGetUserId(request.username, payload.getEmail());
+        String newToken = jwtUtils.generateToken(userId);
 
-        return ResponseEntity.ok(new Response(newToken));
+        return ResponseEntity.ok(new Response(newToken, userId));
+    }
+
+    private UUID createNewUserIfNotExistsAndGetUserId(String username, String email) {
+        if(usersService.findByEmail(email).isEmpty())
+            return usersService.save(username, email);
+        else
+            return usersService.findByEmail(email).get().getUserId();
     }
 
     @AllArgsConstructor
     private static class Request {
-        @Getter private String name;
+        @Getter private String username;
         @Getter private String token;
     }
 
     @AllArgsConstructor
     private static class Response{
         @Getter private String token;
+        @Getter private UUID userId;
     }
 }

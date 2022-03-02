@@ -30,8 +30,9 @@ public final class UserRepositoryInMemory implements UserRepository {
     }
 
     @Override
-    public boolean existsByUsername(String username) {
+    public Optional<User> findByEmail(String email) {
         return this.users.stream()
-                .anyMatch(user -> user.getUsername().equalsIgnoreCase(username));
+                .filter(user -> user.getEmail().equalsIgnoreCase(email))
+                .findFirst();
     }
 }

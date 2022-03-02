@@ -13,12 +13,16 @@ import java.util.UUID;
 public class UsersService {
     private final UserRepository userRepository;
 
-    public void save(String username, String email) {
-        userRepository.save(new User(UUID.randomUUID(), username, email, LocalDateTime.now()));
+    public UUID save(String username, String email) {
+        UUID userId = UUID.randomUUID();
+
+        userRepository.save(new User(userId, username, email, LocalDateTime.now()));
+
+        return userId;
     }
 
-    public boolean existsByUsername(String username) {
-        return userRepository.existsByUsername(username);
+    public Optional<User> findByEmail(String email){
+        return userRepository.findByEmail(email);
     }
 
     public Optional<User> findByUserId(UUID id) {
