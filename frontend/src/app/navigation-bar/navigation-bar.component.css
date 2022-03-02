@@ -1,0 +1,86 @@
+* {
+  font-family: sans-serif;
+}
+
+body {
+  font-size: 14px;
+  color: #333;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.toolbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6%;
+  font-weight: 600;
+  color: white;
+  background-color: #202a35;
+  width: auto;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+}
+
+nav {
+  width: 20%;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.userInfo {
+  margin-top: auto;
+  display: flex;
+  flex-direction: row;
+  width: 50%;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.tab-link-active {
+  background: #5ccef7;
+}
+
+nav a {
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  padding: 10px;
+}
+
+.toolbar h2 {
+  width: 50%;
+  font-size: 30px;
+  margin-left: 100px;
+  margin-top: 5px;
+}
+
+.progress-bar-container {
+  top: 0;
+  left: 0;
+  position: fixed;
+  width: 100%;
+  z-index: 99;
+}
+
+.myImageNavBar {
+  height: 75%;
+  width: 20%;
+}
+
+@media screen and (max-width: 560px) {
+  .toolbar h2 {
+    font-size: 20px;
+    margin-left: 50px;
+  }
+
+  img {display: none}
+}

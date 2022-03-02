@@ -1,0 +1,8 @@
+.card-body {
+  display: flex;
+  justify-content: center;
+}
+
+.card-body button{
+  width: 90%;
+}

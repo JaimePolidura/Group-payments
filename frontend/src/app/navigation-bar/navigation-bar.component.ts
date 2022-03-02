@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {Authentication} from "../../services/authentication";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-navigation-bar',
@@ -7,9 +9,32 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavigationBarComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private auth: Authentication,
+    private router: Router,
+  ){}
 
   ngOnInit(): void {
+  }
+
+  isLogged(): boolean {
+    return this.auth.isLogged();
+  }
+
+  name(): string{
+    return this.auth.getName();
+  }
+
+  photoURL(): string{
+    console.log(this.auth.getPhotoURL())
+
+    return this.auth.getPhotoURL();
+  }
+
+  logout(): void {
+    this.auth.logout(() => {
+      this.router.navigate(["/login"]);
+    });
   }
 
 }

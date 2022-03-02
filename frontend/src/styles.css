@@ -1,1 +1,90 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+  background: #f7f8fb;
+}
+
+.myContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+
+  background-color: #ffff;
+  padding: 3%;
+}
+
+.div-config-dif-background {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 1.5px 3.5px 0 #666;
+}
+
+.myButton {
+  font-size: medium;
+  color: white;
+  background-color: #202a35;
+  text-align: center;
+  padding: 4%;
+  border: none;
+  border-radius: 5%;
+}
+
+.myButton:hover{
+  transition: all 0.25s ease-in-out;
+
+  color: white;
+  background-color: #465669;
+  transform: scale(1.025);
+}
+
+.myDisabled {
+  background-color: #7d8691;
+  cursor: pointer;
+}
+
+.myDisabled:hover {
+  background-color: #7d8691;
+  cursor: default;
+  transform: scale(1);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: center;
+}
+
+.modal-footer .myButton{
+  padding: 3%;
+  width: 40%;
+}
+
+.close {
+  outline: none;
+}
+
+.width60 {
+  width: 60%;
+}
+
+.hidden {
+  display: none;
+}
+
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
+
+.orange {
+  color: orange;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

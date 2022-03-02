@@ -1,19 +1,50 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {GoogleLoginProvider, SocialAuthService, SocialUser} from "angularx-social-login";
-import {HttpClient, HttpClientModule} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
+import {LoginResponse} from "../models/login-response";
 
 @Injectable({
   providedIn: 'root'
 })
 export class Authentication {
   private loggedUser: SocialUser;
-  private logged: boolean;
+  private logged: boolean = false;
+  private userId: string;
+  private token: string;
 
   constructor(
     private oauthProvider: SocialAuthService,
     private http: HttpClient,
-  ){
-    this.logged = false;
+  ){}
+
+  async signInWithGoogle(onSuccess: (() => void)) {
+    try{
+      const dataFromOAuthProvider = await this.oauthProvider.signIn(GoogleLoginProvider.PROVIDER_ID);
+      const responseFromBackend = await this.verifyTokenAndGetJWT(dataFromOAuthProvider.idToken, dataFromOAuthProvider.name);
+
+      this.logged = true;
+      this.loggedUser = dataFromOAuthProvider;
+      this.userId = responseFromBackend.userId;
+      this.token = responseFromBackend.token;
+
+      onSuccess();
+    }catch(exception){
+      window.alert("ERROR");
+      console.error(exception);
+    }
+  }
+
+  async verifyTokenAndGetJWT(tokenFromOauthProvider: string, name: string): Promise<any |  LoginResponse>{
+    return this.http.post<LoginResponse>('http://localhost:8080/oauth/google', {token: tokenFromOauthProvider, username: name})
+      .toPromise();
+  }
+
+  logout(onSuccess: () => void): void{
+    this.oauthProvider.signOut().then(() => {
+      this.logged = false;
+
+      onSuccess();
+    });
   }
 
   subscribeToAuthState(callback: (() => void)): void {
@@ -25,25 +56,6 @@ export class Authentication {
         callback();
       }
     );
-  }
-
-  async signInWithGoogle(onSuccess: (() => void)) {
-    const dataFromOAuthProvider = await this.oauthProvider.signIn(GoogleLoginProvider.PROVIDER_ID);
-    const responseFromBackend = await this.verifyTokenAndGetJWT(dataFromOAuthProvider.idToken);
-
-  
-  }
-
-  async verifyTokenAndGetJWT(tokenFromOauthProvider: string){
-    this.http.post('http://localhost:8080/oauth/google', {token: tokenFromOauthProvider});
-  }
-
-  logout(onSuccess: () => void): void{
-    this.oauthProvider.signOut().then(() => {
-      this.logged = false;
-
-      onSuccess();
-    });
   }
 
   isLogged(): boolean {
