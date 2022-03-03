@@ -6,7 +6,7 @@ import {GetCurrentGroupResponse} from "./response/get-current-group-response";
 @Injectable({
   providedIn: 'root'
 })
-export class GroupServiceService {
+export class GroupService {
 
   constructor(private http: HttpClient) { }
 

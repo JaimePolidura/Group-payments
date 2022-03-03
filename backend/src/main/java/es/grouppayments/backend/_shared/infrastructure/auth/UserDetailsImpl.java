@@ -1,4 +1,4 @@
-package es.grouppayments.backend._shared.infrastructure;
+package es.grouppayments.backend._shared.infrastructure.auth;
 
 import es.grouppayments.backend.users._shared.domain.User;
 import es.grouppayments.backend.users._shared.domain.UsersService;
@@ -18,7 +18,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class UserDetailsImpl implements UserDetailsService {
     private final UsersService usersService;
-    
+
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         User user = usersService.findByUserId(UUID.fromString(userId))
@@ -27,8 +27,8 @@ public class UserDetailsImpl implements UserDetailsService {
         List<GrantedAuthority> roles = Collections.singletonList(new SimpleGrantedAuthority("USER"));
 
         return new org.springframework.security.core.userdetails.User(
-                user.getUsername(),
-                null,
+                user.getUserId().toString(),
+                "",
                 roles
         );
     }

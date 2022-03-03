@@ -16,7 +16,7 @@ public class ApplicationCQRSClassMapper {
 
     public ApplicationCQRSClassMapper(ApplicationContext context) {
         this.context = context;
-        this.reflections = new Reflections("es.jaime.gateway");
+        this.reflections = new Reflections("es.grouppayments.backend");
     }
 
     public<I, H> Map<Class<I>, H> find (Class<H> classToFind) {

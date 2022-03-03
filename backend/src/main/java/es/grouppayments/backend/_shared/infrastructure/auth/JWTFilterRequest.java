@@ -1,6 +1,5 @@
 package es.grouppayments.backend._shared.infrastructure.auth;
 
-import es.grouppayments.backend._shared.infrastructure.UserDetailsImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
