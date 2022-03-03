@@ -20,10 +20,7 @@ export class HttpRequestInterceptor implements HttpInterceptor {
   constructor(private auth: Authentication) {}
 
   intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    console.log("1");
-
     if(this.needsAuth(req)){
-      console.log("2");
       req = req.clone({ headers: req.headers.set(TOKEN_HEADER_KEY, 'Bearer ' + this.auth.getToken()) });
     }
 

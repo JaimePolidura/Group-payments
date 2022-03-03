@@ -14,6 +14,8 @@ import { MainComponent } from './main/main.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import { HttpRequestInterceptor } from "../backend/http-request-interceptor.service";
+import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { HttpRequestInterceptor } from "../backend/http-request-interceptor.serv
     AppRoutingModule,
     SocialLoginModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgbModule,
+    ReactiveFormsModule,
   ],
   providers: [
     {

@@ -9,7 +9,6 @@ import {LoginRequest} from "./request/login-request";
 })
 export class Authentication {
   private loggedUser: SocialUser;
-  private logged: boolean = false;
   private userId: string;
   private token: string;
 
@@ -23,7 +22,6 @@ export class Authentication {
       const dataFromOAuthProvider = await this.oauthProvider.signIn(GoogleLoginProvider.PROVIDER_ID);
       const responseFromBackend = await this.verifyTokenAndGetJWT({username: dataFromOAuthProvider.name, token: dataFromOAuthProvider.idToken});
 
-      this.logged = true;
       this.loggedUser = dataFromOAuthProvider;
       this.userId = responseFromBackend.userId;
       this.token = responseFromBackend.token;
@@ -42,25 +40,15 @@ export class Authentication {
 
   logout(onSuccess: () => void): void{
     this.oauthProvider.signOut().then(() => {
-      this.logged = false;
+      // @ts-ignore
+      this.loggedUser = undefined;
 
       onSuccess();
     });
   }
 
-  subscribeToAuthState(callback: (() => void)): void {
-    this.oauthProvider.authState.subscribe(
-      data => {
-        this.loggedUser = data;
-        this.logged = this.loggedUser != null;
-
-        callback();
-      }
-    );
-  }
-
   isLogged(): boolean {
-    return this.logged;
+    return this.loggedUser == undefined;
   }
 
   getName(): string {
@@ -73,6 +61,10 @@ export class Authentication {
 
   getToken(): string{
     return this.token;
+  }
+
+  getUserId(): string {
+    return this.userId;
   }
 
 }

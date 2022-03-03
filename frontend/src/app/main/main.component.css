@@ -1,0 +1,13 @@
+.myContainer {
+  min-width: 17.5%;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+}
+
+.options > button {
+  margin: auto;
+  width: 95%;
+}

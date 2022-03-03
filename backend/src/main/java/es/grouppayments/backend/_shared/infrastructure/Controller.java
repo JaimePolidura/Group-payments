@@ -1,10 +1,16 @@
 package es.grouppayments.backend._shared.infrastructure;
 
+import org.checkerframework.checker.units.qual.UnknownUnits;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.util.UUID;
+
 public class Controller {
-    public String getLoggedUsername() { return SecurityContextHolder.getContext().getAuthentication().getName(); }
+    public UUID getLoggedUsername()
+    {
+        return UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName());
+    }
 
     protected ResponseEntity<String> buildNewHttpResponseOK() {
         return ResponseEntity.ok().body("");

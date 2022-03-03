@@ -14,9 +14,6 @@ export class LoginComponent implements OnInit {
   ){}
 
   ngOnInit(): void {
-    this.oauth.subscribeToAuthState(() => {
-      this.redirectToMain();
-    });
   }
 
   signInWithGoogle() {

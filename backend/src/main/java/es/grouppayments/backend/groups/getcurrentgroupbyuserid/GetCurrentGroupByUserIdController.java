@@ -20,8 +20,8 @@ public class GetCurrentGroupByUserIdController extends Controller {
     @GetMapping("groups/current")
     public ResponseEntity<Response> currentGroup(){
         GetCurrentGroupByUserQueryResponse queryResponse = queryBus.ask(new GetCurrentGroupByUserQuery(
-                UUID.fromString(getLoggedUsername()))
-        );
+                getLoggedUsername()
+        ));
 
         return buildNewHttpResponseOK(new Response(queryResponse.getGroup()));
     }

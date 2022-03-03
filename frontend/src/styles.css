@@ -30,7 +30,7 @@ body {
   text-align: center;
   padding: 4%;
   border: none;
-  border-radius: 5%;
+  border-radius: 2.5%;
 }
 
 .myButton:hover{
@@ -52,18 +52,22 @@ body {
   transform: scale(1);
 }
 
+.modal-body-centered {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
 .modal-footer {
   display: flex;
+  flex-direction: row;
   justify-content: center;
 }
 
 .modal-footer .myButton{
   padding: 3%;
-  width: 40%;
-}
-
-.close {
-  outline: none;
+  width: 70%;
+  margin: auto;
 }
 
 .width60 {
