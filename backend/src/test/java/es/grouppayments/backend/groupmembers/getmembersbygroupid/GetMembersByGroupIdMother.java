@@ -1,4 +1,4 @@
-package es.grouppayments.backend.groupmembers.findmembersbygroupid;
+package es.grouppayments.backend.groupmembers.getmembersbygroupid;
 
 import _shared.UsingUsers;
 import es.grouppayments.backend.groupmembers.GroupMembersTestMother;
@@ -9,21 +9,21 @@ import es.grouppayments.backend.users._shared.infrastructure.UserRepositoryInMem
 
 import java.util.UUID;
 
-public class FindMembersByGroupIdMother extends GroupMembersTestMother implements UsingUsers {
-    private final FindMembersByGroupIdQueryHandler handler;
+public class GetMembersByGroupIdMother extends GroupMembersTestMother implements UsingUsers {
+    private final GetMembersByGroupIdQueryHandler handler;
     private final UserRepository userRepository;
 
-    public FindMembersByGroupIdMother(){
+    public GetMembersByGroupIdMother(){
         this.userRepository = new UserRepositoryInMemory();
 
-        this.handler = new FindMembersByGroupIdQueryHandler(
+        this.handler = new GetMembersByGroupIdQueryHandler(
                 new GroupMemberService(groupMemberRepository, testEventBus),
                 new UsersService(userRepository)
         );
     }
 
-    public FindMembersByGroupIdQueryResponse executeQuery(UUID gruopId){
-        return this.handler.handle(new FindMembersByGroupIdQuery(gruopId));
+    public GetMembersByGroupIdQueryResponse executeQuery(UUID gruopId){
+        return this.handler.handle(new GetMembersByGroupIdQuery(gruopId));
     }
 
     @Override

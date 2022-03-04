@@ -1,4 +1,4 @@
-package es.grouppayments.backend.groupmembers.findmembersbygroupid;
+package es.grouppayments.backend.groupmembers.getmembersbygroupid;
 
 import es.grouppayments.backend.users._shared.domain.User;
 import org.junit.Test;
@@ -8,7 +8,7 @@ import java.util.UUID;
 
 import static org.junit.Assert.*;
 
-public class FindMembersByGroupIdTest extends FindMembersByGroupIdMother {
+public class GetMembersByGroupIdTest extends GetMembersByGroupIdMother {
     @Test
     public void shouldFind(){
         UUID user1 = UUID.randomUUID();

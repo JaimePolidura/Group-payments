@@ -5,7 +5,6 @@ import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups.getcurrentgroupbyuserid.GetCurrentGroupByUserQuery;
 import es.grouppayments.backend.groups.getcurrentgroupbyuserid.GetCurrentGroupByUserQueryResponse;
 import es.jaime.javaddd.domain.cqrs.command.CommandBus;
-import es.jaime.javaddd.domain.cqrs.command.CommandHandler;
 import es.jaime.javaddd.domain.cqrs.query.QueryBus;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
