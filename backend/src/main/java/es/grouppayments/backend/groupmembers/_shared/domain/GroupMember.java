@@ -13,6 +13,10 @@ public class GroupMember extends Aggregate {
     @Getter private final UUID groupId;
     @Getter private final GroupMemberRole role;
 
+    public boolean isAdmin(){
+        return this.role == GroupMemberRole.ADMIN;
+    }
+
     @Override
     public Map<String, Object> toPrimitives() {
         return Map.of(

@@ -9,7 +9,7 @@ public interface GroupMemberRepository {
 
     List<GroupMember> findMembersByGroupId(UUID groupId);
 
-    Optional<UUID> findGroupIdByUserId(UUID userId);
+    Optional<GroupMember> findGroupMemberByUserId(UUID userId);
 
     void deleteByUserId(UUID userId);
 

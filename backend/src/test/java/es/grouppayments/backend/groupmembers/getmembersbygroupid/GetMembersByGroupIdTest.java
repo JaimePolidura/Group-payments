@@ -1,6 +1,5 @@
 package es.grouppayments.backend.groupmembers.getmembersbygroupid;
 
-import es.grouppayments.backend.users._shared.domain.User;
 import org.junit.Test;
 
 import java.util.List;
@@ -18,8 +17,8 @@ public class GetMembersByGroupIdTest extends GetMembersByGroupIdMother {
         addGroup(groupId, user1, 10, user2);
         addUser(user1, user2);
 
-        List<User> usersResponse = executeQuery(groupId)
-                .getUsers();
+        List<GetMembersByGroupIdQueryResponse.GroupMemberUser> usersResponse = executeQuery(groupId)
+                .getMembers();
 
         assertEquals(2, usersResponse.size());
         assertTrue(usersResponse.stream().anyMatch(user -> user.getUserId().equals(user1)));
@@ -28,6 +27,6 @@ public class GetMembersByGroupIdTest extends GetMembersByGroupIdMother {
 
     @Test
     public void shouldntFind(){
-        assertEmptyCollection(executeQuery(UUID.randomUUID()).getUsers());
+        assertEmptyCollection(executeQuery(UUID.randomUUID()).getMembers());
     }
 }

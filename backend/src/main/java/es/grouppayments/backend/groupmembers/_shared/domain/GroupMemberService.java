@@ -23,12 +23,13 @@ public class GroupMemberService {
         return this.groupMembers.findMembersByGroupId(groupId);
     }
 
-    public Optional<UUID> findGroupIdByUserId(UUID userId){
-        return this.groupMembers.findGroupIdByUserId(userId);
+    public Optional<GroupMember> findGroupMemberByUserId(UUID userId){
+        return this.groupMembers.findGroupMemberByUserId(userId);
     }
 
     public void deleteByUserId(UUID userId) {
-        UUID groupId = this.findGroupIdByUserId(userId).get();
+        UUID groupId = this.findGroupMemberByUserId(userId).get()
+                .getGroupId();
 
         this.groupMembers.deleteByUserId(userId);
 
@@ -40,7 +41,8 @@ public class GroupMemberService {
     }
 
     public void leaveGroupIfMember(UUID userId){
-        Optional<UUID> groupMemberOptional = findGroupIdByUserId(userId);
+        Optional<UUID> groupMemberOptional = findGroupMemberByUserId(userId)
+                .map(GroupMember::getGroupId);
         boolean isMemberOfGroup = groupMemberOptional.isPresent();
 
         if(isMemberOfGroup){

@@ -8,11 +8,10 @@ import lombok.Getter;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Data
 public class GetMembersByGroupIdQueryResponse implements QueryResponse {
-    private final List<GroupMemberUser> users;
+    private final List<GroupMemberUser> members;
 
     public static GetMembersByGroupIdQueryResponse fromAggregateUserList(List<User> usersAggregateList){
         return new GetMembersByGroupIdQueryResponse(usersAggregateList.stream()
@@ -21,7 +20,7 @@ public class GetMembersByGroupIdQueryResponse implements QueryResponse {
     }
 
     @AllArgsConstructor
-    private static class GroupMemberUser {
+    public static class GroupMemberUser {
         @Getter private final UUID userId;
         @Getter private final String username;
         @Getter private final String email;

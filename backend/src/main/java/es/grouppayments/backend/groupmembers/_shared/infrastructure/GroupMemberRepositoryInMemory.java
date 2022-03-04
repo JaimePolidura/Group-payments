@@ -28,10 +28,9 @@ public class GroupMemberRepositoryInMemory implements GroupMemberRepository {
     }
 
     @Override
-    public Optional<UUID> findGroupIdByUserId(UUID userId) {
+    public Optional<GroupMember> findGroupMemberByUserId(UUID userId) {
         return this.roomMembers.stream()
                 .filter(member -> member.getUserId().equals(userId))
-                .map(GroupMember::getGroupId)
                 .findFirst();
     }
 

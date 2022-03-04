@@ -1,5 +1,6 @@
 package es.grouppayments.backend.groups.getcurrentgroupbyuserid;
 
+import es.grouppayments.backend.groupmembers._shared.domain.GroupMember;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
 import es.jaime.javaddd.domain.cqrs.query.QueryHandler;
@@ -17,7 +18,8 @@ public class GetCurrentGroupByUserQueryHandler implements QueryHandler<GetCurren
 
     @Override
     public GetCurrentGroupByUserQueryResponse handle(GetCurrentGroupByUserQuery findByUserQuery) {
-        Optional<UUID> optionalGorupId = groupMemberService.findGroupIdByUserId(findByUserQuery.getUserId());
+        Optional<UUID> optionalGorupId = groupMemberService.findGroupMemberByUserId(findByUserQuery.getUserId())
+                .map(GroupMember::getGroupId);
 
         return optionalGorupId
                 .map(uuid -> new GetCurrentGroupByUserQueryResponse(groupService.findById(uuid).get()))
