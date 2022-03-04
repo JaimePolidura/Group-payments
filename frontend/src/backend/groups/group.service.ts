@@ -7,6 +7,7 @@ import {JoinGroupResponse} from "./response/join-group-response";
 import {JoinGroupRequest} from "./request/join-group-request";
 import {CreateGroupResponse} from "./response/create-group-response";
 import {CreateGroupRequest} from "./request/create-group-request";
+import {GetGroupMembersByGroupIdResponse} from "./response/get-group-members-by-group-id-response";
 
 @Injectable({
   providedIn: 'root'
@@ -29,5 +30,9 @@ export class GroupService {
 
   public createGroup(createGroupRequest: CreateGroupRequest): Observable<CreateGroupResponse> {
     return this.http.post<CreateGroupResponse>("http://localhost:8080/groups/create", createGroupRequest);
+  }
+
+  public getGroupMembersByGroupId(groupId: string): Observable<GetGroupMembersByGroupIdResponse> {
+    return this.http.get<GetGroupMembersByGroupIdResponse>(`http://localhost:8080/groups/members/${groupId}`);
   }
 }

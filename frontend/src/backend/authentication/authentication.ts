@@ -48,7 +48,7 @@ export class Authentication {
   }
 
   isLogged(): boolean {
-    return this.loggedUser == undefined;
+    return this.loggedUser != undefined;
   }
 
   getName(): string {

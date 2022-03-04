@@ -5,6 +5,7 @@ import {Group} from "../../model/group";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {AbstractControl, Form, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {CreateGroupRequest} from "../../backend/groups/request/create-group-request";
+import {User} from "../../model/user";
 
 @Component({
   selector: 'app-main',
@@ -15,6 +16,8 @@ export class MainComponent implements OnInit {
   public userId: string;
 
   public currentGroup: Group;
+  public currentGroupMembers: User[];
+
   createGroupForm: FormGroup;
   joinGroupForm: FormGroup;
 
@@ -22,7 +25,6 @@ export class MainComponent implements OnInit {
     public auth: Authentication,
     private groupService: GroupService,
     public modalService: NgbModal,
-    private formBuilder: FormBuilder,
   ) { }
 
   ngOnInit(): void {
@@ -34,6 +36,10 @@ export class MainComponent implements OnInit {
     this.groupService.getCurrentGroup(this.auth.getUserId()).subscribe(res => {
       if(res.group != undefined) {
         this.currentGroup = res.group;
+
+        this.groupService.getGroupMembersByGroupId(res.group.groupId).subscribe(res =>  {
+          this.currentGroupMembers = res.members;
+        });
       }
     });
   }
@@ -60,7 +66,10 @@ export class MainComponent implements OnInit {
 
     this.groupService.joinGroup({groupId: groupIdToJoin}).subscribe(res => {
       this.currentGroup = res.group;
-      console.log(res);
+
+      this.groupService.getGroupMembersByGroupId(res.group.groupId).subscribe(res => {
+        this.currentGroupMembers = res.members;
+      })
     });
   }
 
@@ -91,5 +100,9 @@ export class MainComponent implements OnInit {
 
   public isInGroup(): boolean {
     return this.currentGroup != undefined;
+  }
+
+  public copyToClipboard(toCopy: any) {
+    navigator.clipboard.writeText(toCopy);
   }
 }

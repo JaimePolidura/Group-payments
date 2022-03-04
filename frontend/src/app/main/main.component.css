@@ -11,3 +11,27 @@
   margin: auto;
   width: 95%;
 }
+
+.group-container {
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: 25% auto;
+}
+
+.group-options{
+  grid-row: 1;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.group-options button {
+  border-radius: 40%;
+  padding: 7.5%;
+}
+
+.group-members{
+  grid-row: 2;
+}
