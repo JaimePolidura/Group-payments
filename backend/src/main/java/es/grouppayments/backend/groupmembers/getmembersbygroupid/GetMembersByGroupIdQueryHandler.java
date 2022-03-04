@@ -23,6 +23,6 @@ public class GetMembersByGroupIdQueryHandler implements QueryHandler<GetMembersB
                 .map(groupMember -> usersService.findByUserId(groupMember.getUserId()).get())
                 .toList();
 
-        return new GetMembersByGroupIdQueryResponse(users);
+        return GetMembersByGroupIdQueryResponse.fromAggregateUserList(users);
     }
 }
