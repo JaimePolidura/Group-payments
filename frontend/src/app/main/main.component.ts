@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {Router} from "@angular/router";
 import {Authentication} from "../../backend/authentication/authentication";
 import {GroupService} from "../../backend/groups/group.service";
 import {Group} from "../../model/group";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {AbstractControl, Form, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-main',
@@ -15,8 +14,8 @@ export class MainComponent implements OnInit {
   public userId: string;
 
   public currentGroup: Group;
-  joinGroupForm: FormGroup;
   createGroupForm: FormGroup;
+  joinGroupForm: FormGroup;
 
   constructor(
     public auth: Authentication,
@@ -37,17 +36,15 @@ export class MainComponent implements OnInit {
   }
 
   private setupJoinGroupForm(): void {
-    // this.joinGroupForm = new FormGroup({
-    //   id: new FormControl('', [Validators.required]),
-    // });
-
-    this.joinGroupForm = this.formBuilder.group({
-      groupId: ['', Validators.required],
+    this.joinGroupForm = new FormGroup({
+      groupId: new FormControl('', [Validators.required]),
     });
   }
+  get groupId(): AbstractControl | null { return this.joinGroupForm.get('groupId'); }
 
-  public checkIfGroupToJoinExists(): void {//
-    const groupId = this.joinGroupForm.get('groupId')?.value;
+  public checkIfGroupToJoinExists(): void {
+    const groupId = this.groupId?.value;
+    console.log(groupId);
 
     this.groupService.getGroupById(groupId).subscribe(
       res => {this.joinGroupForm.setErrors(null)},
@@ -56,10 +53,14 @@ export class MainComponent implements OnInit {
   }
 
   public joinGroup(): void {
-    const groupIdToJoin: string = this.joinGroupForm.get("groupId")?.value;
+    console.log("Hola");
+
+    // @ts-ignore
+    const groupIdToJoin: string = document.getElementById("groupId");
 
     this.groupService.joinGroup({groupId: groupIdToJoin}).subscribe(res => {
       this.currentGroup = res.group;
+      console.log(res);
     });
   }
 
