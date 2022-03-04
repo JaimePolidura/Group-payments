@@ -4,6 +4,7 @@ import {GroupService} from "../../backend/groups/group.service";
 import {Group} from "../../model/group";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {AbstractControl, Form, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {CreateGroupRequest} from "../../backend/groups/request/create-group-request";
 
 @Component({
   selector: 'app-main',
@@ -26,6 +27,8 @@ export class MainComponent implements OnInit {
 
   ngOnInit(): void {
     this.setupJoinGroupForm();
+    this.setUpCreateGroupForm();
+
     this.userId = this.auth.getUserId();
 
     this.groupService.getCurrentGroup(this.auth.getUserId()).subscribe(res => {
@@ -53,10 +56,7 @@ export class MainComponent implements OnInit {
   }
 
   public joinGroup(): void {
-    console.log("Hola");
-
-    // @ts-ignore
-    const groupIdToJoin: string = document.getElementById("groupId");
+    const groupIdToJoin = this.groupId?.value;
 
     this.groupService.joinGroup({groupId: groupIdToJoin}).subscribe(res => {
       this.currentGroup = res.group;
@@ -64,8 +64,25 @@ export class MainComponent implements OnInit {
     });
   }
 
-  public createGroup(): void {
+  private setUpCreateGroupForm(): void {
+    this.createGroupForm = new FormGroup({
+      money: new FormControl('', [Validators.required, Validators.min(1)]),
+      title: new FormControl('GroupPayment', [Validators.required, Validators.maxLength(15)])
+    });
+  }
+  get money(): AbstractControl | null { return this.createGroupForm.get('money'); }
+  get title(): AbstractControl | null { return this.createGroupForm.get('title'); }
 
+  public createGroup(): void {
+    const createGroupRequest: CreateGroupRequest = {
+      money: this.money?.value,
+      title: this.title?.value,
+    }
+
+    this.groupService.createGroup(createGroupRequest).subscribe(res => {
+      console.log(res.group);
+      this.currentGroup = res.group;
+    });
   }
 
   public isAdminOfCurrentGroup(): boolean {
