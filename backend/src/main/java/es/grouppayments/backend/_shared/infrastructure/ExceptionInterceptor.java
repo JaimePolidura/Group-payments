@@ -24,6 +24,8 @@ public class ExceptionInterceptor {
 
         if(supportedException.isEmpty()) throwable.printStackTrace();
 
+        throwable.printStackTrace();
+
         return supportedException.orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 

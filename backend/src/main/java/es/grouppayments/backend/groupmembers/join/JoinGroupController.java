@@ -2,6 +2,7 @@ package es.grouppayments.backend.groupmembers.join;
 
 import es.grouppayments.backend._shared.infrastructure.Controller;
 import es.grouppayments.backend.groups._shared.domain.Group;
+import es.grouppayments.backend.groups.getcurrentgroupbyuserid.GetCurrentGroupByUserQuery;
 import es.grouppayments.backend.groups.getcurrentgroupbyuserid.GetCurrentGroupByUserQueryResponse;
 import es.grouppayments.backend.groups.getgroupbyid.GetGroupByIdQuery;
 import es.jaime.javaddd.domain.cqrs.command.CommandBus;
@@ -22,11 +23,16 @@ public class JoinGroupController extends Controller {
     private final CommandBus commandBus;
     private final QueryBus queryBus;
 
-    @PostMapping("groupmembers/join")
+    @PostMapping("groups/join")
     public ResponseEntity<Response> join(@RequestBody Request request){
-        commandBus.dispatch(new JoinGroupCommand(getLoggedUsername(), UUID.fromString(request.groupId)));
+        commandBus.dispatch(new JoinGroupCommand(
+                getLoggedUsername(),
+                UUID.fromString(request.groupId)
+        ));
 
-        GetCurrentGroupByUserQueryResponse queryResponse = queryBus.ask(new GetGroupByIdQuery(getLoggedUsername()));
+        GetCurrentGroupByUserQueryResponse queryResponse = queryBus.ask(new GetCurrentGroupByUserQuery(
+                getLoggedUsername()
+        ));
 
         return buildNewHttpResponseOK(new Response(queryResponse.getGroup()));
     }
@@ -34,6 +40,7 @@ public class JoinGroupController extends Controller {
     @AllArgsConstructor
     private static class Request {
         public String groupId;
+        public String ignoreThis;
     }
 
     @AllArgsConstructor
