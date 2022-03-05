@@ -13,7 +13,7 @@ import {GroupsApiService} from "../../../backend/groups/groups-api.service";
 export class GroupOptionsComponent implements OnInit {
 
   constructor(
-    private groupState: GroupStateService,
+    public groupState: GroupStateService,
     public modalService: NgbModal,
     private groupsApi: GroupsApiService,
     ) { }

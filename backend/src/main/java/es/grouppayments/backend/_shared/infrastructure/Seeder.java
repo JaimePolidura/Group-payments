@@ -20,9 +20,9 @@ public class Seeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        usersService.save("Jaime", "jaime.polidura@gmail.com");
-        usersService.save("Jorge", "jorge.polidura@gmail.com");
-        usersService.save("Julia", "julia.polidura@gmail.com");
+        usersService.save("Jaime", "jaime.polidura@gmail.com", "https://lh3.googleusercontent.com/a/AATXAJz7wrFagWv7s_MyF8vEv4ZNz72ciRuD3fk2i_lrsQ=s96-c");
+        usersService.save("Jorge", "jorge.polidura@gmail.com", "https://lh3.googleusercontent.com/a-/AOh14Gg2u6SQhIvGMiX1y5_8gPdDvswOr2O8INkFNVq4=s96-c\n");
+        usersService.save("Julia", "julia.polidura@gmail.com", "https://lh3.googleusercontent.com/a/AATXAJyfnpTxyjxSddAWxFVyOH6kk2I6JXrb4N509rhxcA=s96-c");
 
         UUID groupId = UUID.randomUUID();
         groupService.create(groupId, "Group", 120, findUserIdByEmail("jaime.polidura@gmail.com"));

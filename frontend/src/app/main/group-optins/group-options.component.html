@@ -1,7 +1,7 @@
 <div class="group-container div-config-dif-background">
   <div class="group-options">
     <div class="group-options-stats">
-      <h4>{{currentGroup().description}} - {{currentGroup().money}}</h4>
+      <h3>{{currentGroup().description}} - {{currentGroup().money}}</h3>
     </div>
     <div class="group-options-options">
       <button class="group-option-button" (click)="modalService.open(shareGroupModal)">
@@ -12,13 +12,21 @@
       </button>
     </div>
   </div>
+
   <div class="group-separator"><hr></div>
+
   <div class="group-members">
     <div *ngFor="let member of currentGroupMembers()">
       <div class="group-member">
-        <img src="{{member.photoUrl}}" class="rounded-circle">
-        <br>
-        <h6>{{member.username}}</h6>
+        <div class="group-member-option">
+          <button class="btn btn-danger" [ngClass]="{'myDisabled disabled': !groupState.isAdminOfCurrentGroup()}" (click)="">x</button>
+        </div>
+        <div class="group-member-image">
+          <img src="{{member.photoUrl}}" class="rounded-circle">
+        </div>
+        <div class="group-member-name">
+          <h6>{{member.username}}</h6>
+        </div>
       </div>
     </div>
   </div>

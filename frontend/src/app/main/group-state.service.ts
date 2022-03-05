@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Group} from "../../model/group";
 import {User} from "../../model/user";
+import {Authentication} from "../../backend/authentication/authentication";
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,9 @@ export class GroupStateService {
   private currentGroup: Group;
   private currentGroupMembers: User[];
 
-  constructor() { }
+  constructor(
+    private auth: Authentication,
+  ){}
 
   public getCurrentGroup(): Group {
     return this.currentGroup;
@@ -31,8 +34,8 @@ export class GroupStateService {
     this.currentGroupMembers.push(member);
   }
 
-  public isAdminOfCurrentGroup(userId: string): boolean {
-    return this.currentGroup != undefined && this.currentGroup.adminUserId == userId;
+  public isAdminOfCurrentGroup(): boolean {
+    return this.currentGroup != undefined && this.currentGroup.adminUserId == this.auth.getUserId();
   }
 
   public isInAGroup(): boolean {

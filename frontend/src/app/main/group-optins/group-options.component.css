@@ -11,6 +11,11 @@
   grid-template-rows: 5% 5% 90%;
 }
 
+.group-options-stats {
+  display: flex;
+  flex-direction: row;
+}
+
 .group-container .group-options {
   margin-top: 1%;
   margin-left: 1%;
@@ -55,11 +60,31 @@
 .group-member {
   margin-top: 1%;
 
+  display: grid;
+  grid-template-columns: 3% 4% auto;
+}
+
+.group-member > * {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 
-.group-member img {
-  width: 3%;
+.group-member-image {
+  grid-column: 2;
+}
+
+.group-member-image img {
+  width: 60%;
+  height: 100%;
+}
+
+.group-member-name {
+  justify-content: flex-start;
+
+  grid-column: 3;
+}
+
+.group-member-option {
+  grid-column: 1;
 }

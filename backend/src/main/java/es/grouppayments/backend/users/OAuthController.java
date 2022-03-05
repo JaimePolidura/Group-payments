@@ -50,7 +50,7 @@ public class OAuthController {
 
     private UUID createNewUserIfNotExistsAndGetUserId(String username, String email, String phtoUrl) {
         if(usersService.findByEmail(email).isEmpty())
-            return usersService.save(username, email);
+            return usersService.save(username, email, phtoUrl);
         else
             return usersService.findByEmail(email).get().getUserId();
     }
