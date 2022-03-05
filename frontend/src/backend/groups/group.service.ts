@@ -8,6 +8,7 @@ import {JoinGroupRequest} from "./request/join-group-request";
 import {CreateGroupResponse} from "./response/create-group-response";
 import {CreateGroupRequest} from "./request/create-group-request";
 import {GetGroupMembersByGroupIdResponse} from "./response/get-group-members-by-group-id-response";
+import {LeaveGroupRequest} from "./request/leave-group-request";
 
 @Injectable({
   providedIn: 'root'
@@ -34,5 +35,9 @@ export class GroupService {
 
   public getGroupMembersByGroupId(groupId: string): Observable<GetGroupMembersByGroupIdResponse> {
     return this.http.get<GetGroupMembersByGroupIdResponse>(`http://localhost:8080/groups/members/${groupId}`);
+  }
+
+  public leaveGroup(request: LeaveGroupRequest): Observable<any>{
+    return this.http.post("http://localhost:8080/groups/leave", request);
   }
 }

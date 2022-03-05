@@ -1,31 +1,36 @@
-<div class="myContainer div-config-dif-background">
-  <div *ngIf="isInGroup()" class="group-container">
-    <div class="group-options">
-      <button class="btn btn-primary" (click)="modalService.open(shareGroupModal)">
-        <i class="fa-solid fa-share-nodes"></i>
-      </button>
-      <button class="btn btn-primary">
-        <i class="fa-solid fa-arrow-right-from-bracket"></i>
-      </button>
+<div class="group-container div-config-dif-background" *ngIf="isInGroup()">
+  <div class="group-options">
+    <div class="group-options-stats">
+      <h4>{{currentGroup.description}} - {{currentGroup.money}}</h4>
     </div>
-    <div class="group-members">
-      <h4 *ngFor="let member of currentGroupMembers">{{member.username}}</h4>
+    <div class="group-options-options">
+      <button class="group-option-button" (click)="modalService.open(shareGroupModal)">
+        <i class="fa-solid fa-share-nodes fa-2x"></i>
+      </button>
+      <button class="group-option-button" (click)="leaveGroup()">
+        <i class="fa-solid fa-arrow-right-from-bracket fa-2x"></i>
+      </button>
     </div>
   </div>
-
-  <div *ngIf="!isInGroup()">
-    <h4 style="text-align: center">Welcome {{auth.getName()}}</h4>
-    <br>
-
-    <div class="options">
-      <button class="btn btn-primary" (click)="modalService.open(joinGroupModal)">Join</button><br>
-      <button class="btn btn-primary" (click)="modalService.open(createGroupModal)">Create</button>
-    </div>
+  <div class="group-separator"><hr></div>
+  <div class="group-members">
+    <h6 *ngFor="let member of currentGroupMembers">{{member.username}}</h6>
   </div>
 </div>
 
+<div class="myContainer div-config-dif-background" *ngIf="!isInGroup()">
+  <h4 style="text-align: center">Welcome {{auth.getName()}}</h4>
+  <br>
+
+  <div class="options">
+    <button class="btn btn-primary" (click)="modalService.open(joinGroupModal)">Join</button><br>
+    <button class="btn btn-primary" (click)="modalService.open(createGroupModal)">Create</button>
+  </div>
+</div>
+
+
 <ng-template #joinGroupModal let-modal>
-  <form action="" [formGroup]="joinGroupForm" (ngSubmit)="joinGroupForm.valid && joinGroup()">
+  <form action="" [formGroup]="joinGroupForm" (ngSubmit)="joinGroupForm.valid && joinGroup() && modalService.dismissAll() && modal.dismiss()">
     <div class="modal-header">
       <h2 style="text-align: center">Join group</h2>
       <button class="btn-close" type="button" (click)="modal.dismiss()"></button>

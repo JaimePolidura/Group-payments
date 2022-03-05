@@ -89,7 +89,6 @@ export class MainComponent implements OnInit {
     }
 
     this.groupService.createGroup(createGroupRequest).subscribe(res => {
-      console.log(res.group);
       this.currentGroup = res.group;
     });
   }
@@ -104,5 +103,13 @@ export class MainComponent implements OnInit {
 
   public copyToClipboard(toCopy: any) {
     navigator.clipboard.writeText(toCopy);
+  }
+
+  public leaveGroup() {
+    this.groupService.leaveGroup({groupId: this.currentGroup?.groupId, ignoreThis: ""}).subscribe(res => {
+      this.currentGroupMembers = [];
+      // @ts-ignore
+      this.currentGroup = undefined;
+    });
   }
 }
