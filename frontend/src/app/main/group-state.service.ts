@@ -11,7 +11,6 @@ export class GroupStateService {
   private currentGroupMembers: User[];
 
   constructor(
-    private auth: Authentication,
   ){}
 
   public getCurrentGroup(): Group {
@@ -34,12 +33,26 @@ export class GroupStateService {
     this.currentGroupMembers.push(member);
   }
 
-  public isAdminOfCurrentGroup(): boolean {
-    return this.currentGroup != undefined && this.currentGroup.adminUserId == this.auth.getUserId();
+  public isAdminOfCurrentGroup(userId: string): boolean {
+    return this.currentGroup != undefined && this.currentGroup.adminUserId == userId;
   }
 
   public isInAGroup(): boolean {
     return this.currentGroup != undefined;
+  }
+
+  public deleteGroupMemberById(userId: string): User | undefined {
+    for(let i = 0; i < this.currentGroupMembers.length; i++){
+      const actualUser: User = this.currentGroupMembers[i];
+
+      if(actualUser.userId == userId){
+        this.currentGroupMembers.splice(i, 1);
+
+        return actualUser;
+      }
+    }
+
+    return undefined;
   }
 
   public clearState(): void {

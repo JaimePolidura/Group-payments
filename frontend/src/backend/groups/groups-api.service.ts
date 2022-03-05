@@ -9,6 +9,7 @@ import {CreateGroupResponse} from "./response/create-group-response";
 import {CreateGroupRequest} from "./request/create-group-request";
 import {GetGroupMembersByGroupIdResponse} from "./response/get-group-members-by-group-id-response";
 import {LeaveGroupRequest} from "./request/leave-group-request";
+import {KickGroupMemberRequest} from "./request/kick-group-member-request";
 
 @Injectable({
   providedIn: 'root'
@@ -39,5 +40,9 @@ export class GroupsApiService {
 
   public leaveGroup(request: LeaveGroupRequest): Observable<any>{
     return this.http.post("http://localhost:8080/groups/leave", request);
+  }
+
+  public kickGroupMember(request: KickGroupMemberRequest): Observable<any> {
+    return this.http.post("http://localhost:8080/groups/kick", request);
   }
 }
