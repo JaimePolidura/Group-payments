@@ -11,6 +11,8 @@ import {MainComponent} from "./main/main.component";
 import {NavigationBarComponent} from "./navigation-bar/navigation-bar.component";
 import {GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule} from "angularx-social-login";
 import {HttpRequestInterceptor} from "../backend/http-request-interceptor.service";
+import { GroupOptionsComponent } from './main/group-optins/group-options.component';
+import {NonGroupOptionsComponent} from "./main/non-group-options/non-group-options.component";
 
 @NgModule({
   declarations: [
@@ -18,6 +20,8 @@ import {HttpRequestInterceptor} from "../backend/http-request-interceptor.servic
     LoginComponent,
     MainComponent,
     NavigationBarComponent,
+    NonGroupOptionsComponent,
+    GroupOptionsComponent,
   ],
   imports: [
     BrowserModule,

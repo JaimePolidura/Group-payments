@@ -13,7 +13,7 @@ import {LeaveGroupRequest} from "./request/leave-group-request";
 @Injectable({
   providedIn: 'root'
 })
-export class GroupService {
+export class GroupsApiService {
 
   constructor(private http: HttpClient) { }
 
