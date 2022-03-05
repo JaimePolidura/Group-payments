@@ -42,13 +42,13 @@ public class OAuthController {
         var googleIdToken = GoogleIdToken.parse(verifier.getJsonFactory(), request.token);
         var payload = googleIdToken.getPayload();
 
-        UUID userId = createNewUserIfNotExistsAndGetUserId(request.username, payload.getEmail());
+        UUID userId = createNewUserIfNotExistsAndGetUserId(request.username, payload.getEmail(), String.valueOf(payload.get("picture")));
         String newToken = jwtUtils.generateToken(userId);
 
         return ResponseEntity.ok(new Response(newToken, userId));
     }
 
-    private UUID createNewUserIfNotExistsAndGetUserId(String username, String email) {
+    private UUID createNewUserIfNotExistsAndGetUserId(String username, String email, String phtoUrl) {
         if(usersService.findByEmail(email).isEmpty())
             return usersService.save(username, email);
         else

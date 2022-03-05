@@ -14,6 +14,7 @@ public final class User extends Aggregate {
     @Getter private final String username;
     @Getter private final String email;
     @Getter private final LocalDateTime loggedDate;
+    @Getter private final String photoUrl;
 
     @Override
     public Map<String, Object> toPrimitives() {
@@ -21,6 +22,7 @@ public final class User extends Aggregate {
                 "userId", userId.toString(),
                 "username", username,
                 "email", email,
+                "photoUrl", photoUrl,
                 "loggedDate", loggedDate.toString()
         );
     }

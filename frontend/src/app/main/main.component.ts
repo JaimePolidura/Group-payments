@@ -3,7 +3,7 @@ import {Authentication} from "../../backend/authentication/authentication";
 import {GroupService} from "../../backend/groups/group.service";
 import {Group} from "../../model/group";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {AbstractControl, Form, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/forms";
 import {CreateGroupRequest} from "../../backend/groups/request/create-group-request";
 import {User} from "../../model/user";
 
@@ -53,10 +53,12 @@ export class MainComponent implements OnInit {
 
   public checkIfGroupToJoinExists(): void {
     const groupId = this.groupId?.value;
-    console.log(groupId);
 
     this.groupService.getGroupById(groupId).subscribe(
-      res => {this.joinGroupForm.setErrors(null)},
+      res => {
+        this.joinGroup();
+        this.joinGroupForm.setErrors(null)
+      },
       err => {this.joinGroupForm.setErrors({groupNoExists: true})}
     );
   }
@@ -64,7 +66,9 @@ export class MainComponent implements OnInit {
   public joinGroup(): void {
     const groupIdToJoin = this.groupId?.value;
 
-    this.groupService.joinGroup({groupId: groupIdToJoin}).subscribe(res => {
+    this.closeModal();
+
+    this.groupService.joinGroup({groupId: groupIdToJoin, ignoreThis: ''}).subscribe(res => {
       this.currentGroup = res.group;
 
       this.groupService.getGroupMembersByGroupId(res.group.groupId).subscribe(res => {
@@ -90,6 +94,7 @@ export class MainComponent implements OnInit {
 
     this.groupService.createGroup(createGroupRequest).subscribe(res => {
       this.currentGroup = res.group;
+      this.closeModal();
     });
   }
 
@@ -103,6 +108,7 @@ export class MainComponent implements OnInit {
 
   public copyToClipboard(toCopy: any) {
     navigator.clipboard.writeText(toCopy);
+    this.closeModal();
   }
 
   public leaveGroup() {
@@ -111,5 +117,9 @@ export class MainComponent implements OnInit {
       // @ts-ignore
       this.currentGroup = undefined;
     });
+  }
+
+  private closeModal(): void {
+    this.modalService.dismissAll();
   }
 }

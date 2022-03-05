@@ -30,7 +30,7 @@
 
 
 <ng-template #joinGroupModal let-modal>
-  <form action="" [formGroup]="joinGroupForm" (ngSubmit)="joinGroupForm.valid && joinGroup() && modalService.dismissAll() && modal.dismiss()">
+  <form action="" [formGroup]="joinGroupForm" (ngSubmit)="joinGroupForm.valid && joinGroup()">
     <div class="modal-header">
       <h2 style="text-align: center">Join group</h2>
       <button class="btn-close" type="button" (click)="modal.dismiss()"></button>

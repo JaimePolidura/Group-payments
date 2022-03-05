@@ -13,10 +13,10 @@ import java.util.UUID;
 public class UsersService {
     private final UserRepository userRepository;
 
-    public UUID save(String username, String email) {
+    public UUID save(String username, String email, String photoUrl) {
         UUID userId = UUID.randomUUID();
 
-        userRepository.save(new User(userId, username, email, LocalDateTime.now()));
+        userRepository.save(new User(userId, username, email, LocalDateTime.now(), photoUrl));
 
         return userId;
     }

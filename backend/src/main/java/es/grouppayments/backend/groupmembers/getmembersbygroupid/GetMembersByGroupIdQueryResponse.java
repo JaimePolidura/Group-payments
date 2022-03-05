@@ -24,9 +24,15 @@ public class GetMembersByGroupIdQueryResponse implements QueryResponse {
         @Getter private final UUID userId;
         @Getter private final String username;
         @Getter private final String email;
+        @Getter private final String photoUrl;
 
         public static GroupMemberUser fromUserAggregate(User userAggregate){
-            return new GroupMemberUser(userAggregate.getUserId(), userAggregate.getUsername(), userAggregate.getEmail());
+            return new GroupMemberUser(
+                    userAggregate.getUserId(),
+                    userAggregate.getUsername(),
+                    userAggregate.getEmail(),
+                    userAggregate.getPhotoUrl()
+            );
         }
     }
 }
