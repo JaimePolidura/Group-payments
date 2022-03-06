@@ -12,6 +12,7 @@ import es.grouppayments.backend.payments._shared.domain.UnprocessablePayment;
 import es.jaime.javaddd.domain.cqrs.command.CommandHandler;
 import es.jaime.javaddd.domain.event.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
+import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,10 +33,11 @@ public class MakePaymentCommandHandler implements CommandHandler<MakePaymentComm
     @Override
     public void handle(MakePaymentCommand makePaymentCommand) {
         Group group = ensureGroupExistsAndGet(makePaymentCommand.getGruopId());
+        this.ensureAdminOfGroup(group, makePaymentCommand.getUserId());
         List<GroupMember> groupMembersNotAdmin = ensureAtLeastOneMemberExceptAdminAndGet(group);
         double moneyToPayPerMember = group.getMoney() / groupMembersNotAdmin.size();
 
-        ensureAllHaveEnoughBalance(groupMembersNotAdmin, moneyToPayPerMember);
+        ensureAllMembersCanPay(groupMembersNotAdmin, moneyToPayPerMember);
 
         for (GroupMember groupMember : groupMembersNotAdmin) {
             this.paymentService.makePayment(groupMember.getUserId(), group.getAdminUserId(), moneyToPayPerMember);
@@ -51,10 +53,15 @@ public class MakePaymentCommandHandler implements CommandHandler<MakePaymentComm
         ));
     }
 
-    private void ensureAllHaveEnoughBalance(List<GroupMember> payerMembers, double money){
+    private void ensureAllMembersCanPay(List<GroupMember> payerMembers, double money){
         Utils.allMatchOrThrow(payerMembers,
                 member -> paymentService.isValid(member.getUserId(), money),
                 UnprocessablePayment.of("Not enough balance"));
+    }
+
+    private void ensureAdminOfGroup(Group group, UUID userId){
+        if(!group.getAdminUserId().equals(userId))
+            throw new NotTheOwner("You are not the admin of the group");
     }
 
     private List<GroupMember> ensureAtLeastOneMemberExceptAdminAndGet(Group group){

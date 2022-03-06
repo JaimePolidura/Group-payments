@@ -4,6 +4,7 @@ import es.grouppayments.backend.groups._shared.domain.events.GroupDeleted;
 import es.grouppayments.backend.payments._shared.domain.PaymentDone;
 import es.grouppayments.backend.payments._shared.domain.UnprocessablePayment;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
+import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import org.junit.Test;
 
@@ -17,9 +18,10 @@ public class MakePaymentTest extends MakePaymentMother{
         final double moneyOfGroup = 60;
         final double moneyPerMember = moneyOfGroup / numberOfMembersNotAdmin;
         UUID groupId = UUID.randomUUID();
-        addGroup(groupId, UUID.randomUUID(), moneyOfGroup, UUID.randomUUID(), UUID.randomUUID());
+        UUID userID = UUID.randomUUID();
+        addGroup(groupId, userID, moneyOfGroup, UUID.randomUUID(), UUID.randomUUID());
 
-        makePayment(groupId);
+        makePayment(groupId, userID);
 
         assertEventRaised(PaymentDone.class, GroupDeleted.class);
         assertGroupDeleted(groupId);
@@ -28,26 +30,36 @@ public class MakePaymentTest extends MakePaymentMother{
 
     @Test(expected = ResourceNotFound.class)
     public void shouldntMakePaymentGroupNotExists(){
-        makePayment(UUID.randomUUID());
+        makePayment(UUID.randomUUID(), UUID.randomUUID());
     }
 
     @Test(expected = IllegalQuantity.class)
     public void shouldntMakePaymentGroupOnlyOneMember(){
+        UUID userId = UUID.randomUUID();
         UUID groupId = UUID.randomUUID();
-        addGroup(groupId, UUID.randomUUID(), 10);
+        addGroup(groupId, userId, 10);
 
-        makePayment(groupId);
+        makePayment(groupId, userId);
+    }
+
+    @Test(expected = NotTheOwner.class)
+    public void shouldntMakePaymentNotTheAdmin(){
+        UUID groupId = UUID.randomUUID();
+        addGroup(groupId, UUID.randomUUID(), 10, UUID.randomUUID());
+
+        makePayment(groupId, UUID.randomUUID());
     }
 
     @Test(expected = UnprocessablePayment.class)
     public void shouldntMakePaymentUnprocessable(){
         UUID groupId = UUID.randomUUID();
-        addGroup(groupId, UUID.randomUUID(), 10);
+        UUID userId = UUID.randomUUID();
+        addGroup(groupId, userId, 10);
         addMember(groupId, UUID.randomUUID());
         addMember(groupId, UUID.randomUUID());
 
         super.willFail();
 
-        makePayment(groupId);
+        makePayment(groupId, userId);
     }
 }

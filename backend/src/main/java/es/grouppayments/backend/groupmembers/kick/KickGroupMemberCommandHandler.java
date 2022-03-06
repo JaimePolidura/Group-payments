@@ -5,6 +5,7 @@ import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
 import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
 import es.jaime.javaddd.domain.cqrs.command.CommandHandler;
+import es.jaime.javaddd.domain.exceptions.IllegalState;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ public class KickGroupMemberCommandHandler implements CommandHandler<KickGroupMe
         Group group = ensureGroupExistsAndGet(command.getGroupId());
         ensureAdminOfGroup(group, command.getUserId());
         ensureUserToKickInGroup(command.getUserIdToKick(), group.getGroupId());
+        ensureAdminNotKickingHimself(command.getUserIdToKick(), command.getUserId());
 
         groupMemberService.deleteByUserId(command.getUserIdToKick());
     }
@@ -44,6 +46,12 @@ public class KickGroupMemberCommandHandler implements CommandHandler<KickGroupMe
 
         if(!groupMember.getGroupId().equals(groupId)){
             throw new ResourceNotFound("The user to that group");
+        }
+    }
+
+    private void ensureAdminNotKickingHimself(UUID userIdToKick, UUID userId){
+        if(userIdToKick.equals(userId)){
+            throw new IllegalState("You cant kick yourself");
         }
     }
 }

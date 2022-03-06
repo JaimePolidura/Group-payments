@@ -22,9 +22,10 @@ public class MakePaymentMother extends GroupTestMother {
         );
     }
 
-    public void makePayment(UUID gruopId){
+    public void makePayment(UUID gruopId, UUID userId){
         this.makePaymentCommandHandler.handle(new MakePaymentCommand(
-                gruopId
+                gruopId,
+                userId
         ));
     }
 
