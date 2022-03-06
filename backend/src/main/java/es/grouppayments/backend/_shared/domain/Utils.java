@@ -2,7 +2,10 @@ package es.grouppayments.backend._shared.domain;
 
 import es.jaime.javaddd.domain.exceptions.DomainException;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -13,5 +16,9 @@ public final class Utils {
                                            Supplier<? extends DomainException> exceptionSupplier) {
         if(!list.stream().allMatch(condition))
            throw exceptionSupplier.get();
+    }
+
+    public static <E> Set<E> setOf(E... elements){
+        return new HashSet<>(Arrays.asList(elements));
     }
 }

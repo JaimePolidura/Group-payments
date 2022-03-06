@@ -5,6 +5,7 @@ import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/form
 import {GroupsApiService} from "../../../backend/groups/groups-api.service";
 import {CreateGroupRequest} from "../../../backend/groups/request/create-group-request";
 import {GroupStateService} from "../group-state.service";
+import {ServerSentEventsService} from "../../../backend/server-sent-events.service";
 
 @Component({
   selector: 'app-non-group-options',
@@ -20,6 +21,7 @@ export class NonGroupOptionsComponent implements OnInit {
     public auth: Authentication,
     private groupService: GroupsApiService,
     private groupState: GroupStateService,
+    private serverSentEvents: ServerSentEventsService,
   ){}
 
   ngOnInit(): void {
@@ -78,6 +80,7 @@ export class NonGroupOptionsComponent implements OnInit {
     this.groupService.createGroup(createGroupRequest).subscribe(res => {
       this.groupState.setCurrentGroup(res.group);
       this.closeModal();
+      this.serverSentEvents.connect();
     });
   }
 

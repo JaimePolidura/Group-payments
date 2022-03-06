@@ -25,7 +25,7 @@ public class MakePaymentTest extends MakePaymentMother{
 
         assertEventRaised(PaymentDone.class, GroupDeleted.class);
         assertGroupDeleted(groupId);
-        assertContentOfEventEquals(PaymentDone.class, PaymentDone::getMoneyPaidPerUser, moneyPerMember);
+        assertContentOfEventEquals(PaymentDone.class, PaymentDone::getMoneyPaidPerMember, moneyPerMember);
     }
 
     @Test(expected = ResourceNotFound.class)

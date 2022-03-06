@@ -46,7 +46,7 @@ export class Authentication {
       onSuccess();
     });
   }
-  
+
   isLogged(): boolean {
     return this.loggedUser != undefined;
   }

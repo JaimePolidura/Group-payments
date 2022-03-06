@@ -17,7 +17,7 @@ public class OnPaymentDone {
             paymentTransactions.save(
                     event.getAdminUserId(),
                     memberUserId,
-                    event.getMoneyPaidPerUser(),
+                    event.getMoneyPaidPerMember(),
                     event.getDescription()
             );
         });

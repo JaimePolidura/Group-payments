@@ -7,12 +7,14 @@ import es.grouppayments.backend.groups._shared.domain.GroupService;
 import es.grouppayments.backend.users._shared.domain.UsersService;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
 @AllArgsConstructor
 @Component
+@ConditionalOnProperty(value = "useseeder", havingValue = "true")
 public class Seeder implements CommandLineRunner {
     private final UsersService usersService;
     private final GroupService groupService;

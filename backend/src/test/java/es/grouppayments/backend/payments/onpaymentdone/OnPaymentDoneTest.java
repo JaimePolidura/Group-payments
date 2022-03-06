@@ -15,7 +15,7 @@ public class OnPaymentDoneTest extends OnPaymentDoneMother {
         UUID user2 = UUID.randomUUID();
         UUID userAdmin = UUID.randomUUID();
 
-        execute(new PaymentDone(List.of(user1, user2), userAdmin, "payment", 10));
+        execute(new PaymentDone(UUID.randomUUID() ,List.of(user1, user2), userAdmin, "payment", 10));
 
         //It will get all transactions
         List<Payment> transactions = paymentRepository().findByUserIdPaid(userAdmin);

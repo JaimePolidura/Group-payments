@@ -16,6 +16,8 @@ public class UsersService {
     public UUID save(String username, String email, String photoUrl) {
         UUID userId = UUID.randomUUID();
 
+        System.out.println("generated user id " + userId);
+
         userRepository.save(new User(userId, username, email, LocalDateTime.now(), photoUrl));
 
         return userId;

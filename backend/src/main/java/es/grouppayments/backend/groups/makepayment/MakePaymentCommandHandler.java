@@ -46,6 +46,7 @@ public class MakePaymentCommandHandler implements CommandHandler<MakePaymentComm
         groupService.deleteById(makePaymentCommand.getGruopId());
 
         eventBus.publish(new PaymentDone(
+                group.getGroupId(),
                 getUsersIdFromGroupMembers(groupMembersNotAdmin),
                 group.getAdminUserId(),
                 group.getDescription(),

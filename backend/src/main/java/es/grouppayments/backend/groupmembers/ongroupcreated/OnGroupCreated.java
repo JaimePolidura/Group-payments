@@ -16,7 +16,7 @@ public class OnGroupCreated {
     @EventListener({GroupCreated.class})
     public void on(GroupCreated event){
         this.groupMembers.save(new GroupMember(
-                event.getAmdinUserId(),
+                event.getAdminUserId(),
                 event.getGroupId(),
                 GroupMemberRole.ADMIN
         ));
