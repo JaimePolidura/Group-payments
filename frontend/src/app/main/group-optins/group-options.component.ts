@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {GroupStateService} from "../group-state.service";
 import {Group} from "../../../model/group";
 import {User} from "../../../model/user";
@@ -6,6 +6,7 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {GroupsApiService} from "../../../backend/groups/groups-api.service";
 import {KickGroupMemberRequest} from "../../../backend/groups/request/kick-group-member-request";
 import {Authentication} from "../../../backend/authentication/authentication";
+import {MakePaymentRequest} from "../../../backend/groups/request/make-payment-request";
 
 @Component({
   selector: 'app-group-options',
@@ -13,6 +14,7 @@ import {Authentication} from "../../../backend/authentication/authentication";
   styleUrls: ['./group-options.component.css']
 })
 export class GroupOptionsComponent implements OnInit {
+  @ViewChild('errorPaymentModal') private errorPaymentModal: any;
 
   constructor(
     public groupState: GroupStateService,
@@ -43,7 +45,7 @@ export class GroupOptionsComponent implements OnInit {
     this.closeModal();
   }
 
-  private closeModal(): void {
+  public closeModal(): void {
     this.modalService.dismissAll();
   }
 
@@ -67,5 +69,26 @@ export class GroupOptionsComponent implements OnInit {
 
   isAdminOfCurrentGroup(userId: string): boolean{
     return this.groupState.isAdminOfCurrentGroup(userId);
+  }
+
+  public makePayment(): void {
+    const request: MakePaymentRequest = {
+      groupId: this.groupState.getCurrentGroup().groupId,
+      userId: this.auth.getUserId(),
+    };
+
+    this.closeModal();
+
+    this.groupsApi.makePayment(request).subscribe(
+      res => this.onPaymentSuccess(),
+      err => this.onPaymentFailure(err)
+    );
+  }
+
+  private onPaymentSuccess(): void {
+  }
+
+  private onPaymentFailure(err: any): void {
+    this.modalService.open(this.errorPaymentModal);
   }
 }

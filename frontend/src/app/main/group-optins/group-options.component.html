@@ -67,8 +67,34 @@
     <h6>Total bill/member ~ {{currentGroup().money / currentGroupMembers().length}}</h6>
   </div>
   <div class="modal-footer payment-confirm-options">
-    <button type="submit" class="btn btn-success">✔ Pay ✔</button>
-    <button type="submit" class="btn btn-danger">✘ Cancel ✘</button>
+    <button type="submit" class="btn btn-success" (click)="makePayment()">✔ Pay ✔</button>
+    <button type="submit" class="btn btn-danger" (click)="closeModal()">✘ Cancel ✘</button>
+  </div>
+</ng-template>
+
+<ng-template #errorPaymentModal let-modal>
+  <div class="modal-header">
+    <h2 style="text-align: center">¡ERROR!</h2>
+    <button class="btn-close" type="button" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body modal-body-centered">
+    <h5 class="red">Error while trying to make the payment</h5>
+  </div>
+  <div class="modal-footer payment-confirm-options">
+    <button type="submit" class="myButton myButton-footer" (click)="this.closeModal()">✔ Ok ✔</button>
+  </div>
+</ng-template>
+
+<ng-template #successPaymentModal let-modal>
+  <div class="modal-header">
+    <h2 style="text-align: center">¡Payment done!</h2>
+    <button class="btn-close" type="button" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body modal-body-centered">
+    <h6>The payment has been completed</h6>
+  </div>
+  <div class="modal-footer payment-confirm-options">
+    <button type="submit" class="myButton myButton-footer" (click)="this.closeModal()">✔ Ok ✔</button>
   </div>
 </ng-template>
 
