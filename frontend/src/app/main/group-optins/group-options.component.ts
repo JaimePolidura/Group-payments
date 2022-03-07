@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {ApplicationRef, Component, OnInit, ViewChild} from '@angular/core';
 import {GroupStateService} from "../group-state.service";
 import {Group} from "../../../model/group";
 import {User} from "../../../model/user";
@@ -8,6 +8,8 @@ import {KickGroupMemberRequest} from "../../../backend/groups/request/kick-group
 import {Authentication} from "../../../backend/authentication/authentication";
 import {MakePaymentRequest} from "../../../backend/groups/request/make-payment-request";
 import {ServerSentEventsService} from "../../../backend/events/server-sent-events.service";
+import {GroupMemberJoined} from "../../../backend/events/model/group-member-joined";
+import {GetGroupMemberByUserIdRequest} from "../../../backend/groups/request/get-group-member-by-user-id-request";
 
 @Component({
   selector: 'app-group-options',
@@ -23,10 +25,12 @@ export class GroupOptionsComponent implements OnInit {
     private groupsApi: GroupsApiService,
     private auth: Authentication,
     private serverSentEvents: ServerSentEventsService,
+    private applicationRef: ApplicationRef,
   ){}
 
   ngOnInit(): void {
     this.onMemberLeft();
+    this.onMemberJoined();
 
     this.serverSentEvents.connect();
   }
@@ -102,6 +106,26 @@ export class GroupOptionsComponent implements OnInit {
     this.serverSentEvents.subscribe('group-member-left', (groupMemberLeft) => {
       // @ts-ignore
       this.groupState.deleteGroupMemberById(groupMemberLeft.userId);
+      this.refreshChangesInUI();
     });
+  }
+
+  public onMemberJoined(): void {
+    this.serverSentEvents.subscribe('group-member-joined', (groupMemberJoined) => {
+      // @ts-ignore
+      const userId = groupMemberJoined.userId;
+      const request: GetGroupMemberByUserIdRequest = {userId: userId, groupId: this.groupState.getCurrentGroup().groupId};
+
+      this.groupsApi.getGroupMemberByUserId(request).subscribe(res => {
+        this.groupState.addMember(res.member);
+        this.refreshChangesInUI();
+      });
+    });
+  }
+
+  //We force angular to update
+  //TODO fix
+  private refreshChangesInUI(): void {
+    this.applicationRef.tick();
   }
 }

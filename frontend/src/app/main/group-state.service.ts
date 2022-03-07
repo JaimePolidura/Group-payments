@@ -1,7 +1,6 @@
-import { Injectable } from '@angular/core';
+import {ApplicationRef, ChangeDetectorRef, Injectable} from '@angular/core';
 import {Group} from "../../model/group";
 import {User} from "../../model/user";
-import {Authentication} from "../../backend/authentication/authentication";
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +9,9 @@ export class GroupStateService {
   private currentGroup: Group;
   private currentGroupMembers: User[];
 
-  constructor(
-  ){}
+  constructor(){
+    this.currentGroupMembers = [];
+  }
 
   public getCurrentGroup(): Group {
     return this.currentGroup;
@@ -30,7 +30,13 @@ export class GroupStateService {
   }
 
   public addMember(member: User): void {
-    this.currentGroupMembers.push(member);
+    if (!this.existsByUserId(member.userId)) {
+      this.currentGroupMembers = [...this.currentGroupMembers.concat([member])];
+    }
+  }
+
+  private existsByUserId(userId: string): boolean{
+    return this.currentGroupMembers.filter(member => member.userId == userId).length != 0;
   }
 
   public isAdminOfCurrentGroup(userId: string): boolean {
@@ -58,7 +64,6 @@ export class GroupStateService {
   public clearState(): void {
     // @ts-ignore
     this.currentGroup = undefined;
-    // @ts-ignore
-    this.currentGroupMembers = undefined;
+    this.currentGroupMembers = [];
   }
 }

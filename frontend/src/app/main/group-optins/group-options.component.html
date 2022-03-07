@@ -16,7 +16,7 @@
   <div class="group-separator"><hr></div>
 
   <div class="group-members">
-    <div *ngFor="let member of currentGroupMembers()">
+    <div *ngFor="let member of groupState.getCurrentGroupMembers()">
       <div class="group-member">
         <div class="group-member-option">
           <button class="btn btn-danger"

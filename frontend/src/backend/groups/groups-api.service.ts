@@ -11,6 +11,8 @@ import {GetGroupMembersByGroupIdResponse} from "./response/get-group-members-by-
 import {LeaveGroupRequest} from "./request/leave-group-request";
 import {KickGroupMemberRequest} from "./request/kick-group-member-request";
 import {MakePaymentRequest} from "./request/make-payment-request";
+import {GetGroupMemberByUserIdRequest} from "./request/get-group-member-by-user-id-request";
+import {GetGroupMemberByUserIdResponse} from "./response/get-group-member-by-user-id-response";
 
 @Injectable({
   providedIn: 'root'
@@ -49,5 +51,9 @@ export class GroupsApiService {
 
   public makePayment(request: MakePaymentRequest): Observable<any> {
     return this.http.post("http://localhost:8080/groups/makepayment", request);
+  }
+
+  public getGroupMemberByUserId(request: GetGroupMemberByUserIdRequest): Observable<GetGroupMemberByUserIdResponse> {
+    return this.http.get<GetGroupMemberByUserIdResponse>(`http://localhost:8080/groups/member?userId=${request.userId}&groupId=${request.groupId}`);
   }
 }

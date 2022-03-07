@@ -75,9 +75,14 @@ export class NonGroupOptionsComponent implements OnInit {
       title: this.title?.value,
     }
 
+    this.closeModal();
+
     this.groupService.createGroup(createGroupRequest).subscribe(res => {
       this.groupState.setCurrentGroup(res.group);
-      this.closeModal();
+
+      this.groupService.getGroupMembersByGroupId(res.group.groupId).subscribe(res => {
+        this.groupState.setCurrentGroupMembers(res.members);
+      });
     });
   }
 
