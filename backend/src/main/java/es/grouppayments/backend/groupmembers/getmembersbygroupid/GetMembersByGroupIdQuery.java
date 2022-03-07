@@ -8,4 +8,5 @@ import java.util.UUID;
 @Data
 public class GetMembersByGroupIdQuery implements Query {
     private final UUID groupId;
+    private final UUID userId;
 }

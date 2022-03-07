@@ -20,8 +20,9 @@ public class GetMembersByGroupIdController extends Controller {
     @GetMapping("/groups/members/{groupId}")
     public ResponseEntity<GetMembersByGroupIdQueryResponse> getMembers(@PathVariable String groupId){
         GetMembersByGroupIdQueryResponse queryResponse = queryBus.ask(new GetMembersByGroupIdQuery(
-                UUID.fromString(groupId))
-        );
+                UUID.fromString(groupId),
+                getLoggedUsername()
+        ));
 
         return buildNewHttpResponseOK(queryResponse);
     }

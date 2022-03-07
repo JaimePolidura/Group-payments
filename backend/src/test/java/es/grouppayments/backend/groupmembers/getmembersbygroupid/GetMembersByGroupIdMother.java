@@ -22,8 +22,8 @@ public class GetMembersByGroupIdMother extends GroupMembersTestMother implements
         );
     }
 
-    public GetMembersByGroupIdQueryResponse executeQuery(UUID gruopId){
-        return this.handler.handle(new GetMembersByGroupIdQuery(gruopId));
+    public GetMembersByGroupIdQueryResponse executeQuery(UUID gruopId, UUID userId){
+        return this.handler.handle(new GetMembersByGroupIdQuery(gruopId, userId));
     }
 
     @Override
