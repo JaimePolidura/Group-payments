@@ -7,6 +7,7 @@ import {GroupsApiService} from "../../../backend/groups/groups-api.service";
 import {KickGroupMemberRequest} from "../../../backend/groups/request/kick-group-member-request";
 import {Authentication} from "../../../backend/authentication/authentication";
 import {MakePaymentRequest} from "../../../backend/groups/request/make-payment-request";
+import {ServerSentEventsService} from "../../../backend/events/server-sent-events.service";
 
 @Component({
   selector: 'app-group-options',
@@ -21,13 +22,18 @@ export class GroupOptionsComponent implements OnInit {
     public modalService: NgbModal,
     private groupsApi: GroupsApiService,
     private auth: Authentication,
-    ) { }
+    private serverSentEvents: ServerSentEventsService,
+  ){}
 
   ngOnInit(): void {
+    this.onMemberLeft();
+
+    this.serverSentEvents.connect();
   }
 
   public leaveGroup() {
     this.groupsApi.leaveGroup({groupId: this.currentGroup().groupId, ignoreThis: ""}).subscribe(res => {
+      this.serverSentEvents.disconnect();
       this.groupState.clearState();
     });
   }
@@ -90,5 +96,12 @@ export class GroupOptionsComponent implements OnInit {
 
   private onPaymentFailure(err: any): void {
     this.modalService.open(this.errorPaymentModal);
+  }
+
+  public onMemberLeft(): void {
+    this.serverSentEvents.subscribe('group-member-left', (groupMemberLeft) => {
+      // @ts-ignore
+      this.groupState.deleteGroupMemberById(groupMemberLeft.userId);
+    });
   }
 }

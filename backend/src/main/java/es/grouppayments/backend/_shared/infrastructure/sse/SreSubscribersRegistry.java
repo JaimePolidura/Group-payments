@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class SreSubscribersRegistry {
@@ -27,10 +26,14 @@ public class SreSubscribersRegistry {
         }
     }
 
+    public void delete(UUID groupId, SseEmitter emitter){
+        this.subscribers.get(groupId).removeIf(e -> e.equals(emitter));
+    }
+
     @SneakyThrows
     public void sendToGroup(UUID groupId, String data){
         for (SseEmitter sseEmitter : this.subscribers.get(groupId)) {
-            sseEmitter.send(data);
+            sseEmitter.send(SseEmitter.event().data(data));
         }
     }
 }

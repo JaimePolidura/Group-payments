@@ -26,8 +26,6 @@ export class NavigationBarComponent implements OnInit {
   }
 
   photoURL(): string{
-    console.log(this.auth.getPhotoURL())
-
     return this.auth.getPhotoURL();
   }
 
