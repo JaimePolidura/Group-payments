@@ -31,6 +31,7 @@ export class GroupOptionsComponent implements OnInit {
   ngOnInit(): void {
     this.onMemberLeft();
     this.onMemberJoined();
+    this.onGroupDeleted();
 
     this.serverSentEvents.connect();
   }
@@ -102,15 +103,29 @@ export class GroupOptionsComponent implements OnInit {
     this.modalService.open(this.errorPaymentModal);
   }
 
-  public onMemberLeft(): void {
+  private onMemberLeft(): void {
     this.serverSentEvents.subscribe('group-member-left', (groupMemberLeft) => {
       // @ts-ignore
-      this.groupState.deleteGroupMemberById(groupMemberLeft.userId);
-      this.refreshChangesInUI();
+      const userId = groupMemberLeft.userId;
+
+      if(userId == this.auth.getUserId()){
+        this.onKicked();
+      }else{
+        this.groupState.deleteGroupMemberById(userId);
+        this.refreshChangesInUI();
+      }
     });
   }
 
-  public onMemberJoined(): void {
+  private onKicked(): void {
+    window.alert("You have been kicked from the group!");
+
+    this.groupState.clearState();
+    this.serverSentEvents.disconnect()
+    this.refreshChangesInUI()
+  }
+
+  private onMemberJoined(): void {
     this.serverSentEvents.subscribe('group-member-joined', (groupMemberJoined) => {
       // @ts-ignore
       const userId = groupMemberJoined.userId;
@@ -120,6 +135,15 @@ export class GroupOptionsComponent implements OnInit {
         this.groupState.addMember(res.member);
         this.refreshChangesInUI();
       });
+    });
+  }
+
+  private onGroupDeleted(): void {
+    this.serverSentEvents.subscribe('group-deleted', (event) => {
+      this.groupState.clearState();
+      this.serverSentEvents.disconnect();
+
+      this.refreshChangesInUI();
     });
   }
 
