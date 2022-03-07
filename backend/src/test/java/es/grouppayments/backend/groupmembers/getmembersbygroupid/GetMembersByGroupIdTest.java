@@ -1,6 +1,6 @@
 package es.grouppayments.backend.groupmembers.getmembersbygroupid;
 
-import es.grouppayments.backend.groupmembers.getmemberbyuserid.GetMemberByUserIdResponse;
+import es.grouppayments.backend.groupmembers.getmemberbyuserid.GetMemberByUserIdQueryResponse;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import org.junit.Test;
 
@@ -19,7 +19,7 @@ public class GetMembersByGroupIdTest extends GetMembersByGroupIdMother {
         addGroup(groupId, user1, 10, user2);
         addUser(user1, user2);
 
-        List<GetMemberByUserIdResponse> usersResponse = executeQuery(groupId, user1)
+        List<GetMemberByUserIdQueryResponse> usersResponse = executeQuery(groupId, user1)
                 .getMembers();
 
         assertEquals(2, usersResponse.size());
@@ -34,7 +34,6 @@ public class GetMembersByGroupIdTest extends GetMembersByGroupIdMother {
 
     @Test(expected = ResourceNotFound.class)
     public void shouldntGetNotBelongsToGroup(){
-        UUID userToGet = UUID.randomUUID();
         UUID groupId = UUID.randomUUID();
         addGroup(groupId, UUID.randomUUID(), 100);
 

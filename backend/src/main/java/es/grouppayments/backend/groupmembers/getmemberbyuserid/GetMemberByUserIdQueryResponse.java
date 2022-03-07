@@ -8,14 +8,14 @@ import lombok.Getter;
 import java.util.UUID;
 
 @AllArgsConstructor
-public class GetMemberByUserIdResponse implements QueryResponse {
+public class GetMemberByUserIdQueryResponse implements QueryResponse {
     @Getter private final UUID userId;
     @Getter private final String username;
     @Getter private final String email;
     @Getter private final String photoUrl;
 
-    public static GetMemberByUserIdResponse fromUserAggregate(User userAggregate){
-        return new GetMemberByUserIdResponse(
+    public static GetMemberByUserIdQueryResponse fromUserAggregate(User userAggregate){
+        return new GetMemberByUserIdQueryResponse(
                 userAggregate.getUserId(),
                 userAggregate.getUsername(),
                 userAggregate.getEmail(),

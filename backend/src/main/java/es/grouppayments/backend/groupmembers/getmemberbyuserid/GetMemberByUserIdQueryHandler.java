@@ -12,18 +12,18 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class GetMemberByUserIdHandler implements QueryHandler<GetMemberByUserIdQuery, GetMemberByUserIdResponse> {
+public class GetMemberByUserIdQueryHandler implements QueryHandler<GetMemberByUserIdQuery, GetMemberByUserIdQueryResponse> {
     private final UsersService usersService;
     private final GroupMemberService groupMemberService;
 
     @Override
-    public GetMemberByUserIdResponse handle(GetMemberByUserIdQuery query) {
+    public GetMemberByUserIdQueryResponse handle(GetMemberByUserIdQuery query) {
         ensureMemberInGroupAndUserInGroup(query.getGroupId(), query.getUserIdToGet(), query.getUserId());
 
         User user = usersService.findByUserId(query.getUserIdToGet())
                 .get();
 
-        return GetMemberByUserIdResponse.fromUserAggregate(user);
+        return GetMemberByUserIdQueryResponse.fromUserAggregate(user);
     }
 
     private void ensureMemberInGroupAndUserInGroup(UUID groupId, UUID userIdToGet, UUID userId){
@@ -33,7 +33,7 @@ public class GetMemberByUserIdHandler implements QueryHandler<GetMemberByUserIdQ
                 .size();
 
         //Expect 2 because the user and user to find both should be in the group
-        if(totalFind == 2){
+        if(totalFind != 2){
             throw new ResourceNotFound("You dont belong to the group Or user not found");
         }
     }
