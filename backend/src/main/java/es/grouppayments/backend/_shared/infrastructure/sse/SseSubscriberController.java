@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.json.JSONObject;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -34,11 +35,11 @@ public class SseSubscriberController extends Controller {
                 .get()
                 .getGroupId();
 
-        this.subscribersRegistry.add(groupIdOfUser, sseEmitter);
+        this.subscribersRegistry.add(groupIdOfUser, sseEmitter, UUID.fromString(userId));
 
-        sseEmitter.onCompletion(() -> this.subscribersRegistry.delete(groupIdOfUser, sseEmitter));
-        sseEmitter.onError(e -> this.subscribersRegistry.delete(groupIdOfUser, sseEmitter));
-        sseEmitter.onTimeout(() -> this.subscribersRegistry.delete(groupIdOfUser, sseEmitter));
+        sseEmitter.onCompletion(() -> this.subscribersRegistry.delete(groupIdOfUser, UUID.fromString(userId)));
+        sseEmitter.onError(e -> this.subscribersRegistry.delete(groupIdOfUser, UUID.fromString(userId)));
+        sseEmitter.onTimeout(() -> this.subscribersRegistry.delete(groupIdOfUser, UUID.fromString(userId)));
 
         return sseEmitter;
     }
@@ -50,6 +51,7 @@ public class SseSubscriberController extends Controller {
 
     @SneakyThrows
     @EventListener(GroupDomainEvent.class)
+    @Order(1)
     public void onNewEvent(GroupDomainEvent event){
         if(!event.name().equalsIgnoreCase("group-created")){
             this.subscribersRegistry.sendToGroup(event.getGroupId(), toJSON(event));
@@ -57,6 +59,7 @@ public class SseSubscriberController extends Controller {
     }
 
     @EventListener({GroupDeleted.class})
+    @Order(2)
     public void onGroupDeleted(GroupDeleted groupDeleted){
         this.subscribersRegistry.delete(groupDeleted.getGroupId());
     }

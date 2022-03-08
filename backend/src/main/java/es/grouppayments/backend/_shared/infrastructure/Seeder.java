@@ -23,14 +23,13 @@ public class Seeder implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         usersService.save("Jaime", "jaime.polidura@gmail.com", "https://lh3.googleusercontent.com/a/AATXAJz7wrFagWv7s_MyF8vEv4ZNz72ciRuD3fk2i_lrsQ=s96-c");
-        usersService.save("Jorge", "jorge.polidura@gmail.com", "https://lh3.googleusercontent.com/a-/AOh14Gg2u6SQhIvGMiX1y5_8gPdDvswOr2O8INkFNVq4=s96-c");
-        usersService.save("Julia", "julia.polidura@gmail.com", "https://lh3.googleusercontent.com/a/AATXAJyfnpTxyjxSddAWxFVyOH6kk2I6JXrb4N509rhxcA=s96-c");
+        usersService.save("JaimeTruman", "jaimetruman@gmail.com", "https://lh3.googleusercontent.com/a/AATXAJz7wrFagWv7s_MyF8vEv4ZNz72ciRuD3fk2i_lrsQ=s96-c");
+        usersService.save("Jaime Polidura", "jaime.polidura@alumnos.uneatlantico.es", "https://lh3.googleusercontent.com/a-/AOh14Gg2u6SQhIvGMiX1y5_8gPdDvswOr2O8INkFNVq4=s96-c");
 
         UUID groupId = UUID.randomUUID();
         groupService.create(groupId, "Group", 120, findUserIdByEmail("jaime.polidura@gmail.com"));
-
-        groupMemberService.save(new GroupMember(findUserIdByEmail("jorge.polidura@gmail.com"), groupId, GroupMemberRole.USER));
-        groupMemberService.save(new GroupMember(findUserIdByEmail("julia.polidura@gmail.com"), groupId, GroupMemberRole.USER));
+        groupMemberService.save(new GroupMember(findUserIdByEmail("jaimetruman@gmail.com"), groupId, GroupMemberRole.USER));
+        groupMemberService.save(new GroupMember(findUserIdByEmail("jaime.polidura@alumnos.uneatlantico.es"), groupId, GroupMemberRole.USER));
     }
 
     private UUID findUserIdByEmail(String email){
