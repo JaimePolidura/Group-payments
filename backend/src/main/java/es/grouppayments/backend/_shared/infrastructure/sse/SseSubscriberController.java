@@ -4,6 +4,7 @@ import es.grouppayments.backend._shared.domain.GroupDomainEvent;
 import es.grouppayments.backend._shared.infrastructure.Controller;
 import es.grouppayments.backend._shared.infrastructure.auth.JWTUtils;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
+import es.grouppayments.backend.groups._shared.domain.events.GroupDeleted;
 import es.jaime.javaddd.domain.exceptions.IllegalAccess;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -12,7 +13,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.io.IOException;
 import java.util.UUID;
 
 @RestController
@@ -25,7 +25,7 @@ public class SseSubscriberController extends Controller {
 
     @RequestMapping("/sse")
     public SseEmitter sseEmitter(@RequestParam String token,
-                                 @RequestParam String userId) throws IOException {
+                                 @RequestParam String userId){
         validateTokenOrThrowException(token, userId);
 
         SseEmitter sseEmitter = new SseEmitter(Long.MAX_VALUE);
@@ -54,6 +54,11 @@ public class SseSubscriberController extends Controller {
         if(!event.name().equalsIgnoreCase("group-created")){
             this.subscribersRegistry.sendToGroup(event.getGroupId(), toJSON(event));
         }
+    }
+
+    @EventListener({GroupDeleted.class})
+    public void onGroupDeleted(GroupDeleted groupDeleted){
+        this.subscribersRegistry.delete(groupDeleted.getGroupId());
     }
 
     private String toJSON(GroupDomainEvent event){

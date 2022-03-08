@@ -34,12 +34,12 @@ public class MakePaymentCommandHandler implements CommandHandler<MakePaymentComm
     public void handle(MakePaymentCommand makePaymentCommand) {
         Group group = ensureGroupExistsAndGet(makePaymentCommand.getGruopId());
         this.ensureAdminOfGroup(group, makePaymentCommand.getUserId());
-        List<GroupMember> groupMembersNotAdmin = ensureAtLeastOneMemberExceptAdminAndGet(group);
-        double moneyToPayPerMember = group.getMoney() / groupMembersNotAdmin.size();
+        List<GroupMember> groupMembersWithoutAdmin = ensureAtLeastOneMemberExceptAdminAndGet(group);
+        double moneyToPayPerMember = group.getMoney() / groupMembersWithoutAdmin.size();
 
-        ensureAllMembersCanPay(groupMembersNotAdmin, moneyToPayPerMember);
+        ensureAllMembersCanPay(groupMembersWithoutAdmin, moneyToPayPerMember);
 
-        for (GroupMember groupMember : groupMembersNotAdmin) {
+        for (GroupMember groupMember : groupMembersWithoutAdmin) {
             this.paymentService.makePayment(groupMember.getUserId(), group.getAdminUserId(), moneyToPayPerMember);
         }
 
@@ -47,7 +47,7 @@ public class MakePaymentCommandHandler implements CommandHandler<MakePaymentComm
 
         eventBus.publish(new PaymentDone(
                 group.getGroupId(),
-                getUsersIdFromGroupMembers(groupMembersNotAdmin),
+                getUsersIdFromGroupMembers(groupMembersWithoutAdmin),
                 group.getAdminUserId(),
                 group.getDescription(),
                 moneyToPayPerMember

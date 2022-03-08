@@ -30,6 +30,10 @@ public class SreSubscribersRegistry {
         this.subscribers.get(groupId).removeIf(e -> e.equals(emitter));
     }
 
+    public void delete(UUID groupId){
+        this.subscribers.remove(groupId);
+    }
+
     @SneakyThrows
     public void sendToGroup(UUID groupId, String data){
         for (SseEmitter sseEmitter : this.subscribers.get(groupId)) {

@@ -15,8 +15,8 @@ public class GetMemberByUserIdController extends Controller {
     private final QueryBus queryBus;
 
     @GetMapping("/groups/member")
-    public ResponseEntity<GetMemberByUserIdQueryResponse> getMember(@RequestParam String userId,
-                                                                    @RequestParam String groupId){
+    public ResponseEntity<Response> getMember(@RequestParam String userId,
+                                              @RequestParam String groupId){
 
         GetMemberByUserIdQueryResponse queryResponse = this.queryBus.ask(new GetMemberByUserIdQuery(
                 UUID.fromString(userId),
@@ -24,6 +24,11 @@ public class GetMemberByUserIdController extends Controller {
                 getLoggedUsername()
         ));
 
-        return buildNewHttpResponseOK(queryResponse);
+        return buildNewHttpResponseOK(new Response(queryResponse));
+    }
+
+    @AllArgsConstructor
+    private static class Response {
+        public final GetMemberByUserIdQueryResponse member;
     }
 }
