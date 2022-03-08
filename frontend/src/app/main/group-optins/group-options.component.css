@@ -44,6 +44,12 @@
   background-repeat: no-repeat;
   border: none;
   outline: none;
+  color: #202a35;
+}
+
+.group-option-button:hover {
+  color: #465669;
+  transition: 0.25s;
 }
 
 .group-separator{

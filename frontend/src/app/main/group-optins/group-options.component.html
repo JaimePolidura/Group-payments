@@ -4,10 +4,10 @@
       <h3>{{currentGroup().description}} - {{currentGroup().money}}</h3>
     </div>
     <div class="group-options-options">
-      <button class="group-option-button" (click)="modalService.open(shareGroupModal)">
+      <button class="group-option-button" (click)="modalService.open(shareGroupModal)" title="Share group">
         <i class="fa-solid fa-share-nodes fa-2x"></i>
       </button>
-      <button class="group-option-button" (click)="leaveGroup()">
+      <button class="group-option-button" (click)="leaveGroup()" title="Leave group">
         <i class="fa-solid fa-arrow-right-from-bracket fa-2x"></i>
       </button>
     </div>
@@ -64,7 +64,7 @@
     <h6>Are you sure to make the payment?</h6>
     <br>
     <h6>Total bill: {{currentGroup().money}}</h6>
-    <h6>Total bill/member ~ {{currentGroup().money / currentGroupMembers().length}}</h6>
+    <h6>Total bill/member ~ {{currentGroup().money / currentGroupMembers().length - 1}}</h6>
   </div>
   <div class="modal-footer payment-confirm-options">
     <button type="submit" class="btn btn-success" (click)="makePayment()">✔ Pay ✔</button>

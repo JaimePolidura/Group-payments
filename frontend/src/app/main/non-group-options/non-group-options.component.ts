@@ -5,6 +5,7 @@ import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/form
 import {GroupsApiService} from "../../../backend/groups/groups-api.service";
 import {CreateGroupRequest} from "../../../backend/groups/request/create-group-request";
 import {GroupStateService} from "../group-state.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-non-group-options',
@@ -20,6 +21,7 @@ export class NonGroupOptionsComponent implements OnInit {
     public auth: Authentication,
     private groupService: GroupsApiService,
     private groupState: GroupStateService,
+    private router: Router,
   ){}
 
   ngOnInit(): void {
@@ -70,12 +72,12 @@ export class NonGroupOptionsComponent implements OnInit {
   }
 
   public createGroup(): void {
+    this.closeModal();
+
     const createGroupRequest: CreateGroupRequest = {
       money: this.money?.value,
       title: this.title?.value,
     }
-
-    this.closeModal();
 
     this.groupService.createGroup(createGroupRequest).subscribe(res => {
       this.groupState.setCurrentGroup(res.group);
@@ -83,6 +85,12 @@ export class NonGroupOptionsComponent implements OnInit {
       this.groupService.getGroupMembersByGroupId(res.group.groupId).subscribe(res => {
         this.groupState.setCurrentGroupMembers(res.members);
       });
+    });
+  }
+
+  public logout(): void {
+    this.auth.logout(() => {
+      this.router.navigateByUrl("/");
     });
   }
 
