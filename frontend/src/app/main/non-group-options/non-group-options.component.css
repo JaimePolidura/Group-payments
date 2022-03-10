@@ -11,3 +11,9 @@
   margin: auto;
   width: 95%;
 }
+
+@media screen and (max-width: 900px){
+  .myContainer {
+    width: 90%;
+  }
+}
