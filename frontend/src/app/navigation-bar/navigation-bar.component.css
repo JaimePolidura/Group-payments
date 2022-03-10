@@ -16,10 +16,8 @@ body {
   left: 0;
   right: 0;
   height: 6%;
-  font-weight: 600;
   color: white;
   background-color: #202a35;
-  width: auto;
 
   display: grid;
   grid-template-columns: 50% 40% 10%;
@@ -54,4 +52,22 @@ body {
 .myImageNavBar {
   height: 75%;
   width: 20%;
+}
+
+@media screen and (max-width: 900px){
+  .toolbar {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 9%;
+  }
+
+  .toolbar h2 {
+    margin-top: 2%;
+    margin-left: 2.5%;
+    width: 100%;
+  }
+
+  .user-name {display: none}
+  .user-photo {display: none}
 }

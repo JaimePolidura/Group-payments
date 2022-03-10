@@ -37,18 +37,15 @@ export class GroupOptionsComponent implements OnInit {
   }
 
   public leaveGroup() {
+    this.serverSentEvents.disconnect();
+
     this.groupsApi.leaveGroup({groupId: this.currentGroup().groupId, ignoreThis: ""}).subscribe(res => {
-      this.serverSentEvents.disconnect();
       this.groupState.clearState();
     });
   }
 
   public currentGroup(): Group {
     return this.groupState.getCurrentGroup();
-  }
-
-  public currentGroupMembers(): User[] {
-    return this.groupState.getCurrentGroupMembers();
   }
 
   public copyToClipboard(toCopy: any) {
@@ -151,5 +148,13 @@ export class GroupOptionsComponent implements OnInit {
   //TODO fix
   private refreshChangesInUI(): void {
     this.applicationRef.tick();
+  }
+
+  public calculateTotalMoneyPerMember(): number {
+    const notOnlyAdminInGroup: boolean = this.groupState.getCurrentGroupMembers().length - 1 > 0;
+
+    return notOnlyAdminInGroup ?
+      this.groupState.getCurrentGroup().money / (this.groupState.getCurrentGroupMembers().length - 1) :
+      0 ;
   }
 }

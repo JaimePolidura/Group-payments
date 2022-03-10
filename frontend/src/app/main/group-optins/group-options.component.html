@@ -1,7 +1,7 @@
 <div class="group-container div-config-dif-background">
   <div class="group-options">
     <div class="group-options-stats">
-      <h3>{{currentGroup().description}} - {{currentGroup().money}}</h3>
+      <h3>{{currentGroup().description}} - &nbsp;&nbsp;&nbsp;&nbsp; Total {{currentGroup().money}}€ &nbsp;&nbsp;&nbsp;&nbsp; Total/Member ~ {{calculateTotalMoneyPerMember()}}€</h3>
     </div>
     <div class="group-options-options">
       <button class="group-option-button" (click)="modalService.open(shareGroupModal)" title="Share group">
@@ -64,7 +64,7 @@
     <h6>Are you sure to make the payment?</h6>
     <br>
     <h6>Total bill: {{currentGroup().money}}</h6>
-    <h6>Total bill/member ~ {{currentGroup().money / currentGroupMembers().length - 1}}</h6>
+    <h6>Total bill/member ~ {{calculateTotalMoneyPerMember()}} €</h6>
   </div>
   <div class="modal-footer payment-confirm-options">
     <button type="submit" class="btn btn-success" (click)="makePayment()">✔ Pay ✔</button>
