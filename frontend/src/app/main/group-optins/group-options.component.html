@@ -1,7 +1,12 @@
 <div class="group-container div-config-dif-background">
   <div class="group-options">
     <div class="group-options-stats">
-      <h3>{{currentGroup().description}} - &nbsp;&nbsp;&nbsp;&nbsp; Total {{currentGroup().money}}€ &nbsp;&nbsp;&nbsp;&nbsp; Total/Member ~ {{calculateTotalMoneyPerMember()}}€</h3>
+      <div class="group-desc">
+        <h3 class="group-desc">{{currentGroup().description}}- &nbsp;&nbsp;&nbsp;&nbsp;</h3>
+      </div>
+      <div class="group-data">
+        <h3>Total {{currentGroup().money}}€ &nbsp;&nbsp;Total/Member ~ {{calculateTotalMoneyPerMember()}}€</h3>
+      </div>
     </div>
     <div class="group-options-options">
       <button class="group-option-button" (click)="modalService.open(shareGroupModal)" title="Share group">

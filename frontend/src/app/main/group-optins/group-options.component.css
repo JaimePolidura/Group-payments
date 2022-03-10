@@ -97,7 +97,7 @@
 
 .payment-container {
   position: fixed;
-  top: 95%;
+  top: 92.5%;
   width: 100%;
 
   display: flex;
@@ -118,4 +118,36 @@
 
 .payment-confirm-options button {
   width: 40%;
+}
+
+@media screen and (max-width: 900px){
+  .group-desc h3{
+    display: none;
+  }
+
+  .group-data{
+    margin-top: 4%;
+  }
+
+  .group-data h3{
+    font-size: 17px;
+  }
+
+  .payment-container button {
+    width: 70%;
+    height: 100%;
+  }
+
+  .group-member {
+    margin-top: 1%;
+
+    display: grid;
+    grid-template-columns: 15% 15% auto;
+  }
+
+  .group-member-image img {
+    width: 60%;
+    height: 100%;
+  }
+
 }
