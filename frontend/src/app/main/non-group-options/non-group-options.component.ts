@@ -46,9 +46,9 @@ export class NonGroupOptionsComponent implements OnInit {
   get title(): AbstractControl | null { return this.createGroupForm.get('title'); }
 
   public checkIfGroupToJoinExists(): void {
-    const groupId = this.groupId?.value;
+    const groupJoinShareLink = this.groupId?.value;
 
-    this.groupService.getGroupById(groupId).subscribe(
+    this.groupService.getGroupById(this.getGroupIdToJoinFromShareLink(groupJoinShareLink)).subscribe(
       res => {
         this.joinGroup();
         this.joinGroupForm.setErrors(null)
@@ -58,7 +58,8 @@ export class NonGroupOptionsComponent implements OnInit {
   }
 
   public joinGroup(): void {
-    const groupIdToJoin = this.groupId?.value;
+    const groupToJoinLink: string = this.groupId?.value;
+    const groupIdToJoin = this.getGroupIdToJoinFromShareLink(groupToJoinLink);
 
     this.closeModal();
 
@@ -69,6 +70,10 @@ export class NonGroupOptionsComponent implements OnInit {
         this.groupState.setCurrentGroupMembers(res.members);
       });
     });
+  }
+
+  private getGroupIdToJoinFromShareLink(shareLink: string): string {
+    return shareLink.split("/")[shareLink.split("/").length - 1];
   }
 
   public createGroup(): void {

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Authentication} from "../../backend/authentication/authentication";
 import {GroupsApiService} from "../../backend/groups/groups-api.service";
 import {GroupStateService} from "./group-state.service";
+import {ActivatedRoute, ActivatedRouteSnapshot, Router} from "@angular/router";
 
 @Component({
   selector: 'app-main',
@@ -13,6 +14,8 @@ export class MainComponent implements OnInit {
     public auth: Authentication,
     private groupService: GroupsApiService,
     public groupState: GroupStateService,
+    private actualRoute: ActivatedRoute,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {

@@ -10,6 +10,7 @@ import {MakePaymentRequest} from "../../../backend/groups/request/make-payment-r
 import {ServerSentEventsService} from "../../../backend/events/server-sent-events.service";
 import {GroupMemberJoined} from "../../../backend/events/model/group-member-joined";
 import {GetGroupMemberByUserIdRequest} from "../../../backend/groups/request/get-group-member-by-user-id-request";
+import {FrontendUsingRoutesService} from "../../../frontend-using-routes.service";
 
 @Component({
   selector: 'app-group-options',
@@ -26,6 +27,7 @@ export class GroupOptionsComponent implements OnInit {
     private auth: Authentication,
     private serverSentEvents: ServerSentEventsService,
     private applicationRef: ApplicationRef,
+    private frontendHost: FrontendUsingRoutesService,
   ){}
 
   ngOnInit(): void {
@@ -142,6 +144,10 @@ export class GroupOptionsComponent implements OnInit {
 
       this.refreshChangesInUI();
     });
+  }
+
+  public getURLForJoiningGroup(): string{
+    return `${this.frontendHost.USING}/join/${this.currentGroup().groupId}`;
   }
 
   //We force angular to update

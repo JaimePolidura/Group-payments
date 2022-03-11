@@ -86,13 +86,21 @@
 }
 
 .group-member-name {
+  display: flex;
   justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+  align-self: center;
+  vertical-align: center;
 
   grid-column: 3;
 }
 
 .group-member-option {
   grid-column: 1;
+
+  display: flex;
+  justify-content: center;
 }
 
 .payment-container {

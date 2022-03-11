@@ -42,7 +42,7 @@
 
 <div class="payment-container">
   <button class="btn btn-success"
-          [ngClass]="{'myDisabled disabled': !isLoggedUserAdminOfCurrentGroup()}"
+          [ngClass]="{'myDisabled disabled': !isLoggedUserAdminOfCurrentGroup() || groupState.getCurrentGroupMembers().length == 1}"
           (click)="modalService.open(confirmPaymentModal)">
     ✔ Pay ✔</button>
 </div>
@@ -53,10 +53,10 @@
     <button class="btn-close" type="button" (click)="modal.dismiss()"></button>
   </div>
   <div class="modal-body modal-body-centered">
-    <h5 style="text-align: center" id="groupIdToShare">{{currentGroup().groupId}}</h5>
+    <h5 style="text-align: center" id="groupIdToShare">{{getURLForJoiningGroup()}}</h5>
   </div>
   <div class="modal-footer">
-    <button type="submit" class="myButton myButton-footer" (click)="copyToClipboard(currentGroup().groupId)">Copy</button>
+    <button type="submit" class="myButton myButton-footer" (click)="copyToClipboard(getURLForJoiningGroup())">Copy</button>
   </div>
 </ng-template>
 

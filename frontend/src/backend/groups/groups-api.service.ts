@@ -13,47 +13,51 @@ import {KickGroupMemberRequest} from "./request/kick-group-member-request";
 import {MakePaymentRequest} from "./request/make-payment-request";
 import {GetGroupMemberByUserIdRequest} from "./request/get-group-member-by-user-id-request";
 import {GetGroupMemberByUserIdResponse} from "./response/get-group-member-by-user-id-response";
+import {BackendUsingRoutesService} from "../backend-using-routes.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class GroupsApiService {
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private routes: BackendUsingRoutesService,
+  ) {}
 
   public getCurrentGroup(userId: string): Observable<GetCurrentGroupResponse> {
-    return this.http.get<GetCurrentGroupResponse>("http://localhost:8080/groups/current");
+    return this.http.get<GetCurrentGroupResponse>(`${this.routes.USING}/groups/current`);
   }
 
   public getGroupById(groupId: string): Observable<GetGroupByIdResponse>{
-    return this.http.get<GetGroupByIdResponse>(`http://localhost:8080/groups/id/${groupId}`);
+    return this.http.get<GetGroupByIdResponse>(`${this.routes.USING}/groups/id/${groupId}`);
   }
 
   public joinGroup(joinGroupRequest: JoinGroupRequest): Observable<JoinGroupResponse> {
-    return this.http.post<JoinGroupResponse>("http://localhost:8080/groups/join", joinGroupRequest);
+    return this.http.post<JoinGroupResponse>(`${this.routes.USING}/groups/join`, joinGroupRequest);
   }
 
   public createGroup(createGroupRequest: CreateGroupRequest): Observable<CreateGroupResponse> {
-    return this.http.post<CreateGroupResponse>("http://localhost:8080/groups/create", createGroupRequest);
+    return this.http.post<CreateGroupResponse>(`${this.routes.USING}/groups/create`, createGroupRequest);
   }
 
   public getGroupMembersByGroupId(groupId: string): Observable<GetGroupMembersByGroupIdResponse> {
-    return this.http.get<GetGroupMembersByGroupIdResponse>(`http://localhost:8080/groups/members/${groupId}`);
+    return this.http.get<GetGroupMembersByGroupIdResponse>(`${this.routes.USING}/groups/members/${groupId}`);
   }
 
   public leaveGroup(request: LeaveGroupRequest): Observable<any>{
-    return this.http.post("http://localhost:8080/groups/leave", request);
+    return this.http.post(`${this.routes.USING}/groups/leave`, request);
   }
 
   public kickGroupMember(request: KickGroupMemberRequest): Observable<any> {
-    return this.http.post("http://localhost:8080/groups/kick", request);
+    return this.http.post(`${this.routes.USING}/groups/kick`, request);
   }
 
   public makePayment(request: MakePaymentRequest): Observable<any> {
-    return this.http.post("http://localhost:8080/groups/makepayment", request);
+    return this.http.post(`${this.routes.USING}/groups/makepayment`, request);
   }
 
   public getGroupMemberByUserId(request: GetGroupMemberByUserIdRequest): Observable<GetGroupMemberByUserIdResponse> {
-    return this.http.get<GetGroupMemberByUserIdResponse>(`http://localhost:8080/groups/member?userId=${request.userId}&groupId=${request.groupId}`);
+    return this.http.get<GetGroupMemberByUserIdResponse>(`${this.routes.USING}/groups/member?userId=${request.userId}&groupId=${request.groupId}`);
   }
 }

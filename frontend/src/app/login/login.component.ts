@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Authentication} from "../../backend/authentication/authentication";
 
 @Component({
@@ -10,7 +10,8 @@ import {Authentication} from "../../backend/authentication/authentication";
 export class LoginComponent implements OnInit {
   constructor(
     private oauth: Authentication,
-    private router: Router
+    private router: Router,
+    private actualRoute: ActivatedRoute,
   ){}
 
   ngOnInit(): void {
@@ -23,6 +24,19 @@ export class LoginComponent implements OnInit {
   }
 
   private redirectToMain(): void {
-    this.router.navigate(["/main"]);
+    const hasUrlToJoinGroup: boolean = this.hasUrlToJoinGroup();
+
+    hasUrlToJoinGroup ?
+      this.router.navigate(["/join", this.getGroupIdToJoin()]) :
+      this.router.navigate(["/main"]);
+
+  }
+
+  private hasUrlToJoinGroup(): boolean {
+    return this.actualRoute.snapshot.params["groupId"] != undefined;
+  }
+
+  private getGroupIdToJoin(): string {
+    return this.actualRoute.snapshot.params["groupId"];
   }
 }

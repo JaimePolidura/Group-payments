@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
+import {ActivatedRouteSnapshot, CanActivate, Params, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
 import { Observable } from 'rxjs';
 import {Authentication} from "../backend/authentication/authentication";
 
@@ -13,19 +13,29 @@ export class ProtectedWithAuthGuard implements CanActivate {
   ) {}
 
   canActivate(
-    route: ActivatedRouteSnapshot,
+    actualRoute: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-    return this.checkIfLoggedOrRedirect();
+    const isLogged = this.isLogged();
+
+    if(!isLogged)
+      this.redirectToLogin(actualRoute);
+
+
+    return isLogged;
   }
 
-  private checkIfLoggedOrRedirect(): boolean{
-    if(!this.authentication.isLogged()){
-      this.router.navigate( ["/login"]);
-      return false;
-    }else{
-      return true;
-    }
+  private isLogged(): boolean {
+    return this.authentication.isLogged();
+  }
+
+  private redirectToLogin(actualRoute: ActivatedRouteSnapshot): void {
+    const groupId = actualRoute.paramMap.get("groupId");
+    const urlFromShareGroup = groupId == null;
+
+    urlFromShareGroup ?
+      this.router.navigate(["/login"]) :
+      this.router.navigate(["/login/groupToJoin/", groupId]);
   }
 
 }

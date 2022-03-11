@@ -13,6 +13,7 @@ import {GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule} from "a
 import {HttpRequestInterceptor} from "../backend/http-request-interceptor.service";
 import { GroupOptionsComponent } from './main/group-optins/group-options.component';
 import {NonGroupOptionsComponent} from "./main/non-group-options/non-group-options.component";
+import { JoinGroupComponent } from './join-group/join-group.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import {NonGroupOptionsComponent} from "./main/non-group-options/non-group-optio
     NavigationBarComponent,
     NonGroupOptionsComponent,
     GroupOptionsComponent,
+    JoinGroupComponent,
   ],
   imports: [
     BrowserModule,
