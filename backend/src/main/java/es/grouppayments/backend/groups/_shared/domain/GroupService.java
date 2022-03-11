@@ -2,6 +2,7 @@ package es.grouppayments.backend.groups._shared.domain;
 
 import es.grouppayments.backend.groups._shared.domain.events.GroupCreated;
 import es.grouppayments.backend.groups._shared.domain.events.GroupDeleted;
+import es.grouppayments.backend.groups._shared.domain.events.GroupEdited;
 import es.jaime.javaddd.domain.event.EventBus;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,12 @@ public class GroupService {
         groups.save(new Group(groupId, title, LocalDateTime.now(), money, adminUserId));
 
         this.eventBus.publish(new GroupCreated(groupId, adminUserId));
+    }
+
+    public void update(Group groupEdited){
+        this.groups.save(groupEdited);
+
+        this.eventBus.publish(new GroupEdited(groupEdited));
     }
 
     public Optional<Group> findById(UUID groupId){

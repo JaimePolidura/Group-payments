@@ -16,6 +16,7 @@ public final class GroupsRepositoryInMemory implements GroupRepository {
 
     @Override
     public void save(Group group) {
+        this.groups.removeIf(g -> g.getGroupId().equals(group));
         this.groups.add(group);
     }
 

@@ -8,7 +8,7 @@ import es.grouppayments.backend.groups._shared.domain.GroupRepository;
 import es.grouppayments.backend.groups._shared.infrastructure.GroupsRepositoryInMemory;
 
 public class GroupTestMother extends TestMother implements UsingGroups {
-    private final GroupRepository groupRepository;
+    private GroupRepository groupRepository;
     private final GroupMemberRepository groupMemberRepository;
 
     public GroupTestMother(){
@@ -24,5 +24,9 @@ public class GroupTestMother extends TestMother implements UsingGroups {
     @Override
     public GroupMemberRepository groupMemberRepository() {
         return this.groupMemberRepository;
+    }
+
+    public void clearGroupsRepository(){
+        this.groupRepository = new GroupsRepositoryInMemory();
     }
 }

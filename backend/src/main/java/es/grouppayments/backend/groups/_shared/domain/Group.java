@@ -26,4 +26,12 @@ public class Group extends Aggregate {
                 "adminUserId", adminUserId.toString()
         );
     }
+
+    public Group changeMoney(double newMoney){
+        return new Group(this.groupId, this.description, this.createdDate, newMoney, this.adminUserId);
+    }
+
+    public Group changeDescription(String newDescription){
+        return new Group(this.groupId, newDescription, this.createdDate, this.money, this.adminUserId);
+    }
 }
