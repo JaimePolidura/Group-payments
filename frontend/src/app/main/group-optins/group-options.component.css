@@ -14,6 +14,7 @@
 .group-options-stats {
   display: flex;
   flex-direction: row;
+  margin-left: 2.5%
 }
 
 .group-container .group-options {
@@ -44,12 +45,10 @@
   background-repeat: no-repeat;
   border: none;
   outline: none;
-  color: #202a35;
 }
 
-.group-option-button:hover {
-  color: #465669;
-  transition: 0.25s;
+.dropdown ul li {
+  cursor: pointer;
 }
 
 .group-separator{

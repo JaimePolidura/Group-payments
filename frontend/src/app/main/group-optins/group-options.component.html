@@ -9,12 +9,16 @@
       </div>
     </div>
     <div class="group-options-options">
-      <button class="group-option-button" (click)="modalService.open(shareGroupModal)" title="Share group">
-        <i class="fa-solid fa-share-nodes fa-2x"></i>
-      </button>
-      <button class="group-option-button" (click)="leaveGroup()" title="Leave group">
-        <i class="fa-solid fa-arrow-right-from-bracket fa-2x"></i>
-      </button>
+      <div ngbDropdown class="dropdown dropdown-menu-right dropdown-menu-lg-left">
+        <button ngbDropdownToggle class="group-option-button" type="button" id="dropdownMenuButton1">
+          <i class="fa-solid fa-bars fa-2x"></i>
+        </button>
+        <ul ngbDropdownMenu aria-labelledby="dropdownMenuButton1">
+          <li><a ngbDropdownItem (click)="modalService.open(shareGroupModal)"><i class="fa-solid fa-share-nodes fa-1x"></i> Share</a></li>
+          <li><a ngbDropdownItem (click)="leaveGroup()"><i class="fa-solid fa-arrow-right-from-bracket fa-1x"></i> Leave</a></li>
+          <li *ngIf="!isAdminOfCurrentGroup(groupState.getCurrentGroup().groupId)"><a ngbDropdownItem><i class="fa-solid fa-pen-to-square fa-1x"></i> Edit</a></li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -44,7 +48,7 @@
   <button class="btn btn-success"
           [ngClass]="{'myDisabled disabled': !isLoggedUserAdminOfCurrentGroup() || groupState.getCurrentGroupMembers().length == 1}"
           (click)="modalService.open(confirmPaymentModal)">
-    ✔ Pay ✔</button>
+    ✓ Pay ✓</button>
 </div>
 
 <ng-template #shareGroupModal let-modal>
