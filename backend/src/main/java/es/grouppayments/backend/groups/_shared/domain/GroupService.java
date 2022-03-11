@@ -24,6 +24,7 @@ public class GroupService {
     }
 
     public void update(Group groupEdited){
+        this.groups.deleteById(groupEdited.getGroupId());
         this.groups.save(groupEdited);
 
         this.eventBus.publish(new GroupEdited(groupEdited));

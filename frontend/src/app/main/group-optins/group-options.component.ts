@@ -11,6 +11,7 @@ import {ServerSentEventsService} from "../../../backend/events/server-sent-event
 import {GetGroupMemberByUserIdRequest} from "../../../backend/groups/request/get-group-member-by-user-id-request";
 import {FrontendUsingRoutesService} from "../../../frontend-using-routes.service";
 import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/forms";
+import {EditGroupRequest} from "../../../backend/groups/request/edit-group-request";
 
 @Component({
   selector: 'app-group-options',
@@ -36,6 +37,7 @@ export class GroupOptionsComponent implements OnInit {
     this.onMemberLeft();
     this.onMemberJoined();
     this.onGroupDeleted();
+    this.onGroupEdited();
 
     this.serverSentEvents.connect();
 
@@ -163,12 +165,6 @@ export class GroupOptionsComponent implements OnInit {
     return `${this.frontendHost.USING}/join/${this.currentGroup().groupId}`;
   }
 
-  //We force angular to update
-  //TODO fix
-  private refreshChangesInUI(): void {
-    this.applicationRef.tick();
-  }
-
   public calculateTotalMoneyPerMember(): number {
     const notOnlyAdminInGroup: boolean = this.groupState.getCurrentGroupMembers().length - 1 > 0;
 
@@ -178,5 +174,43 @@ export class GroupOptionsComponent implements OnInit {
   }
 
   public editGroup() {
+    if(!this.isEditGroupFormDataChanged()) return;
+
+    const request: EditGroupRequest = {
+      groupId: this.groupState.getCurrentGroup().groupId,
+      newDescription: this.newDescription.value,
+      newMoney: this.newMoney.value,
+    }
+
+    this.groupsApi.editGroup(request).subscribe(res => {
+      this.groupState.setCurrentGroup({
+        ...this.currentGroup(),
+        money: request.newMoney,
+        description: request.newDescription,
+      });
+
+      this.refreshChangesInUI();
+    });
+  }
+
+  private isEditGroupFormDataChanged(): boolean {
+    return this.newMoney.value != this.currentGroup().money ||
+      this.newDescription.value != this.currentGroup().description;
+  }
+
+  //We force angular to update
+  //TODO fix
+  private refreshChangesInUI(): void {
+    this.applicationRef.tick();
+  }
+
+  private onGroupEdited() {
+    this.serverSentEvents.subscribe('group-edited', event => {
+      // @ts-ignore
+      const group: Group = event.group;
+
+      this.groupState.setCurrentGroup(group);
+      this.refreshChangesInUI();
+    });
   }
 }

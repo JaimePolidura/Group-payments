@@ -18,7 +18,7 @@ public class EditGroupController extends Controller {
     private final CommandBus commandBus;
 
     @PostMapping("/groups/edit")
-    public ResponseEntity<String> editGroup(@RequestBody Request request){
+    public ResponseEntity<?> editGroup(@RequestBody Request request){
         this.commandBus.dispatch(new EditGroupCommand(
                 UUID.fromString(request.groupId),
                 getLoggedUsername(),
@@ -26,7 +26,7 @@ public class EditGroupController extends Controller {
                 request.newDescription
         ));
 
-        return buildNewHttpResponseOK("Edited");
+        return buildNewHttpResponseOK();
     }
 
     @AllArgsConstructor
