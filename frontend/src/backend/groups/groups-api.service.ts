@@ -14,6 +14,7 @@ import {MakePaymentRequest} from "./request/make-payment-request";
 import {GetGroupMemberByUserIdRequest} from "./request/get-group-member-by-user-id-request";
 import {GetGroupMemberByUserIdResponse} from "./response/get-group-member-by-user-id-response";
 import {BackendUsingRoutesService} from "../backend-using-routes.service";
+import {EditGroupRequest} from "./request/edit-group-request";
 
 @Injectable({
   providedIn: 'root'
@@ -59,5 +60,9 @@ export class GroupsApiService {
 
   public getGroupMemberByUserId(request: GetGroupMemberByUserIdRequest): Observable<GetGroupMemberByUserIdResponse> {
     return this.http.get<GetGroupMemberByUserIdResponse>(`${this.routes.USING}/groups/member?userId=${request.userId}&groupId=${request.groupId}`);
+  }
+
+  public editGroup(request: EditGroupRequest): Observable<any> {
+    return this.http.post(`${this.routes.USING}/groups/edit`, request);
   }
 }

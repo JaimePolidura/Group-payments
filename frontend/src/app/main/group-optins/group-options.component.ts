@@ -8,9 +8,9 @@ import {KickGroupMemberRequest} from "../../../backend/groups/request/kick-group
 import {Authentication} from "../../../backend/authentication/authentication";
 import {MakePaymentRequest} from "../../../backend/groups/request/make-payment-request";
 import {ServerSentEventsService} from "../../../backend/events/server-sent-events.service";
-import {GroupMemberJoined} from "../../../backend/events/model/group-member-joined";
 import {GetGroupMemberByUserIdRequest} from "../../../backend/groups/request/get-group-member-by-user-id-request";
 import {FrontendUsingRoutesService} from "../../../frontend-using-routes.service";
+import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-group-options',
@@ -19,6 +19,8 @@ import {FrontendUsingRoutesService} from "../../../frontend-using-routes.service
 })
 export class GroupOptionsComponent implements OnInit {
   @ViewChild('errorPaymentModal') private errorPaymentModal: any;
+
+  editGroupForm: FormGroup;
 
   constructor(
     public groupState: GroupStateService,
@@ -36,7 +38,18 @@ export class GroupOptionsComponent implements OnInit {
     this.onGroupDeleted();
 
     this.serverSentEvents.connect();
+
+    this.setUpEditGroupForm();
   }
+
+  private setUpEditGroupForm(): void {
+    this.editGroupForm = new FormGroup({
+      newMoney: new FormControl(this.currentGroup().money, [Validators.required, Validators.min(0.1), Validators.max(10000)]),
+      newDescription: new FormControl(this.currentGroup().description, [Validators.required, Validators.minLength(1), Validators.maxLength(16)])
+    });
+  }
+  get newMoney(): AbstractControl {return <AbstractControl>this.editGroupForm.get('newMoney'); }
+  get newDescription(): AbstractControl { return <AbstractControl>this.editGroupForm.get('newDescription'); }
 
   public leaveGroup() {
     this.serverSentEvents.disconnect();
@@ -162,5 +175,8 @@ export class GroupOptionsComponent implements OnInit {
     return notOnlyAdminInGroup ?
       this.groupState.getCurrentGroup().money / (this.groupState.getCurrentGroupMembers().length - 1) :
       0 ;
+  }
+
+  public editGroup() {
   }
 }
