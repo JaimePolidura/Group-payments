@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import {Authentication} from "../authentication/authentication";
-import {fetchEventSource} from "@microsoft/fetch-event-source";
 import {ServerEvent} from "./model/server-event";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ServerSentEventsService {
-  private readonly callbacks: {[name: string]: ((msg: ServerEvent) => void)};
+  private readonly callbacks: {[name: string]: ((event: ServerEvent) => void)};
   private eventSource: EventSource;
 
   constructor(private auth: Authentication){
@@ -23,13 +22,11 @@ export class ServerSentEventsService {
   private onNewMessage(msg: MessageEvent): void {
     const data: any = JSON.parse(msg.data);
 
-    console.log(data);
-
     this.callbacks[data.name](data.body);
   }
 
-  public subscribe(eventName: string, callback: (msg: ServerEvent) => void): void {
-    this.callbacks[eventName] = callback;
+  public subscribe<T extends ServerEvent>(eventName: string, callback: (event: T) => void): void {
+    this.callbacks[eventName] = <(event: ServerEvent) => void> callback;
   }
 
   public disconnect(): void{

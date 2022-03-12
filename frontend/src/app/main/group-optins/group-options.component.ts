@@ -12,6 +12,9 @@ import {GetGroupMemberByUserIdRequest} from "../../../backend/groups/request/get
 import {FrontendUsingRoutesService} from "../../../frontend-using-routes.service";
 import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/forms";
 import {EditGroupRequest} from "../../../backend/groups/request/edit-group-request";
+import {GroupMemberLeftEvent} from "../../../backend/events/model/group-member-left-event";
+import {GroupMemberJoined} from "../../../backend/events/model/group-member-joined";
+import {GroupEdited} from "../../../backend/events/model/group-edited";
 
 @Component({
   selector: 'app-group-options',
@@ -118,8 +121,7 @@ export class GroupOptionsComponent implements OnInit {
   }
 
   private onMemberLeft(): void {
-    this.serverSentEvents.subscribe('group-member-left', (groupMemberLeft) => {
-      // @ts-ignore
+    this.serverSentEvents.subscribe<GroupMemberLeftEvent>('group-member-left', (groupMemberLeft) => {
       const userId = groupMemberLeft.userId;
 
       if(userId == this.auth.getUserId()){
@@ -140,8 +142,7 @@ export class GroupOptionsComponent implements OnInit {
   }
 
   private onMemberJoined(): void {
-    this.serverSentEvents.subscribe('group-member-joined', (groupMemberJoined) => {
-      // @ts-ignore
+    this.serverSentEvents.subscribe<GroupMemberJoined>('group-member-joined', (groupMemberJoined) => {
       const userId = groupMemberJoined.userId;
       const request: GetGroupMemberByUserIdRequest = {userId: userId, groupId: this.groupState.getCurrentGroup().groupId};
 
@@ -205,8 +206,7 @@ export class GroupOptionsComponent implements OnInit {
   }
 
   private onGroupEdited() {
-    this.serverSentEvents.subscribe('group-edited', event => {
-      // @ts-ignore
+    this.serverSentEvents.subscribe<GroupEdited>('group-edited', event => {
       const group: Group = event.group;
 
       this.groupState.setCurrentGroup(group);
