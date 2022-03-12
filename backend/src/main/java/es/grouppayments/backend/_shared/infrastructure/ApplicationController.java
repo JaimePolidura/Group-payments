@@ -5,7 +5,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.UUID;
 
-public class Controller {
+public class ApplicationController {
     public UUID getLoggedUsername() {
         return UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName());
     }

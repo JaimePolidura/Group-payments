@@ -1,4 +1,4 @@
-package es.grouppayments.backend._shared.infrastructure.sse;
+package es.grouppayments.backend._shared.infrastructure.eventstreaming.sse;
 
 import es.grouppayments.backend._shared.domain.Utils;
 import lombok.AllArgsConstructor;
@@ -12,10 +12,10 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-public class SreSubscribersRegistry {
+public class SseSubscribersRegistry {
     private final Map<UUID, Set<EventSourcingSession>> subscribers;
 
-    public SreSubscribersRegistry(){
+    public SseSubscribersRegistry(){
         this.subscribers = new ConcurrentHashMap<>();
     }
 

@@ -1,14 +1,11 @@
-package es.grouppayments.backend._shared.infrastructure.sse;
+package es.grouppayments.backend._shared.infrastructure.eventstreaming.sse;
 
-import es.grouppayments.backend._shared.domain.GroupDomainEvent;
-import es.grouppayments.backend._shared.infrastructure.Controller;
+import es.grouppayments.backend._shared.infrastructure.ApplicationController;
 import es.grouppayments.backend._shared.infrastructure.auth.JWTUtils;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
 import es.grouppayments.backend.groups._shared.domain.events.GroupDeleted;
 import es.jaime.javaddd.domain.exceptions.IllegalAccess;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
-import org.json.JSONObject;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +16,9 @@ import java.util.UUID;
 @RestController
 @CrossOrigin
 @AllArgsConstructor
-public class SseSubscriberController extends Controller {
+public class SseSubscriberController extends ApplicationController {
     private final GroupMemberService groupMemberService;
-    private final SreSubscribersRegistry subscribersRegistry;
+    private final SseSubscribersRegistry subscribersRegistry;
     private final JWTUtils jwtUtils;
 
     @RequestMapping("/sse")
@@ -49,23 +46,9 @@ public class SseSubscriberController extends Controller {
             throw new IllegalAccess("Incorrect authentication");
     }
 
-    @SneakyThrows
-    @EventListener(GroupDomainEvent.class)
-    @Order(1)
-    public void onNewEvent(GroupDomainEvent event){
-        if(!event.name().equalsIgnoreCase("group-created")){
-            this.subscribersRegistry.sendToGroup(event.getGroupId(), toJSON(event));
-        }
-    }
-
     @EventListener({GroupDeleted.class})
     @Order(2)
     public void onGroupDeleted(GroupDeleted groupDeleted){
         this.subscribersRegistry.delete(groupDeleted.getGroupId());
-    }
-
-    private String toJSON(GroupDomainEvent event){
-        return (new JSONObject(event.toPrimitives()))
-                .toString();
     }
 }

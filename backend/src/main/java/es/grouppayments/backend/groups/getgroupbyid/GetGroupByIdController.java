@@ -1,7 +1,7 @@
 package es.grouppayments.backend.groups.getgroupbyid;
 
 
-import es.grouppayments.backend._shared.infrastructure.Controller;
+import es.grouppayments.backend._shared.infrastructure.ApplicationController;
 import es.grouppayments.backend.groups._shared.domain.Group;
 import es.jaime.javaddd.domain.cqrs.query.QueryBus;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import java.util.UUID;
 @RestController
 @CrossOrigin
 @AllArgsConstructor
-public class GetGroupByIdController extends Controller {
+public class GetGroupByIdController extends ApplicationController {
     private final QueryBus queryBus;
 
     @GetMapping("groups/id/{groupId}")

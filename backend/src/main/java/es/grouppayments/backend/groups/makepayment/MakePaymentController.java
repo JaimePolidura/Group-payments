@@ -1,6 +1,6 @@
 package es.grouppayments.backend.groups.makepayment;
 
-import es.grouppayments.backend._shared.infrastructure.Controller;
+import es.grouppayments.backend._shared.infrastructure.ApplicationController;
 import es.jaime.javaddd.domain.cqrs.command.CommandBus;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,7 @@ import java.util.UUID;
 @CrossOrigin
 @RestController
 @AllArgsConstructor
-public class MakePaymentController extends Controller {
+public class MakePaymentController extends ApplicationController {
     private final CommandBus commandBus;
 
     @PostMapping("/groups/makepayment")

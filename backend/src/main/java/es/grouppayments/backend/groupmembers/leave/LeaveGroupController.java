@@ -1,10 +1,9 @@
 package es.grouppayments.backend.groupmembers.leave;
 
-import es.grouppayments.backend._shared.infrastructure.Controller;
+import es.grouppayments.backend._shared.infrastructure.ApplicationController;
 import es.jaime.javaddd.domain.cqrs.command.CommandBus;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +14,7 @@ import java.util.UUID;
 @RestController
 @AllArgsConstructor
 @CrossOrigin
-public class LeaveGroupController extends Controller {
+public class LeaveGroupController extends ApplicationController {
     private final CommandBus commandBus;
 
     @PostMapping("/groups/leave")

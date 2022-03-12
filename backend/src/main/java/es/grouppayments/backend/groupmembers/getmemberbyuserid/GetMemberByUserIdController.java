@@ -1,6 +1,6 @@
 package es.grouppayments.backend.groupmembers.getmemberbyuserid;
 
-import es.grouppayments.backend._shared.infrastructure.Controller;
+import es.grouppayments.backend._shared.infrastructure.ApplicationController;
 import es.jaime.javaddd.domain.cqrs.query.QueryBus;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +11,7 @@ import java.util.UUID;
 @RestController
 @CrossOrigin
 @AllArgsConstructor
-public class GetMemberByUserIdController extends Controller {
+public class GetMemberByUserIdController extends ApplicationController {
     private final QueryBus queryBus;
 
     @GetMapping("/groups/member")

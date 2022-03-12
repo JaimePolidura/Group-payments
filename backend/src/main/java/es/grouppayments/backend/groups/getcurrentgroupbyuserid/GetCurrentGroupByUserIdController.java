@@ -1,6 +1,6 @@
 package es.grouppayments.backend.groups.getcurrentgroupbyuserid;
 
-import es.grouppayments.backend._shared.infrastructure.Controller;
+import es.grouppayments.backend._shared.infrastructure.ApplicationController;
 import es.grouppayments.backend.groups._shared.domain.Group;
 import es.jaime.javaddd.domain.cqrs.query.QueryBus;
 import lombok.AllArgsConstructor;
@@ -9,12 +9,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.UUID;
-
 @AllArgsConstructor
 @RestController
 @CrossOrigin
-public class GetCurrentGroupByUserIdController extends Controller {
+public class GetCurrentGroupByUserIdController extends ApplicationController {
     private final QueryBus queryBus;
 
     @GetMapping("groups/current")

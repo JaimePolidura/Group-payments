@@ -1,10 +1,9 @@
 package es.grouppayments.backend.groupmembers.join;
 
-import es.grouppayments.backend._shared.infrastructure.Controller;
+import es.grouppayments.backend._shared.infrastructure.ApplicationController;
 import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups.getcurrentgroupbyuserid.GetCurrentGroupByUserQuery;
 import es.grouppayments.backend.groups.getcurrentgroupbyuserid.GetCurrentGroupByUserQueryResponse;
-import es.grouppayments.backend.groups.getgroupbyid.GetGroupByIdQuery;
 import es.jaime.javaddd.domain.cqrs.command.CommandBus;
 import es.jaime.javaddd.domain.cqrs.query.QueryBus;
 import lombok.AllArgsConstructor;
@@ -19,7 +18,7 @@ import java.util.UUID;
 @RestController
 @CrossOrigin
 @AllArgsConstructor
-public class JoinGroupController extends Controller {
+public class JoinGroupController extends ApplicationController {
     private final CommandBus commandBus;
     private final QueryBus queryBus;
 

@@ -1,6 +1,6 @@
 package es.grouppayments.backend.groupmembers.kick;
 
-import es.grouppayments.backend._shared.infrastructure.Controller;
+import es.grouppayments.backend._shared.infrastructure.ApplicationController;
 import es.jaime.javaddd.domain.cqrs.command.CommandBus;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,7 @@ import java.util.UUID;
 @RestController
 @AllArgsConstructor
 @CrossOrigin
-public class KickGroupMemberController extends Controller {
+public class KickGroupMemberController extends ApplicationController {
     private final CommandBus commandBus;
 
     @PostMapping("/groups/kick")

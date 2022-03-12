@@ -1,6 +1,6 @@
 package es.grouppayments.backend.groups.create;
 
-import es.grouppayments.backend._shared.infrastructure.Controller;
+import es.grouppayments.backend._shared.infrastructure.ApplicationController;
 import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups.getcurrentgroupbyuserid.GetCurrentGroupByUserQuery;
 import es.grouppayments.backend.groups.getcurrentgroupbyuserid.GetCurrentGroupByUserQueryResponse;
@@ -18,7 +18,7 @@ import java.util.UUID;
 @RestController
 @AllArgsConstructor
 @CrossOrigin
-public class CreateGroupController extends Controller {
+public class CreateGroupController extends ApplicationController {
     private final CommandBus commandBus;
     private final QueryBus queryBus;
 
