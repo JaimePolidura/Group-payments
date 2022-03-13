@@ -14,6 +14,10 @@ import {HttpRequestInterceptor} from "../backend/http-request-interceptor.servic
 import { GroupOptionsComponent } from './main/group-optins/group-options.component';
 import {NonGroupOptionsComponent} from "./main/non-group-options/non-group-options.component";
 import { JoinGroupComponent } from './join-group/join-group.component';
+import {ServerEventListener} from "../backend/eventlistener/server-event-listener";
+import {
+  ServerEventListenerSseService
+} from "../backend/eventlistener/serversentevents/server-event-listener-sse.service";
 
 @NgModule({
   declarations: [
@@ -34,6 +38,7 @@ import { JoinGroupComponent } from './join-group/join-group.component';
     NgbModule,
   ],
   providers: [
+    { provide: ServerEventListener, useExisting: ServerEventListenerSseService },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpRequestInterceptor,

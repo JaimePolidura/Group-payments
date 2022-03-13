@@ -7,14 +7,15 @@ import {GroupsApiService} from "../../../backend/groups/groups-api.service";
 import {KickGroupMemberRequest} from "../../../backend/groups/request/kick-group-member-request";
 import {Authentication} from "../../../backend/authentication/authentication";
 import {MakePaymentRequest} from "../../../backend/groups/request/make-payment-request";
-import {ServerSentEventsService} from "../../../backend/events/server-sent-events.service";
 import {GetGroupMemberByUserIdRequest} from "../../../backend/groups/request/get-group-member-by-user-id-request";
 import {FrontendUsingRoutesService} from "../../../frontend-using-routes.service";
 import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/forms";
 import {EditGroupRequest} from "../../../backend/groups/request/edit-group-request";
-import {GroupMemberLeftEvent} from "../../../backend/events/model/group-member-left-event";
-import {GroupMemberJoined} from "../../../backend/events/model/group-member-joined";
-import {GroupEdited} from "../../../backend/events/model/group-edited";
+import {GroupMemberLeftEvent} from "../../../backend/eventlistener/events/group-member-left-event";
+import {GroupMemberJoined} from "../../../backend/eventlistener/events/group-member-joined";
+import {GroupEdited} from "../../../backend/eventlistener/events/group-edited";
+import {ServerEventsSubscriberService} from "../../../backend/eventlistener/server-events-subscriber.service";
+import {ServerEventListener} from "../../../backend/eventlistener/server-event-listener";
 
 @Component({
   selector: 'app-group-options',
@@ -31,9 +32,10 @@ export class GroupOptionsComponent implements OnInit {
     public modalService: NgbModal,
     private groupsApi: GroupsApiService,
     private auth: Authentication,
-    private serverSentEvents: ServerSentEventsService,
+    private serverEventListener: ServerEventListener,
     private applicationRef: ApplicationRef,
     private frontendHost: FrontendUsingRoutesService,
+    private eventSubscriber: ServerEventsSubscriberService,
   ){}
 
   ngOnInit(): void {
@@ -42,7 +44,7 @@ export class GroupOptionsComponent implements OnInit {
     this.onGroupDeleted();
     this.onGroupEdited();
 
-    this.serverSentEvents.connect();
+    this.serverEventListener.connect();
 
     this.setUpEditGroupForm();
   }
@@ -57,7 +59,7 @@ export class GroupOptionsComponent implements OnInit {
   get newDescription(): AbstractControl { return <AbstractControl>this.editGroupForm.get('newDescription'); }
 
   public leaveGroup() {
-    this.serverSentEvents.disconnect();
+    this.serverEventListener.disconnect();
 
     this.groupsApi.leaveGroup({groupId: this.currentGroup().groupId, ignoreThis: ""}).subscribe(res => {
       this.groupState.clearState();
@@ -121,7 +123,7 @@ export class GroupOptionsComponent implements OnInit {
   }
 
   private onMemberLeft(): void {
-    this.serverSentEvents.subscribe<GroupMemberLeftEvent>('group-member-left', (groupMemberLeft) => {
+    this.eventSubscriber.subscribe<GroupMemberLeftEvent>('group-member-left', (groupMemberLeft) => {
       const userId = groupMemberLeft.userId;
 
       if(userId == this.auth.getUserId()){
@@ -137,12 +139,12 @@ export class GroupOptionsComponent implements OnInit {
     window.alert("You have been kicked from the group!");
 
     this.groupState.clearState();
-    this.serverSentEvents.disconnect()
+    this.serverEventListener.disconnect()
     this.refreshChangesInUI()
   }
 
   private onMemberJoined(): void {
-    this.serverSentEvents.subscribe<GroupMemberJoined>('group-member-joined', (groupMemberJoined) => {
+    this.eventSubscriber.subscribe<GroupMemberJoined>('group-member-joined', (groupMemberJoined) => {
       const userId = groupMemberJoined.userId;
       const request: GetGroupMemberByUserIdRequest = {userId: userId, groupId: this.groupState.getCurrentGroup().groupId};
 
@@ -154,9 +156,9 @@ export class GroupOptionsComponent implements OnInit {
   }
 
   private onGroupDeleted(): void {
-    this.serverSentEvents.subscribe('group-deleted', (event) => {
+    this.eventSubscriber.subscribe('group-deleted', (event) => {
       this.groupState.clearState();
-      this.serverSentEvents.disconnect();
+      this.serverEventListener.disconnect();
 
       this.refreshChangesInUI();
     });
@@ -206,7 +208,7 @@ export class GroupOptionsComponent implements OnInit {
   }
 
   private onGroupEdited() {
-    this.serverSentEvents.subscribe<GroupEdited>('group-edited', event => {
+    this.eventSubscriber.subscribe<GroupEdited>('group-edited', event => {
       const group: Group = event.group;
 
       this.groupState.setCurrentGroup(group);
