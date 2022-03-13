@@ -11,9 +11,7 @@ export class ServerEventListenerSseService implements ServerEventListener{
   private readonly eventEmitter: ReplaySubject<{ name: string; body: ServerEvent }>;
   private eventSource: EventSource;
 
-  constructor(
-    private auth: Authentication,
-  ){
+  constructor(private auth: Authentication){
     this.eventEmitter = new ReplaySubject();
   }
 
@@ -33,7 +31,7 @@ export class ServerEventListenerSseService implements ServerEventListener{
     // @ts-ignore
     const event: any = JSON.parse(messageEvent.data);
 
-    console.log("new event " + event);
+    console.log(event);
 
     this.eventEmitter.next(event);
   }

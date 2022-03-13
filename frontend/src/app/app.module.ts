@@ -16,8 +16,8 @@ import {NonGroupOptionsComponent} from "./main/non-group-options/non-group-optio
 import { JoinGroupComponent } from './join-group/join-group.component';
 import {ServerEventListener} from "../backend/eventlistener/server-event-listener";
 import {
-  ServerEventListenerSseService
-} from "../backend/eventlistener/serversentevents/server-event-listener-sse.service";
+  ServerEventListenerWSStompService
+} from "../backend/eventlistener/websocketstomp/server-event-listener-wsstomp.service";
 
 @NgModule({
   declarations: [
@@ -38,7 +38,7 @@ import {
     NgbModule,
   ],
   providers: [
-    { provide: ServerEventListener, useExisting: ServerEventListenerSseService },
+    { provide: ServerEventListener, useExisting: ServerEventListenerWSStompService },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpRequestInterceptor,
