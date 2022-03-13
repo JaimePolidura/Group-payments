@@ -18,7 +18,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/oauth/**", "/sse").permitAll()
+                .authorizeRequests().antMatchers("/oauth/**", "/sse", "/groupsevents/**").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(jwtFilterRequest, UsernamePasswordAuthenticationFilter.class);

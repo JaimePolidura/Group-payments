@@ -1,8 +1,6 @@
 package es.grouppayments.backend._shared.infrastructure.eventstreaming;
 
 import es.grouppayments.backend._shared.domain.GroupDomainEvent;
-import es.grouppayments.backend._shared.infrastructure.eventstreaming.sse.SseSubscribersRegistry;
-import es.grouppayments.backend.groups._shared.domain.events.GroupDeleted;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.context.event.EventListener;

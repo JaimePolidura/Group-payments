@@ -4,10 +4,12 @@ import es.grouppayments.backend._shared.domain.GroupDomainEvent;
 import es.grouppayments.backend._shared.infrastructure.eventstreaming.GroupEventClientDispatcher;
 import lombok.AllArgsConstructor;
 import org.json.JSONObject;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
+@ConditionalOnProperty(value = "eventsclientdispatcher.method", havingValue = "sse")
 public class SseEventDispatcher implements GroupEventClientDispatcher {
     private final SseSubscribersRegistry subscribersRegistry;
 

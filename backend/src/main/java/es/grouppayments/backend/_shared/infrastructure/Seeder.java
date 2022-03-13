@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @Component
-@ConditionalOnProperty(value = "useseeder", havingValue = "true")
+@ConditionalOnProperty(value = "db.useseeder", havingValue = "true")
 public class Seeder implements CommandLineRunner {
     private final UsersService usersService;
     private final GroupService groupService;

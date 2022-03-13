@@ -25,6 +25,10 @@
 	</repositories>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/io.vavr/vavr -->
 		<dependency>
 			<groupId>io.vavr</groupId>

@@ -4,6 +4,7 @@ import es.grouppayments.backend._shared.domain.Utils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -12,6 +13,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
+@ConditionalOnProperty(value = "eventsclientdispatcher.method", havingValue = "sse")
 public class SseSubscribersRegistry {
     private final Map<UUID, Set<EventSourcingSession>> subscribers;
 

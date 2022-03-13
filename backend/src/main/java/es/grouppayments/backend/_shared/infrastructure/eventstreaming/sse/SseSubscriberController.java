@@ -6,6 +6,7 @@ import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
 import es.grouppayments.backend.groups._shared.domain.events.GroupDeleted;
 import es.jaime.javaddd.domain.exceptions.IllegalAccess;
 import lombok.AllArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @RestController
 @CrossOrigin
 @AllArgsConstructor
+@ConditionalOnProperty(value = "eventsclientdispatcher.method", havingValue = "sse")
 public class SseSubscriberController extends ApplicationController {
     private final GroupMemberService groupMemberService;
     private final SseSubscribersRegistry subscribersRegistry;
