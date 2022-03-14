@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Authentication} from "../../backend/authentication/authentication";
 import {GroupsApiService} from "../../backend/groups/groups-api.service";
 import {JoinGroupRequest} from "../../backend/groups/request/join-group-request";
-import {GroupStateService} from "../main/group-state.service";
+import {GroupRepositoryService} from "../main/group-repository.service";
 
 @Component({
   selector: 'app-join-group',
@@ -17,7 +17,7 @@ export class JoinGroupComponent implements OnInit {
     private auth: Authentication,
     private groupsApi: GroupsApiService,
     private router: Router,
-    private groupState: GroupStateService,
+    private groupState: GroupRepositoryService,
   ){ }
 
   ngOnInit(): void {

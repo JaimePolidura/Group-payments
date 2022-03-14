@@ -1,11 +1,12 @@
 import {ApplicationRef, ChangeDetectorRef, Injectable} from '@angular/core';
 import {Group} from "../../model/group";
 import {User} from "../../model/user";
+import {GroupState} from "../../model/group-state";
 
 @Injectable({
   providedIn: 'root'
 })
-export class GroupStateService {
+export class GroupRepositoryService {
   private currentGroup: Group;
   private currentGroupMembers: User[];
 
@@ -19,6 +20,13 @@ export class GroupStateService {
 
   public getCurrentGroupMembers(): User[]{
     return this.currentGroupMembers;
+  }
+
+  public setGroupState(newGroupState: GroupState){
+    this.currentGroup = {
+      ...this.currentGroup,
+      state: newGroupState,
+    }
   }
 
   public setCurrentGroupMembers(members: User[]): void {

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {ServerEventListener} from "../server-event-listener";
 import {ReplaySubject} from "rxjs";
 import {BackendUsingRoutesService} from "../../backend-using-routes.service";
-import {GroupStateService} from "../../../app/main/group-state.service";
+import {GroupRepositoryService} from "../../../app/main/group-repository.service";
 import {Authentication} from "../../authentication/authentication";
 import {ServerMessage} from "../../server-message";
 import {AuthenticationSocketHeader} from "./authentication-socket-header";
@@ -17,7 +17,7 @@ export class ServerEventListenerWSStompService implements ServerEventListener{
   private stompClient: any;
   private readonly eventEmitter: ReplaySubject<ServerMessage>;
 
-  constructor(private backendRoutes: BackendUsingRoutesService, private groupState: GroupStateService, private auth: Authentication,) {
+  constructor(private backendRoutes: BackendUsingRoutesService, private groupState: GroupRepositoryService, private auth: Authentication,) {
     this.eventEmitter = new ReplaySubject<ServerMessage>();
   }
 

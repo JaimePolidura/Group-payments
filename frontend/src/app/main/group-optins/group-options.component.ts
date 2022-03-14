@@ -1,5 +1,5 @@
 import {ApplicationRef, Component, OnInit, ViewChild} from '@angular/core';
-import {GroupStateService} from "../group-state.service";
+import {GroupRepositoryService} from "../group-repository.service";
 import {Group} from "../../../model/group";
 import {User} from "../../../model/user";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
@@ -28,7 +28,7 @@ export class GroupOptionsComponent implements OnInit {
   editGroupForm: FormGroup;
 
   constructor(
-    public groupState: GroupStateService,
+    public groupState: GroupRepositoryService,
     public modalService: NgbModal,
     private groupsApi: GroupsApiService,
     private auth: Authentication,

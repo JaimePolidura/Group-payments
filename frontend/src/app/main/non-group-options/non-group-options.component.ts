@@ -4,7 +4,7 @@ import {Authentication} from "../../../backend/authentication/authentication";
 import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/forms";
 import {GroupsApiService} from "../../../backend/groups/groups-api.service";
 import {CreateGroupRequest} from "../../../backend/groups/request/create-group-request";
-import {GroupStateService} from "../group-state.service";
+import {GroupRepositoryService} from "../group-repository.service";
 import {Router} from "@angular/router";
 
 @Component({
@@ -20,7 +20,7 @@ export class NonGroupOptionsComponent implements OnInit {
     public modalService: NgbModal,
     public auth: Authentication,
     private groupService: GroupsApiService,
-    private groupState: GroupStateService,
+    private groupState: GroupRepositoryService,
     private router: Router,
   ){}
 
