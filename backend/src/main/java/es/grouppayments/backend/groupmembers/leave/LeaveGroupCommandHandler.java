@@ -6,6 +6,7 @@ import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
 import es.jaime.javaddd.domain.cqrs.command.CommandHandler;
 import es.jaime.javaddd.domain.event.EventBus;
+import es.jaime.javaddd.domain.exceptions.IllegalState;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ public class LeaveGroupCommandHandler implements CommandHandler<LeaveGroupComman
     @Override
     public void handle(LeaveGroupCommand command) {
         Group groupToLeave = this.ensureGroupExistsAndGet(command.getGroupId());
+        ensureGroupIsAbleToLeave(groupToLeave);
         GroupMember groupMember = this.ensureIsInGroup(groupToLeave, command.getUserId());
 
         if(groupMember.isAdmin()){
@@ -29,6 +31,11 @@ public class LeaveGroupCommandHandler implements CommandHandler<LeaveGroupComman
         }else{
             this.groupMemberService.deleteByUserId(command.getUserId());
         }
+    }
+
+    private void ensureGroupIsAbleToLeave(Group group){
+        if(!group.canMembersJoinLeave())
+            throw new IllegalState("You cannot leave the group right now");
     }
 
     private Group ensureGroupExistsAndGet(UUID groupId){

@@ -42,12 +42,16 @@ public class Group extends Aggregate {
         return new Group(this.groupId, this.description, this.createdDate, this.money, this.adminUserId, newState);
     }
 
-    public boolean isWriteBlocked(){
-        return this.state.isWriteBlocked();
+    public boolean isEditable(){
+        return this.state.isEditable();
     }
 
     public boolean canMakePayments(){
         return this.state.canMakePayments();
+    }
+
+    public boolean canMembersJoinLeave(){
+        return this.state.canMembersJoinLeave();
     }
 
     @Override

@@ -22,6 +22,7 @@ public class KickGroupMemberCommandHandler implements CommandHandler<KickGroupMe
     @Override
     public void handle(KickGroupMemberCommand command) {
         Group group = ensureGroupExistsAndGet(command.getGroupId());
+        ensureMemberCanBeKicked(group);
         ensureAdminOfGroup(group, command.getUserId());
         ensureUserToKickInGroup(command.getUserIdToKick(), group.getGroupId());
         ensureAdminNotKickingHimself(command.getUserIdToKick(), command.getUserId());
@@ -32,6 +33,11 @@ public class KickGroupMemberCommandHandler implements CommandHandler<KickGroupMe
     private Group ensureGroupExistsAndGet(UUID groupId){
         return this.groupService.findById(groupId)
                 .orElseThrow(() -> new ResourceNotFound("Group doesnt exists"));
+    }
+
+    private void ensureMemberCanBeKicked(Group group){
+        if(!group.canMembersJoinLeave())
+            throw new IllegalState("Member cannot be kicked");
     }
 
     private void ensureAdminOfGroup(Group group, UUID adminUserId){

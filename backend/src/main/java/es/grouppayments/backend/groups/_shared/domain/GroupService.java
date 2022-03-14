@@ -4,6 +4,7 @@ import es.grouppayments.backend.groups._shared.domain.events.GroupCreated;
 import es.grouppayments.backend.groups._shared.domain.events.GroupDeleted;
 import es.grouppayments.backend.groups._shared.domain.events.GroupEdited;
 import es.jaime.javaddd.domain.event.EventBus;
+import es.jaime.javaddd.domain.exceptions.IllegalState;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +25,17 @@ public class GroupService {
     }
 
     public void update(Group groupEdited){
+        this.ensureGroupEditableOrThrow(groupEdited);
+
         this.groups.deleteById(groupEdited.getGroupId());
         this.groups.save(groupEdited);
 
         this.eventBus.publish(new GroupEdited(groupEdited));
+    }
+
+    private void ensureGroupEditableOrThrow(Group group){
+        if(!group.isEditable())
+            throw new IllegalState("Group editing is blocked");
     }
 
     public Optional<Group> findById(UUID groupId){

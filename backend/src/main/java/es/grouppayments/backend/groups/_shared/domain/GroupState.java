@@ -1,24 +1,31 @@
 package es.grouppayments.backend.groups._shared.domain;
 
 public enum GroupState {
-    PROCESS(false, true),
-    PAYING(true, false),
-    CONFIRMING(true, false),
-    PAID(true, false);
+    PROCESS(true, true, true),
+    PAYING(false, false, false),
+    CONFIRMING(false, false, false),
+    PAID(false, false, false);
 
-    private final boolean isWriteBlocked;
+    //Except changing the state
+    private final boolean isEditable;
     private final boolean canMakePayments;
+    private final boolean canMembersJoinLeave;
 
-    GroupState(boolean isWriteBlocked, boolean canMakePayments) {
-        this.isWriteBlocked = isWriteBlocked;
+    GroupState(boolean isEditable, boolean canMakePayments, boolean canMembersJoinLeave) {
+        this.isEditable = isEditable;
         this.canMakePayments = canMakePayments;
+        this.canMembersJoinLeave = canMembersJoinLeave;
     }
 
-    public boolean isWriteBlocked(){
-        return this.isWriteBlocked;
+    public boolean isEditable(){
+        return this.isEditable;
     }
 
     public boolean canMakePayments() {
         return canMakePayments;
+    }
+
+    public boolean canMembersJoinLeave() {
+        return canMembersJoinLeave;
     }
 }

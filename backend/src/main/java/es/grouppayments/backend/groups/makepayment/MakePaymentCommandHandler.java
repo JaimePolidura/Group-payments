@@ -12,6 +12,7 @@ import es.grouppayments.backend.payments._shared.domain.UnprocessablePayment;
 import es.jaime.javaddd.domain.cqrs.command.CommandHandler;
 import es.jaime.javaddd.domain.event.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
+import es.jaime.javaddd.domain.exceptions.IllegalState;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import lombok.AllArgsConstructor;
@@ -33,10 +34,11 @@ public class MakePaymentCommandHandler implements CommandHandler<MakePaymentComm
     @Override
     public void handle(MakePaymentCommand makePaymentCommand) {
         Group group = ensureGroupExistsAndGet(makePaymentCommand.getGruopId());
+        this.ensureCanMakePayments(group);
         this.ensureAdminOfGroup(group, makePaymentCommand.getUserId());
         List<GroupMember> groupMembersWithoutAdmin = ensureAtLeastOneMemberExceptAdminAndGet(group);
-        double moneyToPayPerMember = group.getMoney() / groupMembersWithoutAdmin.size();
 
+        double moneyToPayPerMember = group.getMoney() / groupMembersWithoutAdmin.size();
         ensureAllMembersCanPay(groupMembersWithoutAdmin, moneyToPayPerMember);
 
         for (GroupMember groupMember : groupMembersWithoutAdmin) {
@@ -54,8 +56,9 @@ public class MakePaymentCommandHandler implements CommandHandler<MakePaymentComm
         ));
     }
 
-    private void ensureCanMakePayments(){
-
+    private void ensureCanMakePayments(Group group){
+        if(!group.canMakePayments())
+            throw new IllegalState("Group is blocked to do payments");
     }
 
     private void ensureAllMembersCanPay(List<GroupMember> payerMembers, double money){
