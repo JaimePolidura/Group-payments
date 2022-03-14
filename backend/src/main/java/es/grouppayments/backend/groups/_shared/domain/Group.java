@@ -16,6 +16,7 @@ public class Group extends Aggregate {
     @Getter private final LocalDateTime createdDate;
     @Getter private final double money;
     @Getter private final UUID adminUserId;
+    @Getter private final GroupState state;
 
     @Override
     public Map<String, Object> toPrimitives() {
@@ -24,16 +25,29 @@ public class Group extends Aggregate {
                 "description", description,
                 "createdDate", this.createdDate.toString(),
                 "money", money,
-                "adminUserId", adminUserId.toString()
+                "adminUserId", adminUserId.toString(),
+                "state", state
         );
     }
 
     public Group changeMoney(double newMoney){
-        return new Group(this.groupId, this.description, this.createdDate, newMoney, this.adminUserId);
+        return new Group(this.groupId, this.description, this.createdDate, newMoney, this.adminUserId, this.state);
     }
 
     public Group changeDescription(String newDescription){
-        return new Group(this.groupId, newDescription, this.createdDate, this.money, this.adminUserId);
+        return new Group(this.groupId, newDescription, this.createdDate, this.money, this.adminUserId, this.state);
+    }
+
+    public Group changeStateTo(GroupState newState){
+        return new Group(this.groupId, this.description, this.createdDate, this.money, this.adminUserId, newState);
+    }
+
+    public boolean isWriteBlocked(){
+        return this.state.isWriteBlocked();
+    }
+
+    public boolean canMakePayments(){
+        return this.state.canMakePayments();
     }
 
     @Override

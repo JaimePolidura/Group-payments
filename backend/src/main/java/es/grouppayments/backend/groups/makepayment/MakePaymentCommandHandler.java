@@ -54,6 +54,10 @@ public class MakePaymentCommandHandler implements CommandHandler<MakePaymentComm
         ));
     }
 
+    private void ensureCanMakePayments(){
+
+    }
+
     private void ensureAllMembersCanPay(List<GroupMember> payerMembers, double money){
         Utils.allMatchOrThrow(payerMembers,
                 member -> paymentService.isValid(member.getUserId(), money),

@@ -1,13 +1,11 @@
 package es.grouppayments.backend.groups.create;
 
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
-import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
 import es.jaime.javaddd.domain.cqrs.command.CommandHandler;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @AllArgsConstructor

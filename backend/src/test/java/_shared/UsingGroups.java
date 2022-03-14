@@ -3,11 +3,11 @@ package _shared;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberRole;
 import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups._shared.domain.GroupRepository;
+import es.grouppayments.backend.groups._shared.domain.GroupState;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -18,20 +18,20 @@ public interface UsingGroups extends UsingGroupMembers{
     GroupRepository groupRepository();
 
     default void addGroup(UUID groupId, UUID adminUserId, double money, UUID... membersUserId){
-        this.groupRepository().save(new Group(groupId, DEFAULT_DESCRIPTION, LocalDateTime.now(), money, adminUserId));
+        this.groupRepository().save(new Group(groupId, DEFAULT_DESCRIPTION, LocalDateTime.now(), money, adminUserId, GroupState.PROCESS));
 
         addMember(groupId, adminUserId, GroupMemberRole.ADMIN);
         addMember(groupId, membersUserId);
     }
 
     default void addGroup(UUID groupId, UUID userId){
-        this.groupRepository().save(new Group(groupId, DEFAULT_DESCRIPTION, LocalDateTime.now(), 1, userId));
+        this.groupRepository().save(new Group(groupId, DEFAULT_DESCRIPTION, LocalDateTime.now(), 1, userId, GroupState.PROCESS));
 
         addMember(groupId, userId, GroupMemberRole.ADMIN);
     }
 
     default void addGroup(UUID groupId, UUID userId, double money){
-        this.groupRepository().save(new Group(groupId, DEFAULT_DESCRIPTION, LocalDateTime.now(), money, userId));
+        this.groupRepository().save(new Group(groupId, DEFAULT_DESCRIPTION, LocalDateTime.now(), money, userId, GroupState.PROCESS));
 
         addMember(groupId, userId, GroupMemberRole.ADMIN);
     }
