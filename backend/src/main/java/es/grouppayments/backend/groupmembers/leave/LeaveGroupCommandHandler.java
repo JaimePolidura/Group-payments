@@ -18,7 +18,6 @@ import java.util.UUID;
 public class LeaveGroupCommandHandler implements CommandHandler<LeaveGroupCommand> {
     private final GroupService groupService;
     private final GroupMemberService groupMemberService;
-    private final EventBus eventBus;
 
     @Override
     public void handle(LeaveGroupCommand command) {

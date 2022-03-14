@@ -1,6 +1,7 @@
 package es.grouppayments.backend.groupmembers.kick;
 
 import es.grouppayments.backend.groupmembers._shared.domain.events.GroupMemberLeft;
+import es.grouppayments.backend.groups._shared.domain.GroupState;
 import es.jaime.javaddd.domain.exceptions.IllegalState;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
@@ -54,6 +55,17 @@ public class KickGroupMemberTest extends KickGroupMemberTestMother{
         addGroup(groupId, userId);
 
         execute(userId, groupId, userId);
+    }
+
+    @Test(expected = IllegalState.class)
+    public void shouldntKickInvalidState(){
+        UUID userId = UUID.randomUUID();
+        UUID groupId = UUID.randomUUID();
+        UUID userIdToKick = UUID.randomUUID();
+        addGroup(groupId, userId, 100, userIdToKick);
+        changeStateTo(groupId, GroupState.PAYING);
+
+        execute(userId, groupId, userIdToKick);
     }
 
 }

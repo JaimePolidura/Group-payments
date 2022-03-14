@@ -12,8 +12,7 @@ public class LeaveGroupMother extends GroupMembersTestMother {
     public LeaveGroupMother(){
         this.handler = new LeaveGroupCommandHandler(
                 new GroupService(groupRepository(), super.testEventBus),
-                new GroupMemberService(groupMemberRepository(), super.testEventBus),
-                super.testEventBus
+                new GroupMemberService(groupMemberRepository(), super.testEventBus)
         );
     }
 

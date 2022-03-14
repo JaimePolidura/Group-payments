@@ -1,6 +1,5 @@
 package es.grouppayments.backend.payments.onpaymentdone;
 
-import _shared.TestMother;
 import es.grouppayments.backend.payments.PaymentTestMother;
 import es.grouppayments.backend.payments._shared.domain.PaymentDone;
 import es.grouppayments.backend.payments._shared.domain.PaymentHistoricalService;

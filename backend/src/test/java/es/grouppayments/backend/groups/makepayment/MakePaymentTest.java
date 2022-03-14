@@ -1,9 +1,11 @@
 package es.grouppayments.backend.groups.makepayment;
 
+import es.grouppayments.backend.groups._shared.domain.GroupState;
 import es.grouppayments.backend.groups._shared.domain.events.GroupDeleted;
 import es.grouppayments.backend.payments._shared.domain.PaymentDone;
 import es.grouppayments.backend.payments._shared.domain.UnprocessablePayment;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
+import es.jaime.javaddd.domain.exceptions.IllegalState;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import org.junit.Test;
@@ -61,5 +63,15 @@ public class MakePaymentTest extends MakePaymentMother{
         super.willFail();
 
         makePayment(groupId, userId);
+    }
+
+    @Test(expected = IllegalState.class)
+    public void shouldntMakePaymentInvalidState(){
+        UUID groupId = UUID.randomUUID();
+        UUID userID = UUID.randomUUID();
+        addGroup(groupId, userID, 10, UUID.randomUUID(), UUID.randomUUID());
+        changeStateTo(groupId, GroupState.PAYING);
+
+        makePayment(groupId, userID);
     }
 }

@@ -1,7 +1,9 @@
 package es.grouppayments.backend.groupmembers.leave;
 
 import es.grouppayments.backend.groupmembers._shared.domain.events.GroupMemberLeft;
+import es.grouppayments.backend.groups._shared.domain.GroupState;
 import es.grouppayments.backend.groups._shared.domain.events.GroupDeleted;
+import es.jaime.javaddd.domain.exceptions.IllegalState;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import org.junit.Test;
 
@@ -45,5 +47,16 @@ public class LeaveGroupTest extends LeaveGroupMother{
         addGroup(groupId, UUID.randomUUID());
 
         execute(UUID.randomUUID(), groupId);
+    }
+
+    @Test(expected = IllegalState.class)
+    public void shouldntDeleteInvalidState(){
+        UUID userAdmin = UUID.randomUUID();
+        UUID userMember = UUID.randomUUID();
+        UUID groupId = UUID.randomUUID();
+        addGroup(groupId, userAdmin, 100, userMember);
+        changeStateTo(groupId, GroupState.PAYING);
+
+        execute(userMember, groupId);
     }
 }

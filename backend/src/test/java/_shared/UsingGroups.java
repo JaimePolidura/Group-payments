@@ -36,6 +36,13 @@ public interface UsingGroups extends UsingGroupMembers{
         addMember(groupId, userId, GroupMemberRole.ADMIN);
     }
 
+    default void changeStateTo(UUID groupId, GroupState groupState){
+        Group group = this.groupRepository().findById(groupId).get();
+        Group changeStateGroup = group.changeStateTo(groupState);
+        this.groupRepository().deleteById(groupId);
+        this.groupRepository().save(changeStateGroup);
+    }
+
     default void assertGroupCreated(UUID groupId){
         assertTrue(this.groupRepository().findById(groupId).isPresent());
     }

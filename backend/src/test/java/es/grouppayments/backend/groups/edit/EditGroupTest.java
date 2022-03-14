@@ -1,11 +1,9 @@
 package es.grouppayments.backend.groups.edit;
 
 import es.grouppayments.backend.groups._shared.domain.Group;
+import es.grouppayments.backend.groups._shared.domain.GroupState;
 import es.grouppayments.backend.groups._shared.domain.events.GroupEdited;
-import es.jaime.javaddd.domain.exceptions.IllegalLength;
-import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
-import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
+import es.jaime.javaddd.domain.exceptions.*;
 import org.junit.Test;
 
 import java.util.UUID;
@@ -67,5 +65,15 @@ public class EditGroupTest extends EditGroupTestMother{
         addGroup(groupId, UUID.randomUUID());
 
         execute(groupId, UUID.randomUUID(), 1000, "xd");
+    }
+
+    @Test(expected = IllegalState.class)
+    public void shouldntEditInvalidState(){
+        UUID userId = UUID.randomUUID();
+        UUID groupId = UUID.randomUUID();
+        addGroup(groupId, userId, 10);
+        changeStateTo(groupId, GroupState.PAYING);
+
+        execute(groupId, userId, 11, "sa");
     }
 }

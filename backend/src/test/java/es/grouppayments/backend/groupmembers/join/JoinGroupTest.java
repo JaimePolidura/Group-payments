@@ -1,7 +1,9 @@
 package es.grouppayments.backend.groupmembers.join;
 
 import es.grouppayments.backend.groupmembers._shared.domain.events.GroupMemberLeft;
+import es.grouppayments.backend.groups._shared.domain.GroupState;
 import es.grouppayments.backend.groups._shared.domain.events.GroupDeleted;
+import es.jaime.javaddd.domain.exceptions.IllegalState;
 import org.junit.Test;
 
 import java.util.UUID;
@@ -47,5 +49,15 @@ public class JoinGroupTest extends JoinGroupTestMother{
 
         assertGroupCreated(groupIdToJoin);
         assertEventRaised(GroupMemberJoined.class, GroupDeleted.class);
+    }
+
+    @Test(expected = IllegalState.class)
+    public void shouldntJoinInvalidState(){
+        UUID groupId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
+        addGroup(groupId, UUID.randomUUID());
+        changeStateTo(groupId, GroupState.PAYING);
+
+        executeJoinGroupCommandHandler(groupId, userId);
     }
 }
