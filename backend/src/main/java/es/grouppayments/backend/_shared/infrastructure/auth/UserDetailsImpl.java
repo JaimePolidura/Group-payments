@@ -24,7 +24,9 @@ public class UserDetailsImpl implements UserDetailsService {
         User user = usersService.findByUserId(UUID.fromString(userId))
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with userid: " + userId));
 
-        List<GrantedAuthority> roles = Collections.singletonList(new SimpleGrantedAuthority("USER"));
+        List<GrantedAuthority> roles = Collections.singletonList(
+                new SimpleGrantedAuthority(user.getState().toString())
+        );
 
         return new org.springframework.security.core.userdetails.User(
                 user.getUserId().toString(),
