@@ -15,6 +15,11 @@ public final class User extends Aggregate {
     @Getter private final String email;
     @Getter private final LocalDateTime loggedDate;
     @Getter private final String photoUrl;
+    @Getter private final UserState state;
+
+    public User updateSignUpState(UserState newState){
+        return new User(userId, username, email, loggedDate, photoUrl, newState);
+    }
 
     @Override
     public Map<String, Object> toPrimitives() {
@@ -23,7 +28,8 @@ public final class User extends Aggregate {
                 "username", username,
                 "email", email,
                 "photoUrl", photoUrl,
-                "loggedDate", loggedDate.toString()
+                "loggedDate", loggedDate.toString(),
+                "state", state
         );
     }
 }

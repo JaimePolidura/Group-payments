@@ -6,17 +6,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class FakeTransactionManager implements TransactionManager {
     @Override
-    public void start() {
-
-    }
+    public void start() {}
 
     @Override
-    public void commit() {
-
-    }
+    public void commit() {}
 
     @Override
-    public void rollback() {
-
-    }
+    public void rollback() {}
 }

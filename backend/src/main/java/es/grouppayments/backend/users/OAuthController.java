@@ -5,6 +5,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import es.grouppayments.backend._shared.infrastructure.auth.JWTUtils;
+import es.grouppayments.backend.users._shared.domain.User;
 import es.grouppayments.backend.users._shared.domain.UsersService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +19,7 @@ import java.util.UUID;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/oauth")
+@RequestMapping("/auth/oauth")
 public class OAuthController {
     @Value("${google.clientId}")
     private String googleClientId;
@@ -35,24 +36,22 @@ public class OAuthController {
     public ResponseEntity<Response> googleOAuth(@RequestBody Request request) throws IOException {
         var netHttpTransport = new NetHttpTransport();
         var jacksonFactory = JacksonFactory.getDefaultInstance();
-
         var verifier = new GoogleIdTokenVerifier.Builder(netHttpTransport, jacksonFactory)
                 .setAudience(Collections.singleton(googleClientId));
-
         var googleIdToken = GoogleIdToken.parse(verifier.getJsonFactory(), request.token);
         var payload = googleIdToken.getPayload();
 
-        UUID userId = createNewUserIfNotExistsAndGetUserId(request.username, payload.getEmail(), String.valueOf(payload.get("picture")));
-        String newToken = jwtUtils.generateToken(userId);
+        User user = createNewUserIfNotExistsAndGetUserId(request.username, payload.getEmail(), String.valueOf(payload.get("picture")));
+        String newToken = jwtUtils.generateToken(user.getUserId(), user.getState());
 
-        return ResponseEntity.ok(new Response(newToken, userId));
+        return ResponseEntity.ok(new Response(newToken, user.getUserId()));
     }
 
-    private UUID createNewUserIfNotExistsAndGetUserId(String username, String email, String phtoUrl) {
+    private User createNewUserIfNotExistsAndGetUserId(String username, String email, String phtoUrl) {
         if(usersService.findByEmail(email).isEmpty())
-            return usersService.save(username, email, phtoUrl);
+            return usersService.create(username, email, phtoUrl);
         else
-            return usersService.findByEmail(email).get().getUserId();
+            return usersService.findByEmail(email).get();
     }
 
     @AllArgsConstructor

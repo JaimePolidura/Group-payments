@@ -2,7 +2,6 @@ package es.grouppayments.backend.users._shared.domain;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.yaml.snakeyaml.Yaml;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -13,12 +12,16 @@ import java.util.UUID;
 public class UsersService {
     private final UserRepository userRepository;
 
-    public UUID save(String username, String email, String photoUrl) {
-        UUID userId = UUID.randomUUID();
+    public User create(String username, String email, String photoUrl) {
+        User newUser = new User(UUID.randomUUID(), username, email, LocalDateTime.now(), photoUrl, UserState.SIGNUP_OAUTH_COMPLETED);
 
-        userRepository.save(new User(userId, username, email, LocalDateTime.now(), photoUrl));
+        userRepository.save(newUser);
 
-        return userId;
+        return newUser;
+    }
+
+    public void update(User user){
+        this.userRepository.save(user);
     }
 
     public Optional<User> findByEmail(String email){

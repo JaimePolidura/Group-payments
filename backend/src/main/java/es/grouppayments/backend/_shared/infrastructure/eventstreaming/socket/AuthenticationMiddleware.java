@@ -3,6 +3,7 @@ package es.grouppayments.backend._shared.infrastructure.eventstreaming.socket;
 import es.grouppayments.backend._shared.infrastructure.auth.JWTUtils;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
 import lombok.AllArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHeaders;
@@ -17,6 +18,7 @@ import java.util.UUID;
 
 @Component
 @AllArgsConstructor
+@ConditionalOnProperty(value = "eventsclientdispatcher.method", havingValue = "stomp")
 public class AuthenticationMiddleware implements ChannelInterceptor {
     private final JWTUtils jwtUtils;
     private final GroupMemberService groupMemberService;
@@ -25,9 +27,8 @@ public class AuthenticationMiddleware implements ChannelInterceptor {
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 
-        if(isConnecting(accessor)){
+        if(isConnecting(accessor))
             authenticate(message);
-        }
 
         return message;
     }
@@ -71,9 +72,8 @@ public class AuthenticationMiddleware implements ChannelInterceptor {
     }
 
     private void authenticateUserOrThrowException(String token, String userId){
-        if(!jwtUtils.isValid(token, UUID.fromString(userId))){
+        if(!jwtUtils.isValid(token, UUID.fromString(userId)))
             throw new IllegalArgumentException("Illegal token");
-        }
     }
 
     private void ensureUserInGroup(String userId, String groupId) {

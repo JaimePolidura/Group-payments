@@ -2,6 +2,7 @@ package _shared;
 
 import es.grouppayments.backend.users._shared.domain.User;
 import es.grouppayments.backend.users._shared.domain.UserRepository;
+import es.grouppayments.backend.users._shared.domain.UserState;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -15,6 +16,6 @@ public interface UsingUsers {
     }
 
     default void addUser(UUID userId){
-        this.usersRepository().save(new User(userId, "sa", "jhksa", LocalDateTime.now(), ""));
+        this.usersRepository().save(new User(userId, "sa", "jhksa", LocalDateTime.now(), "", UserState.SIGNUP_ALL_COMPLETED));
     }
 }

@@ -25,31 +25,30 @@ public class JWTFilterRequest extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         String authorizationHeader = request.getHeader("Authorization");
 
-        if (hasJWT(authorizationHeader) && isNotEmpty(authorizationHeader)) {
+        if (isNotAlreadyLogged() && hasJWTHeader(authorizationHeader) && containsNecesaryData(authorizationHeader)) {
             String jwt = authorizationHeader.substring(7);
             UUID userId = jwtUtils.getUserId(jwt);
+            UserDetails userDetails = userDetailsImpl.loadUserByUsername(userId.toString());
 
-            if (isNotAlreadyLogged()) {
-                UserDetails userDetails = userDetailsImpl.loadUserByUsername(userId.toString());
+            if (jwtUtils.isValid(jwt, userId) && !jwtUtils.isExpired(jwt)) {
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                if (jwtUtils.isValid(jwt, userId) && !jwtUtils.isExpired(jwt)) {
-                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
-                }
+                SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
 
         chain.doFilter(request, response);
     }
 
-    private boolean hasJWT(String authorizationHeader) {
+    private boolean hasJWTHeader(String authorizationHeader) {
         return authorizationHeader != null && authorizationHeader.startsWith("Bearer");
     }
 
-    private boolean isNotEmpty (String authorizationHeader) {
-        return jwtUtils.getUserId(authorizationHeader.substring(7)) != null;
+    private boolean containsNecesaryData(String authorizationHeader) {
+        String token = authorizationHeader.substring(7);
+
+        return jwtUtils.containsNecesaryData(token);
     }
 
     private boolean isNotAlreadyLogged () {
