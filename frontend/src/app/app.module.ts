@@ -20,6 +20,14 @@ import {
 } from "../backend/eventlistener/websocketstomp/server-event-listener-wsstomp.service";
 import { RegisterCardDetailsComponent } from './login/regiser-card-details/register-card-details.component';
 import {NgxStripeModule} from "ngx-stripe";
+import { LoadingProgressBarComponent } from './loading-progress-bar/loading-progress-bar.component';
+import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {MatButtonModule} from "@angular/material/button";
+import {MatMenuModule} from "@angular/material/menu";
+import {MatStepperModule} from "@angular/material/stepper";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
 
 const STRIPE_PUBLIC_KEY = "pk_test_51KdFRuHd6M46OJ6AWkTIoAh6RRcusDTqAEin4zxmvSkAEotVSwhmD6rD02ymmU3PJCAtylGS8ARrxejFlbscO8as00icxHNy4i";
 
@@ -33,15 +41,19 @@ const STRIPE_PUBLIC_KEY = "pk_test_51KdFRuHd6M46OJ6AWkTIoAh6RRcusDTqAEin4zxmvSkA
     GroupOptionsComponent,
     JoinGroupComponent,
     RegisterCardDetailsComponent,
+    LoadingProgressBarComponent,
   ],
   imports: [
     BrowserModule,
     NgxStripeModule.forRoot(STRIPE_PUBLIC_KEY),
     AppRoutingModule,
     ReactiveFormsModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     SocialLoginModule,
     NgbModule,
+    MatProgressBarModule,
+    MatInputModule,
   ],
   providers: [
     { provide: ServerEventListener, useExisting: ServerEventListenerWSStompService },

@@ -5,8 +5,9 @@ import {
   HttpEvent,
   HttpInterceptor
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {finalize, Observable} from 'rxjs';
 import {Authentication} from "./authentication/authentication";
+import {HttpLoadingService} from "./http-loading.service";
 
 const TOKEN_HEADER_KEY = 'Authorization';
 
@@ -17,7 +18,9 @@ const bypassUrl: string[] = ["oauth"];
 })
 export class HttpRequestInterceptor implements HttpInterceptor {
 
-  constructor(private auth: Authentication) {}
+  constructor(private auth: Authentication,
+              private httpLoader: HttpLoadingService
+  ){}
 
   intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     if(this.needsAuth(req)){

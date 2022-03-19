@@ -3,6 +3,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Authentication} from "../../backend/authentication/authentication";
 import {LoginResponse} from "../../backend/authentication/responses/login-response";
 import {UserState} from "../../model/user-state";
+import {HttpLoadingService} from "../../backend/http-loading.service";
 
 @Component({
   selector: 'app-login',

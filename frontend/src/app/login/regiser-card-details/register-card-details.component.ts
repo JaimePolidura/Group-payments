@@ -5,6 +5,7 @@ import {StripeService} from "ngx-stripe";
 import {Authentication} from "../../../backend/authentication/authentication";
 import {PaymentsService} from "../../../backend/payments/payments.service";
 import {ActivatedRoute, Router} from "@angular/router";
+import {HttpLoadingService} from "../../../backend/http-loading.service";
 
 @Component({
   selector: 'app-regiser-card-details',
@@ -16,10 +17,7 @@ export class RegisterCardDetailsComponent implements OnInit {
   elements: StripeElements;
 
   private clientSecret: string | null | undefined;
-  public canGoToNextStepToRegister: boolean = false;
   public isHttpRequestLoading: boolean = false;
-
-  public urlToRegisterInStripe: string;
 
   constructor(
     private stripeService: StripeService,
@@ -27,6 +25,7 @@ export class RegisterCardDetailsComponent implements OnInit {
     private paymentsService: PaymentsService,
     private router: Router,
     private activeRoute: ActivatedRoute,
+    private httpLoader: HttpLoadingService,
   ){}
 
   ngOnInit(): void {
@@ -76,6 +75,7 @@ export class RegisterCardDetailsComponent implements OnInit {
 
   async registerCarDetails() {
     this.isHttpRequestLoading = true;
+    this.httpLoader.isLoading.next(true);
 
     // @ts-ignore
     const result = await this.stripeService.confirmCardSetup(this.clientSecret,  this.buildConfirmCardSetupRequest())
@@ -84,9 +84,8 @@ export class RegisterCardDetailsComponent implements OnInit {
     if(result != undefined && result.setupIntent && result.setupIntent.payment_method != null){
       this.paymentsService.createCustomer({paymentMethod: result.setupIntent.payment_method}).subscribe(() => {
         this.paymentsService.createConnectedAccount().subscribe(res => {
-          this.canGoToNextStepToRegister = true;
-          this.urlToRegisterInStripe = res.accountLink;
           this.isHttpRequestLoading = false;
+          this.httpLoader.isLoading.next(false);
 
           this.goToLink(res.accountLink);
         })
