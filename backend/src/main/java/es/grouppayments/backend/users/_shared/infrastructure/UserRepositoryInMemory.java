@@ -19,6 +19,7 @@ public final class UserRepositoryInMemory implements UserRepository {
 
     @Override
     public void save(User user) {
+        this.users.remove(user);
         this.users.add(user);
     }
 

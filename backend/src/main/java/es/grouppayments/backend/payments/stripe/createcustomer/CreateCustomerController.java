@@ -1,7 +1,7 @@
 package es.grouppayments.backend.payments.stripe.createcustomer;
 
 import es.grouppayments.backend._shared.infrastructure.ApplicationController;
-import es.grouppayments.backend.payments._shared.infrastructure.StripeService;
+import es.grouppayments.backend.payments.stripe._shared.infrastructure.StripeService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,9 +17,9 @@ public final class CreateCustomerController extends ApplicationController {
 
     @PostMapping("/payments/stripe/createcustomer")
     public ResponseEntity<String> createCustomer(@RequestBody CreateCustomerRequest request){
-        stripeService.createCustomer(request.paymentMethod);
+        stripeService.createCustomer(getLoggedUsername(), request.paymentMethod);
 
-        return buildNewHttpResponseOK("Customer created");
+        return buildNewHttpResponseOK();
     }
 
     @AllArgsConstructor

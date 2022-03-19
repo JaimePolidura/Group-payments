@@ -14,9 +14,6 @@ public final class OnStripeCustomerCreated {
 
     @EventListener({StripeCustomerCreated.class})
     public void on(StripeCustomerCreated event){
-        StripeUser stripeUser = stripeUsersService.findByUserId(event.getUserId())
-                .setCustomerId(event.getCustomerId());
-
-        this.stripeUsersService.save(stripeUser);
+        this.stripeUsersService.save(StripeUser.create(event.getUserId(), event.getCustomerId()));
     }
 }

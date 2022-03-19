@@ -1,7 +1,7 @@
 package es.grouppayments.backend.payments.stripe.setupintent;
 
 import es.grouppayments.backend._shared.infrastructure.ApplicationController;
-import es.grouppayments.backend.payments._shared.infrastructure.StripeService;
+import es.grouppayments.backend.payments.stripe._shared.infrastructure.StripeService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;

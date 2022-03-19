@@ -42,7 +42,7 @@ public class OAuthController {
         var payload = googleIdToken.getPayload();
 
         User user = createNewUserIfNotExistsAndGetUserId(request.username, payload.getEmail(), String.valueOf(payload.get("picture")));
-        String newToken = jwtUtils.generateToken(user.getUserId(), user.getState());
+        String newToken = jwtUtils.generateToken(user.getUserId());
 
         return ResponseEntity.ok(new Response(newToken, user.getUserId(), user.getState().toString()));
     }

@@ -1,14 +1,9 @@
 package es.grouppayments.backend._shared.infrastructure.auth;
 
-
-import es.grouppayments.backend.users._shared.domain.UserState;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.vavr.control.Try;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +17,9 @@ public class JWTUtils {
     @Value("${jwt.secretkey}")
     private String jwtSecretKey;
 
-    public String generateToken(UUID userId, UserState state) {
+    public String generateToken(UUID userId) {
         return Jwts.builder()
-                .setSubject(GroupPaymentsJwtSubject.toJSONString(userId, state))
+                .setSubject(userId.toString())
                 .setIssuedAt(new Date())
                 .signWith(SignatureAlgorithm.HS256, jwtSecretKey)
                 .setExpiration(Date.from(ZonedDateTime.now().plusDays(1).toInstant()))
@@ -38,11 +33,7 @@ public class JWTUtils {
     }
 
     public UUID getUserId(String token) {
-        return UUID.fromString(String.valueOf(new JSONObject(decryptToken(token)).get("userId")));
-    }
-
-    public UserState getUserState(String token){
-        return UserState.valueOf(String.valueOf(new JSONObject(decryptToken(token)).get("userState")));
+        return UUID.fromString(getClaims(token).getSubject());
     }
 
     public boolean isExpired (String token) {
@@ -50,11 +41,7 @@ public class JWTUtils {
     }
 
     public boolean containsNecesaryData(String token){
-        return getUserState(token) != null && getUserId(token) != null;
-    }
-
-    private String decryptToken(String token){
-        return getClaims(token).getSubject();
+        return getUserId(token) != null;
     }
 
     private Claims getClaims (String token){
@@ -62,18 +49,5 @@ public class JWTUtils {
                 .setSigningKey(jwtSecretKey)
                 .parseClaimsJws(token)
                 .getBody();
-    }
-
-    @AllArgsConstructor
-    private static class GroupPaymentsJwtSubject {
-        @Getter private final UUID userId;
-        @Getter private final UserState userState;
-
-        public static String toJSONString(UUID userId, UserState userState){
-            return new JSONObject(Map.of(
-                    "userId", userId.toString(),
-                    "userState", userState.toString()
-            )).toString();
-        }
     }
 }
