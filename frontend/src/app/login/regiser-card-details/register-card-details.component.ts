@@ -4,6 +4,7 @@ import {FormGroup} from "@angular/forms";
 import {StripeService} from "ngx-stripe";
 import {Authentication} from "../../../backend/authentication/authentication";
 import {PaymentsService} from "../../../backend/payments/payments.service";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-regiser-card-details',
@@ -15,16 +16,26 @@ export class RegisterCardDetailsComponent implements OnInit {
   elements: StripeElements;
 
   private clientSecret: string | null | undefined;
+  public canGoToNextStepToRegister: boolean = false;
+  public isHttpRequestLoading: boolean = false;
+
+  public urlToRegisterInStripe: string;
 
   constructor(
     private stripeService: StripeService,
     private auth: Authentication,
     private paymentsService: PaymentsService,
+    private router: Router,
+    private activeRoute: ActivatedRoute,
   ){}
 
   ngOnInit(): void {
     this.setupStripeElements();
     this.setupIntent();
+
+    const state: string = this.activeRoute.snapshot.params["state"];
+    if(state == 'done')
+      this.router.navigate(["/main"]);
   }
 
   private async setupIntent() {
@@ -63,26 +74,22 @@ export class RegisterCardDetailsComponent implements OnInit {
     });
   }
 
-
   async registerCarDetails() {
-    const name: string = this.auth.getName();
-
-    console.log("adips")
-    console.log(this.clientSecret)
+    this.isHttpRequestLoading = true;
 
     // @ts-ignore
     const result = await this.stripeService.confirmCardSetup(this.clientSecret,  this.buildConfirmCardSetupRequest())
       .toPromise();
 
-    console.log("hola");
-
-    // @ts-ignore
-    console.log(result.setupIntent.payment_method);
-
     if(result != undefined && result.setupIntent && result.setupIntent.payment_method != null){
-      this.paymentsService.createCustomer({paymentMethod: result.setupIntent.payment_method}).subscribe(res => {
-        console.log(res);
-        console.log("PORRROOOOOO")
+      this.paymentsService.createCustomer({paymentMethod: result.setupIntent.payment_method}).subscribe(() => {
+        this.paymentsService.createConnectedAccount().subscribe(res => {
+          this.canGoToNextStepToRegister = true;
+          this.urlToRegisterInStripe = res.accountLink;
+          this.isHttpRequestLoading = false;
+
+          this.goToLink(res.accountLink);
+        })
       });
     }
   }
@@ -94,6 +101,10 @@ export class RegisterCardDetailsComponent implements OnInit {
           billing_details: {
             name: this.auth.getName()
           },
-        }};
+      }};
+  }
+
+  public goToLink(url: string){
+    window.open(url, "_self");
   }
 }

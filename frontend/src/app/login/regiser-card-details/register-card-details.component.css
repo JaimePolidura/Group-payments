@@ -2,8 +2,15 @@
   width: 20%;
 }
 
-.button{
-  width: 90%;
+.options {
+  display: flex;
+  justify-content: center;
+
+  width: 100%;
+}
+
+.option{
+  width: 100%;
 }
 
 @media screen and (max-width: 900px){

@@ -6,7 +6,13 @@
 
   <br><hr>
 
-  <button type="submit" class="btn btn-primary" (click)="registerCarDetails()">
-    Continue
-  </button>
+  <div class="options">
+      <button *ngIf="!canGoToNextStepToRegister"
+          type="submit"
+          class="btn btn-primary option"
+          (click)="registerCarDetails()"
+          [ngClass]="{'disabled cursorLoading': this.isHttpRequestLoading}">
+        Send
+      </button>
+  </div>
 </div>

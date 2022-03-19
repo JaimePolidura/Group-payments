@@ -17,7 +17,6 @@ export class JoinGroupComponent implements OnInit {
     private auth: Authentication,
     private groupsApi: GroupsApiService,
     private router: Router,
-    private groupState: GroupRepositoryService,
   ){ }
 
   ngOnInit(): void {

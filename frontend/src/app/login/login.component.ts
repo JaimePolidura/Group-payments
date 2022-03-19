@@ -23,6 +23,9 @@ export class LoginComponent implements OnInit {
     this.oauth.signInWithGoogle((loginResponse: LoginResponse) => {
       const alreadyRegistered: boolean = loginResponse.userState == UserState.SIGNUP_ALL_COMPLETED;
 
+      console.log(loginResponse.userState);
+      console.log(UserState.SIGNUP_ALL_COMPLETED);
+
       if(alreadyRegistered)
         this.redirectToMain();
       else

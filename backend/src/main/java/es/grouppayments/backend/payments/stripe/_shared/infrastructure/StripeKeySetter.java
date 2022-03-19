@@ -1,4 +1,4 @@
-package es.grouppayments.backend.payments._shared.infrastructure;
+package es.grouppayments.backend.payments.stripe._shared.infrastructure;
 
 import com.stripe.Stripe;
 import org.springframework.beans.factory.annotation.Value;

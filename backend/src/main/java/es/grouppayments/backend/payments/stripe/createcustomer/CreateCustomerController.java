@@ -1,4 +1,4 @@
-package es.grouppayments.backend.payments.createcustomer;
+package es.grouppayments.backend.payments.stripe.createcustomer;
 
 import es.grouppayments.backend._shared.infrastructure.ApplicationController;
 import es.grouppayments.backend.payments._shared.infrastructure.StripeService;

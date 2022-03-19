@@ -4,6 +4,7 @@ import {SetupIntentResult} from "@stripe/stripe-js";
 import {HttpClient} from "@angular/common/http";
 import {BackendUsingRoutesService} from "../backend-using-routes.service";
 import {CreateCustomerRequest} from "./request/create-customer-request";
+import {CreateConnectedAccountResponse} from "./response/create-connected-account-response";
 
 @Injectable({
   providedIn: 'root'
@@ -20,5 +21,9 @@ export class PaymentsService {
 
   public createCustomer(request: CreateCustomerRequest): Observable<any> {
     return this.http.post(`${this.usingRoutes.USING}/payments/stripe/createcustomer`, request);
+  }
+
+  public createConnectedAccount(): Observable<CreateConnectedAccountResponse> {
+    return this.http.post<CreateConnectedAccountResponse>(`${this.usingRoutes.USING}/payments/stripe/createconnectedaccount`, {});
   }
 }
