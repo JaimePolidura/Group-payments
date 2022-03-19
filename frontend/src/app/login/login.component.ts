@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {Authentication} from "../../backend/authentication/authentication";
+import {LoginResponse} from "../../backend/authentication/responses/login-response";
+import {UserState} from "../../model/user-state";
 
 @Component({
   selector: 'app-login',
@@ -18,8 +20,13 @@ export class LoginComponent implements OnInit {
   }
 
   signInWithGoogle() {
-    this.oauth.signInWithGoogle(() => {
-      this.redirectToMain();
+    this.oauth.signInWithGoogle((loginResponse: LoginResponse) => {
+      const alreadyRegistered: boolean = loginResponse.userState == UserState.SIGNUP_ALL_COMPLETED;
+
+      if(alreadyRegistered)
+        this.redirectToMain();
+      else
+        this.redirectToRegistration();
     });
   }
 
@@ -29,7 +36,10 @@ export class LoginComponent implements OnInit {
     hasUrlToJoinGroup ?
       this.router.navigate(["/join", this.getGroupIdToJoin()]) :
       this.router.navigate(["/main"]);
+  }
 
+  private redirectToRegistration(): void {
+    this.router.navigate(["/register"]);
   }
 
   private hasUrlToJoinGroup(): boolean {

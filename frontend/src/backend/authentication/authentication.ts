@@ -3,6 +3,7 @@ import {GoogleLoginProvider, SocialAuthService, SocialUser} from "angularx-socia
 import {HttpClient} from "@angular/common/http";
 import {LoginResponse} from "./responses/login-response";
 import {LoginRequest} from "./request/login-request";
+import {UserState} from "../../model/user-state";
 
 @Injectable({
   providedIn: 'root'
@@ -11,22 +12,24 @@ export class Authentication {
   private loggedUser: SocialUser;
   private userId: string;
   private token: string;
+  private userState: UserState;
 
   constructor(
     private oauthProvider: SocialAuthService,
     private http: HttpClient,
   ){}
 
-  async signInWithGoogle(onSuccess: (() => void)) {
+  async signInWithGoogle(onSuccess: ((loginResponse: LoginResponse) => void)) {
     try{
       const dataFromOAuthProvider = await this.oauthProvider.signIn(GoogleLoginProvider.PROVIDER_ID);
-      const responseFromBackend = await this.verifyTokenAndGetJWT({username: dataFromOAuthProvider.name, token: dataFromOAuthProvider.idToken});
+      const loginResponse = await this.verifyTokenAndGetJWT({username: dataFromOAuthProvider.name, token: dataFromOAuthProvider.idToken});
 
       this.loggedUser = dataFromOAuthProvider;
-      this.userId = responseFromBackend.userId;
-      this.token = responseFromBackend.token;
+      this.userId = loginResponse.userId;
+      this.token = loginResponse.token;
+      this.userState = loginResponse.userState;
 
-      onSuccess();
+      onSuccess(loginResponse);
     }catch(exception){
       window.alert("ERROR");
       console.error(exception);
@@ -34,7 +37,7 @@ export class Authentication {
   }
 
   async verifyTokenAndGetJWT(loginRequest: LoginRequest): Promise<any | LoginResponse>{
-    return this.http.post<LoginResponse>('http://localhost:8080/oauth/google', loginRequest)
+    return this.http.post<LoginResponse>('http://localhost:8080/auth/oauth/google', loginRequest)
       .toPromise();
   }
 

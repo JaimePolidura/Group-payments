@@ -18,6 +18,10 @@ import {ServerEventListener} from "../backend/eventlistener/server-event-listene
 import {
   ServerEventListenerWSStompService
 } from "../backend/eventlistener/websocketstomp/server-event-listener-wsstomp.service";
+import { RegisterCardDetailsComponent } from './login/regiser-card-details/register-card-details.component';
+import {NgxStripeModule} from "ngx-stripe";
+
+const STRIPE_PUBLIC_KEY = "pk_test_51KdFRuHd6M46OJ6AWkTIoAh6RRcusDTqAEin4zxmvSkAEotVSwhmD6rD02ymmU3PJCAtylGS8ARrxejFlbscO8as00icxHNy4i";
 
 @NgModule({
   declarations: [
@@ -28,9 +32,11 @@ import {
     NonGroupOptionsComponent,
     GroupOptionsComponent,
     JoinGroupComponent,
+    RegisterCardDetailsComponent,
   ],
   imports: [
     BrowserModule,
+    NgxStripeModule.forRoot(STRIPE_PUBLIC_KEY),
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
