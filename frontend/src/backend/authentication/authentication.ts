@@ -19,7 +19,7 @@ export class Authentication {
     private http: HttpClient,
   ){}
 
-  async signInWithGoogle(onSuccess: ((loginResponse: LoginResponse) => void)) {
+  public async signInWithGoogle(onSuccess: ((loginResponse: LoginResponse) => void)) {
     try{
       const dataFromOAuthProvider = await this.oauthProvider.signIn(GoogleLoginProvider.PROVIDER_ID);
       const loginResponse = await this.verifyTokenAndGetJWT({username: dataFromOAuthProvider.name, token: dataFromOAuthProvider.idToken});
@@ -36,12 +36,12 @@ export class Authentication {
     }
   }
 
-  async verifyTokenAndGetJWT(loginRequest: LoginRequest): Promise<any | LoginResponse>{
+  public async verifyTokenAndGetJWT(loginRequest: LoginRequest): Promise<any | LoginResponse>{
     return this.http.post<LoginResponse>('http://localhost:8080/auth/oauth/google', loginRequest)
       .toPromise();
   }
 
-  logout(onSuccess: () => void): void{
+  public logout(onSuccess: () => void): void{
     this.oauthProvider.signOut().then(() => {
       // @ts-ignore
       this.loggedUser = undefined;
@@ -50,23 +50,27 @@ export class Authentication {
     });
   }
 
-  isLogged(): boolean {
+  public isLogged(): boolean {
     return this.loggedUser != undefined;
   }
 
-  getName(): string {
+  public getName(): string {
     return this.loggedUser.name;
   }
 
-  getPhotoURL(): string{
+  public getPhotoURL(): string{
     return this.loggedUser.photoUrl;
   }
 
-  getToken(): string{
+  public getUserState(): UserState{
+    return this.userState;
+  }
+
+  public getToken(): string{
     return this.token;
   }
 
-  getUserId(): string {
+  public getUserId(): string {
     return this.userId;
   }
 

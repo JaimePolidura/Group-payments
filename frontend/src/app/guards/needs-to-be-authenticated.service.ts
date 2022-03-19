@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, Params, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
+import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
 import { Observable } from 'rxjs';
-import {Authentication} from "../backend/authentication/authentication";
+import {UserState} from "../../model/user-state";
+import {Authentication} from "../../backend/authentication/authentication";
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProtectedWithAuthGuard implements CanActivate {
+export class NeedsToBeAuthenticated implements CanActivate {
   constructor(
     private authentication: Authentication,
     private router: Router,
@@ -20,7 +21,6 @@ export class ProtectedWithAuthGuard implements CanActivate {
 
     if(!isLogged)
       this.redirectToLogin(actualRoute);
-
 
     return isLogged;
   }
