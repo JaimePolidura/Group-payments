@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {StripeElement, StripeElements, StripeElementsOptions} from "@stripe/stripe-js";
+import {ConfirmCardSetupData, StripeElement, StripeElements, StripeElementsOptions} from "@stripe/stripe-js";
 import {FormGroup} from "@angular/forms";
 import {StripeService} from "ngx-stripe";
 import {Authentication} from "../../../backend/authentication/authentication";
@@ -13,7 +13,6 @@ import {PaymentsService} from "../../../backend/payments/payments.service";
 export class RegisterCardDetailsComponent implements OnInit {
   card: StripeElement;
   elements: StripeElements;
-  stripeForm: FormGroup;
 
   private clientSecret: string | null | undefined;
 
@@ -34,11 +33,9 @@ export class RegisterCardDetailsComponent implements OnInit {
     if(setupIntent?.error){
       console.log(setupIntent.error);
     }else{
-      this.clientSecret = setupIntent?.setupIntent.client_secret;
+      // @ts-ignore
+      this.clientSecret = setupIntent.client_secret;
     }
-  }
-
-  registerCarDetails() {
   }
 
   private setupStripeElements(): void {
@@ -64,5 +61,39 @@ export class RegisterCardDetailsComponent implements OnInit {
         this.card.mount('#card-element');
       }
     });
+  }
+
+
+  async registerCarDetails() {
+    const name: string = this.auth.getName();
+
+    console.log("adips")
+    console.log(this.clientSecret)
+
+    // @ts-ignore
+    const result = await this.stripeService.confirmCardSetup(this.clientSecret,  this.buildConfirmCardSetupRequest())
+      .toPromise();
+
+    console.log("hola");
+
+    // @ts-ignore
+    console.log(result.setupIntent.payment_method);
+
+    if(result != undefined && result.setupIntent && result.setupIntent.payment_method != null){
+      this.paymentsService.createCustomer({paymentMethod: result.setupIntent.payment_method}).subscribe(res => {
+        console.log(res);
+        console.log("PORRROOOOOO")
+      });
+    }
+  }
+
+  private buildConfirmCardSetupRequest(): ConfirmCardSetupData{
+    return { payment_method: {
+        // @ts-ignore
+        card: this.card,
+          billing_details: {
+            name: this.auth.getName()
+          },
+        }};
   }
 }

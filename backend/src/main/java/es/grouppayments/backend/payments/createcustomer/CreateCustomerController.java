@@ -25,6 +25,7 @@ public final class CreateCustomerController extends ApplicationController {
     @AllArgsConstructor
     private static class CreateCustomerRequest {
         public final String paymentMethod;
+        public final String ignoreThis;
     }
 
 }

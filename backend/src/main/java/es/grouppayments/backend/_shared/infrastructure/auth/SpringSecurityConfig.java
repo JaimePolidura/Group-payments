@@ -20,9 +20,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/auth/oauth/**", "/sse", "/socket/**").permitAll()
-                .antMatchers("/groups").hasAnyRole(UserState.SIGNUP_OAUTH_COMPLETED.name())
+                .antMatchers("/groups/**")
+                    .hasAuthority(UserState.SIGNUP_ALL_COMPLETED.name())
                 .antMatchers("/payments/stripe/setupintent", "/payments/stripe/createcustomer")
-                    .hasAnyRole(UserState.SIGNUP_OAUTH_COMPLETED.name())
+                    .hasAuthority(UserState.SIGNUP_OAUTH_COMPLETED.name())
                 .anyRequest().authenticated();
 
         http.addFilterBefore(jwtFilterRequest, UsernamePasswordAuthenticationFilter.class);
