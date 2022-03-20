@@ -1,4 +1,4 @@
-package es.grouppayments.backend.payments.stripe.oncustomercreated;
+package es.grouppayments.backend.payments.stripe._shared.application.oncustomercreated;
 
 import es.grouppayments.backend.payments.stripe._shared.domain.StripeUser;
 import es.grouppayments.backend.payments.stripe._shared.domain.StripeUsersService;

@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import {ConfirmCardSetupData, StripeElement, StripeElements, StripeElementsOptions} from "@stripe/stripe-js";
-import {FormGroup} from "@angular/forms";
+import {Component, OnInit} from '@angular/core';
+import {ConfirmCardSetupData, StripeElement, StripeElements} from "@stripe/stripe-js";
 import {StripeService} from "ngx-stripe";
 import {Authentication} from "../../../backend/authentication/authentication";
 import {PaymentsService} from "../../../backend/payments/payments.service";
-import {ActivatedRoute, Router} from "@angular/router";
 import {HttpLoadingService} from "../../../backend/http-loading.service";
+import {UserState} from "../../../model/user-state";
 
 @Component({
   selector: 'app-regiser-card-details',
@@ -17,79 +16,60 @@ export class RegisterCardDetailsComponent implements OnInit {
   elements: StripeElements;
 
   private clientSecret: string | null | undefined;
-  public isHttpRequestLoading: boolean = false;
 
   constructor(
     private stripeService: StripeService,
     private auth: Authentication,
     private paymentsService: PaymentsService,
-    private router: Router,
-    private activeRoute: ActivatedRoute,
-    private httpLoader: HttpLoadingService,
+    public httpLoader: HttpLoadingService,
   ){}
 
   ngOnInit(): void {
     this.setupStripeElements();
     this.setupIntent();
-
-    const state: string = this.activeRoute.snapshot.params["state"];
-    if(state == 'done')
-      this.router.navigate(["/main"]);
   }
 
   private async setupIntent() {
     const setupIntent = await this.paymentsService.setupIntent().toPromise();
 
-    if(setupIntent?.error){
-      console.log(setupIntent.error);
-    }else{
+    if(!setupIntent?.error){
       // @ts-ignore
       this.clientSecret = setupIntent.client_secret;
+    }else{
+      window.alert("Some error happened try later");
+      await this.setupIntent();
     }
   }
 
   private setupStripeElements(): void {
     this.stripeService.elements({locale: 'es'}).subscribe(elements => {
       this.elements = elements;
+
       // Only mount the element the first time
       if (!this.card) {
-        this.card = this.elements.create('card', {
-          style: {
-            base: {
-              iconColor: '#666EE8',
-              color: '#31325F',
-              lineHeight: '40px',
-              fontWeight: 300,
-              fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-              fontSize: '18px',
-              '::placeholder': {
-                color: '#CFD7E0'
-              }
-            }
-          }
-        });
+        this.card = this.elements.create('card');
         this.card.mount('#card-element');
       }
     });
   }
 
   async registerCarDetails() {
-    this.isHttpRequestLoading = true;
     this.httpLoader.isLoading.next(true);
 
     // @ts-ignore
-    const result = await this.stripeService.confirmCardSetup(this.clientSecret,  this.buildConfirmCardSetupRequest())
+    const confirmCardResult = await this.stripeService.confirmCardSetup(this.clientSecret,  this.buildConfirmCardSetupRequest())
       .toPromise();
 
-    if(result != undefined && result.setupIntent && result.setupIntent.payment_method != null){
-      this.paymentsService.createCustomer({paymentMethod: result.setupIntent.payment_method}).subscribe(() => {
-        this.paymentsService.createConnectedAccount().subscribe(res => {
-          this.isHttpRequestLoading = false;
-          this.httpLoader.isLoading.next(false);
+    const confirmCardResultNotNull = confirmCardResult != undefined && confirmCardResult.setupIntent
+      && confirmCardResult.setupIntent.payment_method != null;
 
-          this.goToLink(res.accountLink);
-        })
-      });
+    if(confirmCardResultNotNull){
+      try{
+        // @ts-ignore
+        await this.createStripeCustomerAndConnectedAccount(confirmCardResult.setupIntent.payment_method);
+      }catch (error){
+        window.alert("Error try later");
+      }
     }
   }
 
@@ -101,6 +81,20 @@ export class RegisterCardDetailsComponent implements OnInit {
             name: this.auth.getName()
           },
       }};
+  }
+
+  private async createStripeCustomerAndConnectedAccount(paymentMethod: string) {
+    await this.paymentsService.createCustomer({paymentMethod: paymentMethod})
+      .toPromise();
+
+    const connectedAccount = await this.paymentsService.createConnectedAccount()
+      .toPromise();
+
+    this.httpLoader.isLoading.next(false);
+    this.auth.setUserState(UserState.SIGNUP_ALL_COMPLETED);
+
+    // @ts-ignore
+    this.goToLink(connectedAccount.accountLink);
   }
 
   public goToLink(url: string){

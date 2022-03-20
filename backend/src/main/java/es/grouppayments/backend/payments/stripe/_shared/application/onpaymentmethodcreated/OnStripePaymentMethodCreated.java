@@ -1,21 +1,22 @@
-package es.grouppayments.backend.payments.stripe.onconnectedaccountcreated;
+package es.grouppayments.backend.payments.stripe._shared.application.onpaymentmethodcreated;
+
 
 import es.grouppayments.backend.payments.stripe._shared.domain.StripeUser;
 import es.grouppayments.backend.payments.stripe._shared.domain.StripeUsersService;
-import es.grouppayments.backend.payments.stripe._shared.domain.events.StripeConnectedAccountCreated;
+import es.grouppayments.backend.payments.stripe._shared.domain.events.StripePaymentMethodCreated;
 import lombok.AllArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public final class OnStripeConnectedAccountCreated {
+public final class OnStripePaymentMethodCreated {
     private final StripeUsersService stripeUsersService;
 
-    @EventListener({StripeConnectedAccountCreated.class})
-    public void on(StripeConnectedAccountCreated event){
+    @EventListener({StripePaymentMethodCreated.class})
+    public void on(StripePaymentMethodCreated event){
         StripeUser stripeUser = stripeUsersService.getdByUserId(event.getUserId())
-                .setConnectedAccountId(event.getConnectedAccountId());
+                .setPaymentMethod(event.getPaymentMethodId());
 
         this.stripeUsersService.save(stripeUser);
     }

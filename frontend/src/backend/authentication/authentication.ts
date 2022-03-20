@@ -70,6 +70,10 @@ export class Authentication {
     return this.token;
   }
 
+  public setUserState(newUserState: UserState): void {
+    this.userState = newUserState;
+  }
+
   public getUserId(): string {
     return this.userId;
   }

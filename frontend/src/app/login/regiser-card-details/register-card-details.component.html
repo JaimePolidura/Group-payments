@@ -2,6 +2,11 @@
   <h1 style="text-align: center">Register</h1>
   <hr>
 
+  <div *ngIf="httpLoader.isLoading | async">
+    <p style="text-align: center">This may take some seconds</p>
+    <br>
+  </div>
+
   <div id="card-element" class="field"></div>
 
   <br><hr>
@@ -11,8 +16,8 @@
           type="submit"
           class="btn btn-primary option"
           (click)="registerCarDetails()"
-          [ngClass]="{'disabled cursorLoading': this.isHttpRequestLoading}">
-        Send
+          [ngClass]="{'disabled cursorLoading': this.httpLoader.isLoading | async}">
+        Continue
       </button>
   </div>
 </div>
