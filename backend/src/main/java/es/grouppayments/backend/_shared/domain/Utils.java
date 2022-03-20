@@ -21,4 +21,18 @@ public final class Utils {
     public static <E> Set<E> setOf(E... elements){
         return new HashSet<>(Arrays.asList(elements));
     }
+
+    public static double deductFrom(double total, double fee){
+        return total + total * (fee / 100);
+    }
+
+    public static boolean isSucess(Runnable runnable){
+        try{
+            runnable.run();
+
+            return true;
+        }catch (Throwable e){
+            return false;
+        }
+    }
 }

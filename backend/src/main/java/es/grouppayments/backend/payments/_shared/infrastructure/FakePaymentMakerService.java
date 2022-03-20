@@ -2,28 +2,24 @@ package es.grouppayments.backend.payments._shared.infrastructure;
 
 import es.grouppayments.backend.payments._shared.domain.PaymentMakerService;
 import es.grouppayments.backend.payments._shared.domain.UnprocessablePayment;
+import es.grouppayments.backend.payments.stripe._shared.infrastructure.StripeService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 @Service
+@AllArgsConstructor
 public class FakePaymentMakerService implements PaymentMakerService {
-    private boolean fail;
+    private final StripeService stripeService;
 
-    public void willFail(){
-        this.fail = true;
+    @Override
+    public void paymentMemberToApp(UUID userId, double money) {
+
     }
 
     @Override
-    public void makePayment(UUID payerUserId, UUID paidUserId, double moneyPerMember) {
-    }
+    public void paymentAppToAdmin(UUID userId, double money) throws Exception {
 
-    @Override
-    public boolean isValid(UUID payerUserId, double money) {
-        if(fail){
-            throw new UnprocessablePayment("Error");
-        }
-
-        return true;
     }
 }
