@@ -5,7 +5,6 @@ import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
 import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
 import es.jaime.javaddd.domain.cqrs.command.CommandHandler;
-import es.jaime.javaddd.domain.event.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalState;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import lombok.AllArgsConstructor;
@@ -38,13 +37,11 @@ public class LeaveGroupCommandHandler implements CommandHandler<LeaveGroupComman
     }
 
     private Group ensureGroupExistsAndGet(UUID groupId){
-        return this.groupService.findById(groupId)
-                .orElseThrow(() -> new ResourceNotFound("Group not exists"));
+        return this.groupService.findByIdOrThrowException(groupId);
     }
 
     private GroupMember ensureIsInGroup(Group group, UUID userId){
-        GroupMember groupMember = this.groupMemberService.findGroupMemberByUserId(userId)
-                .orElseThrow(() -> new ResourceNotFound("You dont belong to any group"));
+        GroupMember groupMember = this.groupMemberService.findGroupMemberByUserIdOrThrowException(userId);
 
         if(!groupMember.getGroupId().equals(group.getGroupId())){
             throw new ResourceNotFound("You dont belong to that group");

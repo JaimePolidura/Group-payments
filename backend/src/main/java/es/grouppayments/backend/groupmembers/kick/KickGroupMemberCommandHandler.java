@@ -31,8 +31,7 @@ public class KickGroupMemberCommandHandler implements CommandHandler<KickGroupMe
     }
 
     private Group ensureGroupExistsAndGet(UUID groupId){
-        return this.groupService.findById(groupId)
-                .orElseThrow(() -> new ResourceNotFound("Group doesnt exists"));
+        return this.groupService.findByIdOrThrowException(groupId);
     }
 
     private void ensureMemberCanBeKicked(Group group){
@@ -47,8 +46,7 @@ public class KickGroupMemberCommandHandler implements CommandHandler<KickGroupMe
     }
 
     private void ensureUserToKickInGroup(UUID userIdToKick, UUID groupId){
-        GroupMember groupMember = this.groupMemberService.findGroupMemberByUserId(userIdToKick)
-                .orElseThrow(() -> new ResourceNotFound("The user to that group"));
+        GroupMember groupMember = this.groupMemberService.findGroupMemberByUserIdOrThrowException(userIdToKick);
 
         if(!groupMember.getGroupId().equals(groupId)){
             throw new ResourceNotFound("The user to that group");

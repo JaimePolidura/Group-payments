@@ -30,8 +30,7 @@ public class SseSubscriberController extends ApplicationController {
 
         SseEmitter sseEmitter = new SseEmitter(Long.MAX_VALUE);
 
-        UUID groupIdOfUser = groupMemberService.findGroupMemberByUserId(UUID.fromString(userId))
-                .get()
+        UUID groupIdOfUser = groupMemberService.findGroupMemberByUserIdOrThrowException(UUID.fromString(userId))
                 .getGroupId();
 
         this.subscribersRegistry.add(groupIdOfUser, sseEmitter, UUID.fromString(userId));

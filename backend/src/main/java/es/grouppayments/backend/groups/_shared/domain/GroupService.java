@@ -5,6 +5,7 @@ import es.grouppayments.backend.groups._shared.domain.events.GroupDeleted;
 import es.grouppayments.backend.groups._shared.domain.events.GroupEdited;
 import es.jaime.javaddd.domain.event.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalState;
+import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -38,8 +39,9 @@ public class GroupService {
             throw new IllegalState("Group editing is blocked");
     }
 
-    public Optional<Group> findById(UUID groupId){
-        return this.groups.findById(groupId);
+    public Group findByIdOrThrowException(UUID groupId){
+        return this.groups.findById(groupId)
+                .orElseThrow(() -> new ResourceNotFound("Group for that id doesnt exists"));
     }
 
     public Optional<Group> findByUsernameHost(UUID userId){

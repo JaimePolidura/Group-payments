@@ -83,7 +83,7 @@ public final class StripeService {
                         .setCollect(AccountLinkCreateParams.Collect.EVENTUALLY_DUE)
                         .setAccount(connectedAccountId)
                         .setRefreshUrl("http://localhost:4200/register")
-                        .setReturnUrl("http://localhost:4200/register?state=done")
+                        .setReturnUrl("http://localhost:4200/main")
                         .setType(AccountLinkCreateParams.Type.ACCOUNT_ONBOARDING)
                         .build()
         ).getUrl();

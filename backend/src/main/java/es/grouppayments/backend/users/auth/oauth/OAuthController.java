@@ -34,9 +34,8 @@ public class OAuthController {
 
     @PostMapping("/google")
     public ResponseEntity<Response> googleOAuth(@RequestBody Request request) throws IOException {
-        var netHttpTransport = new NetHttpTransport();
-        var jacksonFactory = JacksonFactory.getDefaultInstance();
-        var verifier = new GoogleIdTokenVerifier.Builder(netHttpTransport, jacksonFactory)
+        var verifier = new GoogleIdTokenVerifier
+                .Builder(new NetHttpTransport(), JacksonFactory.getDefaultInstance())
                 .setAudience(Collections.singleton(googleClientId));
         var googleIdToken = GoogleIdToken.parse(verifier.getJsonFactory(), request.token);
         var payload = googleIdToken.getPayload();

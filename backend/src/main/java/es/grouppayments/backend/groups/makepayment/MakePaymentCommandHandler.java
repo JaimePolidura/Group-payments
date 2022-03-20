@@ -84,8 +84,7 @@ public class MakePaymentCommandHandler implements CommandHandler<MakePaymentComm
     }
 
     private Group ensureGroupExistsAndGet(UUID uuid){
-        return this.groupService.findById(uuid)
-                .orElseThrow(() -> new ResourceNotFound("Group not found"));
+        return this.groupService.findByIdOrThrowException(uuid);
     }
 
     private Predicate<? super GroupMember> notAdmin(){

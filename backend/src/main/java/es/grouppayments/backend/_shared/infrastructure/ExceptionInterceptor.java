@@ -25,8 +25,6 @@ public class ExceptionInterceptor {
 
         if(supportedException.isEmpty()) throwable.printStackTrace();
 
-        throwable.printStackTrace();
-
         return supportedException.orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
@@ -42,7 +40,7 @@ public class ExceptionInterceptor {
                 exception.getStatus());
     }
 
-    enum SupportedException {
+    private enum SupportedException {
         ALREADY_EXISTS(AlreadyExists.class, HttpStatus.CONFLICT),
         ALREADY_OWNER(AlreadyOwner.class, HttpStatus.BAD_REQUEST),
         CANNOT_BE_NULL(CannotBeNull.class, HttpStatus.BAD_REQUEST),

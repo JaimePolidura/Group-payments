@@ -14,8 +14,7 @@ public class GetGroupByIdQueryHandler implements QueryHandler<GetGroupByIdQuery,
 
     @Override
     public GetGroupByIdQueryResponse handle(GetGroupByIdQuery getGroupByIdQuery) {
-        Group group = groupService.findById(getGroupByIdQuery.getGroupId())
-                .orElseThrow(() -> new ResourceNotFound("Group not found"));
+        Group group = groupService.findByIdOrThrowException(getGroupByIdQuery.getGroupId());
 
         return new GetGroupByIdQueryResponse(group);
     }

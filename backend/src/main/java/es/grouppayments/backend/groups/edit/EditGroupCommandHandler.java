@@ -31,8 +31,7 @@ public final class EditGroupCommandHandler implements CommandHandler<EditGroupCo
     }
 
     private Group ensureGroupExists(UUID groupId){
-        return this.groupService.findById(groupId)
-                .orElseThrow(() -> new ResourceNotFound("Group not exists"));
+        return this.groupService.findByIdOrThrowException(groupId);
     }
 
     private void ensureAdminOfGroup(Group group, UUID userId){

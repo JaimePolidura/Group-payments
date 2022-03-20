@@ -2,6 +2,7 @@ package es.grouppayments.backend.groupmembers._shared.domain;
 
 import es.grouppayments.backend.groupmembers._shared.domain.events.GroupMemberLeft;
 import es.jaime.javaddd.domain.event.EventBus;
+import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,12 +24,13 @@ public class GroupMemberService {
         return this.groupMembers.findMembersByGroupId(groupId);
     }
 
-    public Optional<GroupMember> findGroupMemberByUserId(UUID userId){
-        return this.groupMembers.findGroupMemberByUserId(userId);
+    public GroupMember findGroupMemberByUserIdOrThrowException(UUID userId){
+        return this.groupMembers.findGroupMemberByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFound("Group member for that id not found"));
     }
 
     public void deleteByUserId(UUID userId) {
-        UUID groupId = this.findGroupMemberByUserId(userId).get()
+        UUID groupId = this.findGroupMemberByUserIdOrThrowException(userId)
                 .getGroupId();
 
         this.groupMembers.deleteByUserId(userId);
@@ -41,7 +43,7 @@ public class GroupMemberService {
     }
 
     public void leaveGroupIfMember(UUID userId){
-        Optional<UUID> groupMemberOptional = findGroupMemberByUserId(userId)
+        Optional<UUID> groupMemberOptional = this.groupMembers.findGroupMemberByUserId(userId)
                 .map(GroupMember::getGroupId);
         boolean isMemberOfGroup = groupMemberOptional.isPresent();
 

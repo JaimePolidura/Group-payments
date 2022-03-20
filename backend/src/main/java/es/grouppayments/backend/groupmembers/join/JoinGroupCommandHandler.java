@@ -3,7 +3,6 @@ package es.grouppayments.backend.groupmembers.join;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMember;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberRole;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
-import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
 import es.jaime.javaddd.domain.cqrs.command.CommandHandler;
 import es.jaime.javaddd.domain.event.EventBus;
@@ -37,15 +36,14 @@ public final class JoinGroupCommandHandler implements CommandHandler<JoinGroupCo
     }
 
     private void ensureGroupStateAvilableToJoin(UUID groupId){
-        var canJoin = this.groupService.findById(groupId).get().canMembersJoinLeave();
+        var canJoin = this.groupService.findByIdOrThrowException(groupId).canMembersJoinLeave();
 
         if(!canJoin)
             throw new IllegalState("Cannot join to group");
     }
 
     private void ensureGroupExists(UUID groupId){
-        groupService.findById(groupId)
-                .orElseThrow(() -> new ResourceNotFound("Group not exists"));
+        groupService.findByIdOrThrowException(groupId);
     }
 
     private void ensureNotAlreadyInGroupOrLeaveGroup(UUID userId){

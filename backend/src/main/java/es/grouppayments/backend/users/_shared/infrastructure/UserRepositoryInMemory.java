@@ -19,7 +19,7 @@ public final class UserRepositoryInMemory implements UserRepository {
 
     @Override
     public void save(User user) {
-        this.users.remove(user);
+        this.users.removeIf(u -> u.getUserId().equals(user.getUserId()));
         this.users.add(user);
     }
 

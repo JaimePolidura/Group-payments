@@ -18,13 +18,15 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/auth/oauth/**", "/sse", "/socket/**").permitAll()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
+                .antMatchers("/auth/oauth/**", "/sse", "/socket/**")
+                    .permitAll()
                 .antMatchers("/groups/**")
                     .hasAuthority(UserState.SIGNUP_ALL_COMPLETED.name())
-                .antMatchers("/payments/stripe/setupintent", "/payments/stripe/createcustomer")
+                .antMatchers("/payments/stripe/**")
                     .hasAuthority(UserState.SIGNUP_OAUTH_COMPLETED.name())
-                .anyRequest().authenticated();
+                .anyRequest()
+                    .authenticated();
 
         http.addFilterBefore(jwtFilterRequest, UsernamePasswordAuthenticationFilter.class);
     }
