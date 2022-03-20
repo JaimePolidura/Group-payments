@@ -1,4 +1,4 @@
-package es.grouppayments.backend.groups.makepayment;
+package es.grouppayments.backend.payments.stripe.makepayment;
 
 import es.jaime.javaddd.domain.cqrs.command.Command;
 import lombok.AllArgsConstructor;

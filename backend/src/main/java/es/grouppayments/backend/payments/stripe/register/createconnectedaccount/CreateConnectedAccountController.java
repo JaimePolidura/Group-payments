@@ -1,4 +1,4 @@
-package es.grouppayments.backend.payments.stripe.createconnectedaccount;
+package es.grouppayments.backend.payments.stripe.register.createconnectedaccount;
 
 import com.stripe.model.Account;
 import es.grouppayments.backend._shared.infrastructure.ApplicationController;

@@ -4,6 +4,8 @@ import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
 import es.grouppayments.backend.groups.GroupTestMother;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
 import es.grouppayments.backend.payments._shared.infrastructure.FakePaymentMakerService;
+import es.grouppayments.backend.payments.stripe.makepayment.MakePaymentCommand;
+import es.grouppayments.backend.payments.stripe.makepayment.MakePaymentCommandHandler;
 
 import java.util.UUID;
 

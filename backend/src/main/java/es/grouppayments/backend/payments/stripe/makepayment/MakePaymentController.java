@@ -1,4 +1,4 @@
-package es.grouppayments.backend.groups.makepayment;
+package es.grouppayments.backend.payments.stripe.makepayment;
 
 import es.grouppayments.backend._shared.infrastructure.ApplicationController;
 import es.jaime.javaddd.domain.cqrs.command.CommandBus;
@@ -17,7 +17,7 @@ import java.util.UUID;
 public class MakePaymentController extends ApplicationController {
     private final CommandBus commandBus;
 
-    @PostMapping("/groups/makepayment")
+    @PostMapping("/payments/makepayment")
     public ResponseEntity<?> makePayment(@RequestBody Request request){
         this.commandBus.dispatch(new MakePaymentCommand(
                 UUID.fromString(request.groupId),

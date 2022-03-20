@@ -2,9 +2,7 @@ package es.grouppayments.backend.groups._shared.domain;
 
 public enum GroupState {
     PROCESS(true, true, true),
-    PAYING(false, false, false),
-    CONFIRMING(false, false, false),
-    PAID(false, false, false);
+    PAYING(false, false, false);
 
     //Except changing the state
     private final boolean isEditable;

@@ -1,4 +1,4 @@
-package es.grouppayments.backend.groups.makepayment;
+package es.grouppayments.backend.payments.stripe.makepayment;
 
 import es.grouppayments.backend._shared.domain.Utils;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMember;
@@ -14,7 +14,6 @@ import es.jaime.javaddd.domain.event.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.IllegalState;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,27 +32,19 @@ public class MakePaymentCommandHandler implements CommandHandler<MakePaymentComm
 
     @Override
     public void handle(MakePaymentCommand makePaymentCommand) {
-        Group group = ensureGroupExistsAndGet(makePaymentCommand.getGruopId());
+        Group group = this.ensureGroupExistsAndGet(makePaymentCommand.getGruopId());
         this.ensureCanMakePayments(group);
         this.ensureAdminOfGroup(group, makePaymentCommand.getUserId());
-        List<GroupMember> groupMembersWithoutAdmin = ensureAtLeastOneMemberExceptAdminAndGet(group);
+        List<GroupMember> groupMembersWithoutAdmin = this.ensureAtLeastOneMemberExceptAdminAndGet(group);
 
-        double moneyToPayPerMember = group.getMoney() / groupMembersWithoutAdmin.size();
-        ensureAllMembersCanPay(groupMembersWithoutAdmin, moneyToPayPerMember);
+        this.eventBus.publish(new PaymentInitialized(group.getGroupId()));
 
-        for (GroupMember groupMember : groupMembersWithoutAdmin) {
-            this.paymentService.makePayment(groupMember.getUserId(), group.getAdminUserId(), moneyToPayPerMember);
-        }
-
-        groupService.deleteById(makePaymentCommand.getGruopId());
-
-        eventBus.publish(new PaymentDone(
-                group.getGroupId(),
-                getUsersIdFromGroupMembers(groupMembersWithoutAdmin),
-                group.getAdminUserId(),
-                group.getDescription(),
-                moneyToPayPerMember
-        ));
+//        double moneyToPayPerMember = group.getMoney() / groupMembersWithoutAdmin.size();
+//        ensureAllMembersCanPay(groupMembersWithoutAdmin, moneyToPayPerMember);
+//
+//        for (GroupMember groupMember : groupMembersWithoutAdmin) {
+//            this.paymentService.makePayment(groupMember.getUserId(), group.getAdminUserId(), moneyToPayPerMember);
+//        }
     }
 
     private void ensureCanMakePayments(Group group){

@@ -25,6 +25,13 @@ public class GroupService {
         this.eventBus.publish(new GroupCreated(groupId, adminUserId));
     }
 
+    public void changeState(UUID gruopId, GroupState state){
+        Group group = this.findByIdOrThrowException(gruopId)
+                .changeStateTo(state);
+        this.groups.deleteById(gruopId);
+        this.groups.save(group);
+    }
+
     public void update(Group groupEdited){
         this.ensureGroupEditableOrThrow(groupEdited);
 
