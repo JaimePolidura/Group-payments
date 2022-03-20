@@ -16,6 +16,10 @@ import {GroupMemberJoined} from "../../../backend/eventlistener/events/group-mem
 import {GroupEdited} from "../../../backend/eventlistener/events/group-edited";
 import {ServerEventsSubscriberService} from "../../../backend/eventlistener/server-events-subscriber.service";
 import {ServerEventListener} from "../../../backend/eventlistener/server-event-listener";
+import {PaymentInitialized} from "../../../backend/eventlistener/events/payment-initialized";
+import {GroupState} from "../../../model/group-state";
+import {HttpLoadingService} from "../../../backend/http-loading.service";
+import {PaymentsService} from "../../../backend/payments/payments.service";
 
 @Component({
   selector: 'app-group-options',
@@ -24,6 +28,7 @@ import {ServerEventListener} from "../../../backend/eventlistener/server-event-l
 })
 export class GroupOptionsComponent implements OnInit {
   @ViewChild('errorPaymentModal') private errorPaymentModal: any;
+  @ViewChild('paymentInitializedModal') private paymentInitializedModal: any;
 
   editGroupForm: FormGroup;
 
@@ -36,6 +41,8 @@ export class GroupOptionsComponent implements OnInit {
     private applicationRef: ApplicationRef,
     private frontendHost: FrontendUsingRoutesService,
     private eventSubscriber: ServerEventsSubscriberService,
+    private httpLoader: HttpLoadingService,
+    private paymentService: PaymentsService,
   ){}
 
   ngOnInit(): void {
@@ -43,6 +50,7 @@ export class GroupOptionsComponent implements OnInit {
     this.onMemberJoined();
     this.onGroupDeleted();
     this.onGroupEdited();
+    this.onPaymentInitialized();
 
     this.serverEventListener.connect();
 
@@ -62,7 +70,7 @@ export class GroupOptionsComponent implements OnInit {
     this.serverEventListener.disconnect();
 
     this.groupsApi.leaveGroup({groupId: this.currentGroup().groupId, ignoreThis: ""}).subscribe(res => {
-      this.groupState.clearState();
+      this.groupState.clear();
     });
   }
 
@@ -109,7 +117,7 @@ export class GroupOptionsComponent implements OnInit {
 
     this.closeModal();
 
-    this.groupsApi.makePayment(request).subscribe(
+    this.paymentService.makePayment(request).subscribe(
       res => this.onPaymentSuccess(),
       err => this.onPaymentFailure(err)
     );
@@ -138,7 +146,7 @@ export class GroupOptionsComponent implements OnInit {
   private onKicked(): void {
     window.alert("You have been kicked from the group!");
 
-    this.groupState.clearState();
+    this.groupState.clear();
     this.serverEventListener.disconnect()
     this.refreshChangesInUI()
   }
@@ -157,7 +165,7 @@ export class GroupOptionsComponent implements OnInit {
 
   private onGroupDeleted(): void {
     this.eventSubscriber.subscribe('group-deleted', (event) => {
-      this.groupState.clearState();
+      this.groupState.clear();
       this.serverEventListener.disconnect();
 
       this.refreshChangesInUI();
@@ -201,10 +209,14 @@ export class GroupOptionsComponent implements OnInit {
       this.newDescription.value != this.currentGroup().description;
   }
 
-  //We force angular to update
-  //TODO fix
-  private refreshChangesInUI(): void {
-    this.applicationRef.tick();
+  private onPaymentInitialized(): void{
+    this.eventSubscriber.subscribe<PaymentInitialized>('payment-initialized', (event) => {
+      this.modalService.open(this.paymentInitializedModal);
+      this.groupState.setGroupState(GroupState.PAYING);
+      this.httpLoader.isLoading.next(true);
+
+      this.refreshChangesInUI();
+    });
   }
 
   private onGroupEdited() {
@@ -214,5 +226,11 @@ export class GroupOptionsComponent implements OnInit {
       this.groupState.setCurrentGroup(group);
       this.refreshChangesInUI();
     });
+  }
+
+  //We force angular to update
+  //TODO fix
+  private refreshChangesInUI(): void {
+    this.applicationRef.tick();
   }
 }

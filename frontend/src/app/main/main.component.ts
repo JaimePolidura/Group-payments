@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Authentication} from "../../backend/authentication/authentication";
 import {GroupsApiService} from "../../backend/groups/groups-api.service";
 import {GroupRepositoryService} from "./group-repository.service";
-import {ActivatedRoute, ActivatedRouteSnapshot, Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
+import {GroupState} from "../../model/group-state";
 
 @Component({
   selector: 'app-main',
@@ -24,6 +25,8 @@ export class MainComponent implements OnInit {
     this.groupService.getCurrentGroup(userId).subscribe(res => {
       if(res.group != undefined) {
         this.groupState.setCurrentGroup(res.group);
+
+        console.log(res.group.state == GroupState.PAYING);
 
         this.groupService.getGroupMembersByGroupId(res.group.groupId).subscribe(res =>  {
           this.groupState.setCurrentGroupMembers(res.members);

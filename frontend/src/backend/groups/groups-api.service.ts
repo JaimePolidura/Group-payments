@@ -54,10 +54,6 @@ export class GroupsApiService {
     return this.http.post(`${this.routes.USING}/groups/kick`, request);
   }
 
-  public makePayment(request: MakePaymentRequest): Observable<any> {
-    return this.http.post(`${this.routes.USING}/groups/makepayment`, request);
-  }
-
   public getGroupMemberByUserId(request: GetGroupMemberByUserIdRequest): Observable<GetGroupMemberByUserIdResponse> {
     return this.http.get<GetGroupMemberByUserIdResponse>(`${this.routes.USING}/groups/member?userId=${request.userId}&groupId=${request.groupId}`);
   }

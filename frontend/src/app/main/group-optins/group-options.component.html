@@ -5,10 +5,11 @@
         <h3 class="group-desc">{{currentGroup().description}}- &nbsp;&nbsp;&nbsp;&nbsp;</h3>
       </div>
       <div class="group-data">
-        <h3>Total {{currentGroup().money}}€ &nbsp;&nbsp;Total/Member ~ {{calculateTotalMoneyPerMember()}}€</h3>
+        <h3 *ngIf="!groupState.isGroupInPayingState()">Total {{currentGroup().money}}€ &nbsp;&nbsp;Total/Member ~ {{calculateTotalMoneyPerMember()}}€</h3>
+        <h3 *ngIf="groupState.isGroupInPayingState()">Paying in progress...</h3>
       </div>
     </div>
-    <div class="group-options-options">
+    <div class="group-options-options" *ngIf="!groupState.isGroupInPayingState()">
       <div ngbDropdown class="dropdown dropdown-menu-right dropdown-menu-lg-left">
         <button ngbDropdownToggle class="group-option-button" type="button" id="dropdownMenuButton1">
           <i class="fa-solid fa-bars fa-2x"></i>
@@ -29,7 +30,7 @@
       <div class="group-member">
         <div class="group-member-option">
           <button class="btn btn-danger"
-                  [ngClass]="{'myDisabled disabled': !isLoggedUserAdminOfCurrentGroup() || isAdminOfCurrentGroup(member.userId)}"
+                  [ngClass]="{'myDisabled disabled': !isLoggedUserAdminOfCurrentGroup() || isAdminOfCurrentGroup(member.userId) || groupState.isGroupInPayingState()}"
                   (click)="kickGroupMember(member.userId)">
             x</button>
         </div>
@@ -46,7 +47,7 @@
 
 <div class="payment-container">
   <button class="btn btn-success"
-          [ngClass]="{'myDisabled disabled': !isLoggedUserAdminOfCurrentGroup() || groupState.getCurrentGroupMembers().length == 1}"
+          [ngClass]="{'myDisabled disabled': !isLoggedUserAdminOfCurrentGroup() || groupState.getCurrentGroupMembers().length == 1 || groupState.isGroupInPayingState()}"
           (click)="modalService.open(confirmPaymentModal)">
     ✓ Pay ✓</button>
 </div>
@@ -76,7 +77,7 @@
     <h6>Total bill/member ~ {{calculateTotalMoneyPerMember()}} €</h6>
   </div>
   <div class="modal-footer payment-confirm-options">
-    <button type="submit" class="btn btn-success" (click)="makePayment()">✔ Pay ✔</button>
+    <button type="submit" class="btn btn-success" (click)="makePayment()">✓ Pay ✓</button>
     <button type="submit" class="btn btn-danger" (click)="closeModal()">✘ Cancel ✘</button>
   </div>
 </ng-template>
@@ -90,7 +91,7 @@
     <h5 class="red">Error while trying to make the payment</h5>
   </div>
   <div class="modal-footer payment-confirm-options">
-    <button type="submit" class="myButton myButton-footer" (click)="this.closeModal()">✔ Ok ✔</button>
+    <button type="submit" class="myButton myButton-footer" (click)="this.closeModal()">✓ Ok ✓</button>
   </div>
 </ng-template>
 
@@ -103,7 +104,7 @@
     <h6>The payment has been completed</h6>
   </div>
   <div class="modal-footer payment-confirm-options">
-    <button type="submit" class="myButton myButton-footer" (click)="this.closeModal()">✔ Ok ✔</button>
+    <button type="submit" class="myButton myButton-footer" (click)="this.closeModal()">✓ Ok ✓</button>
   </div>
 </ng-template>
 
@@ -134,5 +135,21 @@
       </button>
     </div>
   </form>
+</ng-template>
+
+<ng-template #paymentInitializedModal let-modal>
+  <div class="modal-header">
+    <h2 style="text-align: center">Payment initialized</h2>
+    <button class="btn-close" type="button" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body modal-body-centered">
+    <p>Payment has been initalized, dont close the app yet you are likely going to autorize the payment. Thanks for using our service!</p>
+  </div>
+  <div class="modal-footer payment-confirm-options">
+    <button type="submit"
+            class="myButton myButton-footer"
+            (click)="editGroupForm.valid && this.closeModal()">✓ Ok ✓
+    </button>
+  </div>
 </ng-template>
 

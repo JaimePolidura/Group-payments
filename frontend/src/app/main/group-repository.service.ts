@@ -1,4 +1,4 @@
-import {ApplicationRef, ChangeDetectorRef, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Group} from "../../model/group";
 import {User} from "../../model/user";
 import {GroupState} from "../../model/group-state";
@@ -20,6 +20,10 @@ export class GroupRepositoryService {
 
   public getCurrentGroupMembers(): User[]{
     return this.currentGroupMembers;
+  }
+
+  public isGroupInPayingState(): boolean {
+    return this.currentGroup.state == GroupState.PAYING;
   }
 
   public setGroupState(newGroupState: GroupState){
@@ -69,7 +73,7 @@ export class GroupRepositoryService {
     return undefined;
   }
 
-  public clearState(): void {
+  public clear(): void {
     // @ts-ignore
     this.currentGroup = undefined;
     this.currentGroupMembers = [];
