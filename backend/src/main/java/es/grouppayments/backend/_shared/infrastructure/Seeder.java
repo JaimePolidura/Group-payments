@@ -4,6 +4,8 @@ import es.grouppayments.backend.groupmembers._shared.domain.GroupMember;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberRole;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
+import es.grouppayments.backend.payments.stripe._shared.domain.StripeUser;
+import es.grouppayments.backend.payments.stripe._shared.domain.StripeUsersService;
 import es.grouppayments.backend.users._shared.domain.User;
 import es.grouppayments.backend.users._shared.domain.UserState;
 import es.grouppayments.backend.users._shared.domain.UsersService;
@@ -17,11 +19,12 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @Component
-@ConditionalOnProperty(value = "db.useseeder", havingValue = "true")
+@ConditionalOnProperty(value = "grouppayments.db.useseeder", havingValue = "true")
 public class Seeder implements CommandLineRunner {
     private final UsersService usersService;
     private final GroupService groupService;
     private final GroupMemberService groupMemberService;
+    private final StripeUsersService stripeUsersService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -33,6 +36,10 @@ public class Seeder implements CommandLineRunner {
         groupService.create(groupId, "Group", 120, findUserIdByEmail("jaime.polidura@gmail.com"));
         groupMemberService.save(new GroupMember(findUserIdByEmail("jaimetruman@gmail.com"), groupId, GroupMemberRole.USER));
         groupMemberService.save(new GroupMember(findUserIdByEmail("jaime.polidura@alumnos.uneatlantico.es"), groupId, GroupMemberRole.USER));
+
+        stripeUsersService.save(new StripeUser(findUserIdByEmail("jaime.polidura@gmail.com"),"pm_1Kfh2AHd6M46OJ6At3bP5ljx", "cus_LMPrk4ERbD3dNp", "acct_1Kfh2CQWCnLqz00C"));
+        stripeUsersService.save(new StripeUser(findUserIdByEmail("jaimetruman@gmail.com"),"pm_1Kfh4lHd6M46OJ6A4n0DZ5xN", "cus_LMPuzvpWBNNMJe", "acct_1Kfh4nQUa7cp5fFM"));
+        stripeUsersService.save(new StripeUser(findUserIdByEmail("jaime.polidura@alumnos.uneatlantico.es"),"pm_1Kfh6yHd6M46OJ6AjKt1RVNy", "cus_LMPwcLvWt9AtwD", "acct_1Kfh70QlGiEMtOxm"));
     }
 
     private UUID findUserIdByEmail(String email){

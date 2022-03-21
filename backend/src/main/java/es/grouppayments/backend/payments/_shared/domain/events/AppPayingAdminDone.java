@@ -2,15 +2,15 @@ package es.grouppayments.backend.payments._shared.domain.events;
 
 import es.grouppayments.backend._shared.domain.GroupDomainEvent;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class ErrorWhileMemberPaying extends GroupDomainEvent {
+public final class AppPayingAdminDone extends GroupDomainEvent {
     private final UUID groupId;
-    @Getter private final String reason;
+    private final UUID adminUserId;
+    private final double money;
 
     @Override
     public UUID getGroupId() {
@@ -19,14 +19,15 @@ public final class ErrorWhileMemberPaying extends GroupDomainEvent {
 
     @Override
     public String name() {
-        return "group-payment-error-member-paying";
+        return "group-payment-app-admin-done";
     }
 
     @Override
     public Map<String, Object> body() {
         return Map.of(
-                "groupId", this.groupId,
-                "reason", this.reason
+                "groupId", groupId.toString(),
+                "adminUserId", adminUserId.toString(),
+                "money", money
         );
     }
 }

@@ -18,11 +18,14 @@ public final class ErrorWhilePayingToAdmin extends GroupDomainEvent {
 
     @Override
     public String name() {
-        return "payment-error-paying-admin";
+        return "group-payment-error-paying-admin";
     }
 
     @Override
     public Map<String, Object> body() {
-        return null;
+        return Map.of(
+                "groupId", this.groupId,
+                "reason", this.reason
+        );
     }
 }

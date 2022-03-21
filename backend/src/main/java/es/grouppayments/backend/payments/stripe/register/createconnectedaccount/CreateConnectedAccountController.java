@@ -20,6 +20,8 @@ public final class CreateConnectedAccountController extends ApplicationControlle
         Account account = stripeService.createConnectedAccount(getLoggedUsername());
         String accountLink = stripeService.createConnectedAccountLink(getLoggedUsername(), account.getId());
 
+        System.out.println("Connected account id: " + account.getId());
+
         return buildNewHttpResponseOK(new CreateConnectedAccountResponse(accountLink));
     }
 

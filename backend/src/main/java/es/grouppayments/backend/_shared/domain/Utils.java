@@ -23,7 +23,7 @@ public final class Utils {
     }
 
     public static double deductFrom(double total, double fee){
-        return total + total * (fee / 100);
+        return total * ((100 - fee) / 100);
     }
 
     public static boolean isSucess(Runnable runnable){

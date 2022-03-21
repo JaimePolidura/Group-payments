@@ -1,4 +1,4 @@
-package es.grouppayments.backend.payments.stripe.makepayment;
+package es.grouppayments.backend.payments.makepayment;
 
 import es.grouppayments.backend._shared.infrastructure.ApplicationController;
 import es.jaime.javaddd.domain.cqrs.command.CommandBus;

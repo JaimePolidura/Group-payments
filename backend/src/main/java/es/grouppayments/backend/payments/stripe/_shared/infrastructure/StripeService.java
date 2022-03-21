@@ -32,15 +32,20 @@ public final class StripeService {
                 .build()
         );
 
+        System.out.println("Intent id " + setupIntent.getId());
+
         return setupIntent.toJson();
     }
 
     @SneakyThrows
     public void createCustomer(UUID userId, String paymentMethodId){
-        Customer.create(CustomerCreateParams.builder()
+        Customer customer = Customer.create(CustomerCreateParams.builder()
                 .setPaymentMethod(paymentMethodId)
                 .build()
         );
+
+        System.out.println("Payment method: " + paymentMethodId);
+        System.out.println("Customer id " + customer.getId());
 
         this.eventBus.publish(new StripeCustomerCreated(userId, paymentMethodId));
     }

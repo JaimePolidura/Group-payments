@@ -1,4 +1,4 @@
-package es.grouppayments.backend.payments._shared.domain;
+package es.grouppayments.backend.payments._shared.domain.events;
 
 import es.grouppayments.backend._shared.domain.GroupDomainEvent;
 import lombok.AllArgsConstructor;
@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
-public class PaymentDone extends GroupDomainEvent {
+public class GroupPaymentDone extends GroupDomainEvent {
     @Getter private final UUID groupId;
     @Getter private final List<UUID> membersUsersId;
     @Getter private final UUID adminUserId;
@@ -18,7 +18,7 @@ public class PaymentDone extends GroupDomainEvent {
 
     @Override
     public String name() {
-        return "group-payment-done";
+        return "group-payment-all-done";
     }
 
     @Override

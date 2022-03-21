@@ -1,20 +1,17 @@
-package es.grouppayments.backend.payments.stripe.makepayment;
+package es.grouppayments.backend.payments.makepayment;
 
-import es.grouppayments.backend._shared.domain.Utils;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMember;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberRole;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
 import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
+import es.grouppayments.backend.payments._shared.domain.events.*;
 import es.grouppayments.backend.payments._shared.domain.PaymentMakerService;
-import es.grouppayments.backend.payments._shared.domain.events.ErrorWhileMemberPaying;
-import es.grouppayments.backend.payments._shared.domain.events.ErrorWhilePayingToAdmin;
 import es.jaime.javaddd.domain.cqrs.command.CommandHandler;
 import es.jaime.javaddd.domain.event.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.IllegalState;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import io.vavr.control.Try;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -57,20 +54,27 @@ public class MakePaymentCommandHandler implements CommandHandler<MakePaymentComm
 
         for (GroupMember groupMember : groupMembersWithoutAdmin) {
             try{
-                this.paymentService.paymentAppToAdmin(groupMember.getUserId(), moneyToPayPerMember);
+                this.paymentService.paymentMemberToApp(groupMember.getUserId(), moneyToPayPerMember);
 
                 totalMoneyPaid += moneyToPayPerMember;
+
+                this.eventBus.publish(new MemberPayingAppDone(group.getGroupId(), groupMember.getUserId(), moneyToPayPerMember));
             }catch (Exception e){
                 this.eventBus.publish(new ErrorWhileMemberPaying(group.getGroupId(), e.getMessage()));
             }
         }
 
         this.makePaymentAppToAdmin(group, deductFrom(totalMoneyPaid, fee));
+
+        this.eventBus.publish(new GroupPaymentDone(group.getGroupId(), groupMembersWithoutAdmin.stream().map(GroupMember::getUserId).toList(),
+                group.getAdminUserId(), group.getDescription(), moneyToPayPerMember));
     }
 
     private void makePaymentAppToAdmin(Group group, double totalMoney){
         try {
             this.paymentService.paymentAppToAdmin(group.getAdminUserId(), totalMoney);
+
+            this.eventBus.publish(new AppPayingAdminDone(group.getGroupId(), group.getAdminUserId(), totalMoney));
         } catch (Exception e) {
             this.eventBus.publish(new ErrorWhilePayingToAdmin(group.getGroupId(), e.getMessage()));
         }
