@@ -1,8 +1,8 @@
 package es.grouppayments.backend.payments.onpaymentdone;
 
 import es.grouppayments.backend.payments.PaymentTestMother;
-import es.grouppayments.backend.payments._shared.domain.events.GroupPaymentDone;
-import es.grouppayments.backend.payments._shared.domain.PaymentHistoricalService;
+import es.grouppayments.backend.payments.payments._shared.domain.events.GroupPaymentDone;
+import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentHistoryService;
 
 public class OnPaymentDoneMother extends PaymentTestMother {
     private final OnPaymentDone onPaymentDone;

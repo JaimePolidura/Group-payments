@@ -1,7 +1,7 @@
 package _shared;
 
-import es.grouppayments.backend.payments._shared.domain.PaymentRepository;
+import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentsHistoryRepository;
 
 public interface UsingPayments {
-    PaymentRepository paymentRepository();
+    PaymentsHistoryRepository paymentRepository();
 }

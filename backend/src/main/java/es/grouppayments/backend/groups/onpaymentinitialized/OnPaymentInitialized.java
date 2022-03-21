@@ -3,7 +3,7 @@ package es.grouppayments.backend.groups.onpaymentinitialized;
 import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
 import es.grouppayments.backend.groups._shared.domain.GroupState;
-import es.grouppayments.backend.payments._shared.domain.events.PaymentInitialized;
+import es.grouppayments.backend.payments.payments._shared.domain.events.PaymentInitialized;
 import lombok.AllArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;

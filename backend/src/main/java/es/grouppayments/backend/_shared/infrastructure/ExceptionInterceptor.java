@@ -2,7 +2,6 @@ package es.grouppayments.backend._shared.infrastructure;
 
 import com.google.common.collect.ImmutableMap;
 import com.stripe.exception.StripeException;
-import es.grouppayments.backend.payments._shared.domain.UnprocessablePayment;
 import es.jaime.javaddd.domain.exceptions.*;
 import io.jsonwebtoken.MalformedJwtException;
 import org.springframework.http.HttpStatus;
@@ -51,7 +50,6 @@ public class ExceptionInterceptor {
         ILLEGAL_STATE(IllegalState.class, HttpStatus.BAD_REQUEST),
         NOT_THE_OWNER(NotTheOwner.class, HttpStatus.UNAUTHORIZED),
         RESOURCE_NOT_FOUND(ResourceNotFound.class, HttpStatus.NOT_FOUND),
-        UNPROCESSABLE_PAYMENT(UnprocessablePayment.class, HttpStatus.UNPROCESSABLE_ENTITY),
         JWT_INVALID(MalformedJwtException.class, HttpStatus.FORBIDDEN),
         STRIPE_EXCEPTION(StripeException.class, HttpStatus.BAD_REQUEST),
         NOT_VALID(NotValid.class, HttpStatus.BAD_REQUEST);

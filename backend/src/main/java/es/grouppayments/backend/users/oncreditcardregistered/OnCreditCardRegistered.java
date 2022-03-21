@@ -1,6 +1,6 @@
 package es.grouppayments.backend.users.oncreditcardregistered;
 
-import es.grouppayments.backend.payments.stripe._shared.domain.events.StripeConnectedAccountCreated;
+import es.grouppayments.backend.payments.userpaymentsinfo._shared.domain.events.StripeConnectedAccountCreated;
 import es.grouppayments.backend.users._shared.domain.User;
 import es.grouppayments.backend.users._shared.domain.UserState;
 import es.grouppayments.backend.users._shared.domain.UsersService;
