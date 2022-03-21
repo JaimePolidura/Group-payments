@@ -57,7 +57,7 @@ export class RegisterCardDetailsComponent implements OnInit {
     this.httpLoader.isLoading.next(true);
 
     // @ts-ignore
-    const confirmCardResult = await this.stripeService.confirmCardSetup(this.clientSecret,  this.buildConfirmCardSetupRequest())
+    const confirmCardResult = await this.stripeService.confirmCardSetup(this.clientSecret, this.buildConfirmCardSetupRequest())
       .toPromise();
 
     const confirmCardResultNotNull = confirmCardResult != undefined && confirmCardResult.setupIntent

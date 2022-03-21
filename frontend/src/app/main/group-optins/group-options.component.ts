@@ -20,6 +20,7 @@ import {PaymentInitialized} from "../../../backend/eventlistener/events/payment-
 import {GroupState} from "../../../model/group-state";
 import {HttpLoadingService} from "../../../backend/http-loading.service";
 import {PaymentsService} from "../../../backend/payments/payments.service";
+import {PaymentDone} from "../../../backend/eventlistener/events/payment-done";
 
 @Component({
   selector: 'app-group-options',
@@ -51,6 +52,7 @@ export class GroupOptionsComponent implements OnInit {
     this.onGroupDeleted();
     this.onGroupEdited();
     this.onPaymentInitialized();
+    this.onPaymentDone();
 
     this.serverEventListener.connect();
 
@@ -118,12 +120,9 @@ export class GroupOptionsComponent implements OnInit {
     this.closeModal();
 
     this.paymentService.makePayment(request).subscribe(
-      res => this.onPaymentSuccess(),
+      () => {},
       err => this.onPaymentFailure(err)
     );
-  }
-
-  private onPaymentSuccess(): void {
   }
 
   private onPaymentFailure(err: any): void {
@@ -210,12 +209,19 @@ export class GroupOptionsComponent implements OnInit {
   }
 
   private onPaymentInitialized(): void{
-    this.eventSubscriber.subscribe<PaymentInitialized>('payment-initialized', (event) => {
+    this.eventSubscriber.subscribe<PaymentInitialized>('group-payment-initialized', (event) => {
       this.modalService.open(this.paymentInitializedModal);
       this.groupState.setGroupState(GroupState.PAYING);
       this.httpLoader.isLoading.next(true);
 
       this.refreshChangesInUI();
+    });
+  }
+
+  private onPaymentDone(): void {
+    this.eventSubscriber.subscribe<PaymentDone>("group-payment-all-done", res => {
+      this.modalService.dismissAll();
+      this.httpLoader.isLoading.next(false);
     });
   }
 

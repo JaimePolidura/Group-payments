@@ -11,7 +11,10 @@ export class ServerEventsSubscriberService {
   constructor(private serverEventListener: ServerEventListener,) {
     this.callbacks = {};
     this.serverEventListener.getEventEmitter().subscribe(event => {
-      this.callbacks[event.name](event.body);
+      const callbak = this.callbacks[event.name];
+
+      if(callbak != undefined)
+        callbak(event.body);
     });
   }
 
