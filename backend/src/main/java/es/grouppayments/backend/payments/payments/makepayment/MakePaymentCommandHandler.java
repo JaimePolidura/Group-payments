@@ -58,9 +58,9 @@ public class MakePaymentCommandHandler implements CommandHandler<MakePaymentComm
 
                 totalMoneyPaid += moneyToPayPerMember;
 
-                this.eventBus.publish(new MemberPayingAppDone(group.getGroupId(), groupMember.getUserId(), moneyToPayPerMember));
+                this.eventBus.publish(new MemberPayingAppDone(group.getGroupId(), groupMember.getUserId(), moneyToPayPerMember, group));
             }catch (Exception e){
-                this.eventBus.publish(new ErrorWhileMemberPaying(group.getGroupId(), e.getMessage()));
+                this.eventBus.publish(new ErrorWhileMemberPaying(group, e.getMessage(), groupMember.getUserId()));
             }
         }
 
@@ -74,9 +74,9 @@ public class MakePaymentCommandHandler implements CommandHandler<MakePaymentComm
         try {
             this.paymentService.paymentAppToAdmin(group.getAdminUserId(), totalMoney);
 
-            this.eventBus.publish(new AppPayingAdminDone(group.getGroupId(), group.getAdminUserId(), totalMoney));
+            this.eventBus.publish(new AppPayingAdminDone(group.getGroupId(), group.getAdminUserId(), totalMoney, group));
         } catch (Exception e) {
-            this.eventBus.publish(new ErrorWhilePayingToAdmin(group.getGroupId(), e.getMessage()));
+            this.eventBus.publish(new ErrorWhilePayingToAdmin(group, group.getGroupId(), e.getMessage(), group.getAdminUserId(), totalMoney));
         }
     }
 

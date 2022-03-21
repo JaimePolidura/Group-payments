@@ -23,14 +23,14 @@ public class PaymentRepositoryInMemory implements PaymentsHistoryRepository {
     @Override
     public List<Payment> findByUserIdPayer(UUID userIdPayer) {
         return paymentTransactions.stream()
-                .filter(transaction -> transaction.getUserIdPayer().equals(userIdPayer))
+                .filter(transaction -> transaction.getPayer().equals(userIdPayer))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<Payment> findByUserIdPaid(UUID userIdPaid) {
         return paymentTransactions.stream()
-                .filter(transaction -> transaction.getUserIdPaid().equals(userIdPaid))
+                .filter(transaction -> transaction.getPaid().equals(userIdPaid))
                 .collect(Collectors.toList());
     }
 

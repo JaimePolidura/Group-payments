@@ -11,21 +11,27 @@ import java.util.UUID;
 @AllArgsConstructor
 public class Payment extends Aggregate {
     @Getter private final UUID paymentId;
-    @Getter private final UUID userIdPaid;
-    @Getter private final UUID userIdPayer;
+    @Getter private final LocalDateTime date;
+    @Getter private final String payer;
+    @Getter private final String paid;
     @Getter private final double money;
-    @Getter private final LocalDateTime payDate;
     @Getter private final String description;
+    @Getter private final PaymentState state;
+    @Getter private final PaymentType type;
+    @Getter private final String errorMessage;
 
     @Override
     public Map<String, Object> toPrimitives() {
         return Map.of(
-                "paymentId", paymentId.toString(),
-                "userIdPaid", userIdPaid.toString(),
-                "userIdPayer", userIdPayer.toString(),
-                "money", money,
-                "payDate", payDate.toString(),
-                "description", description
+                "paymentId", this.paymentId,
+                "date", this.date.toString(),
+                "payer", this.payer,
+                "paid", this.paid,
+                "money", this.money,
+                "description", this.description,
+                "state", this.state.toString(),
+                "type", this.type.toString(),
+                "errorMessage", this.errorMessage
         );
     }
 }
