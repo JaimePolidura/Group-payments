@@ -59,6 +59,10 @@ export class GroupRepositoryService {
     return this.currentGroup != undefined;
   }
 
+  public getGroupMemberUserByUserId(userId: string): User{
+    return this.currentGroupMembers.filter(groupMember => groupMember.userId == userId)[0];
+  }
+
   public deleteGroupMemberById(userId: string): User | undefined {
     for(let i = 0; i < this.currentGroupMembers.length; i++){
       const actualUser: User = this.currentGroupMembers[i];

@@ -21,6 +21,10 @@ import {GroupState} from "../../../model/group-state";
 import {HttpLoadingService} from "../../../backend/http-loading.service";
 import {PaymentsService} from "../../../backend/payments/payments.service";
 import {PaymentDone} from "../../../backend/eventlistener/events/payment-done";
+import {ErrorWhileMemberPaying} from "../../../backend/eventlistener/events/error-while-member-paying";
+import {AppPayingAdminDone} from "../../../backend/eventlistener/events/app-paying-admin-done";
+import {ErrorWhilePayingToAdmin} from "../../../backend/eventlistener/events/error-while-paying-to-admin";
+import {MemberPayingAppDone} from "../../../backend/eventlistener/events/member-paying-app-done";
 
 @Component({
   selector: 'app-group-options',
@@ -31,7 +35,9 @@ export class GroupOptionsComponent implements OnInit {
   @ViewChild('errorPaymentModal') private errorPaymentModal: any;
   @ViewChild('paymentInitializedModal') private paymentInitializedModal: any;
 
-  editGroupForm: FormGroup;
+  public editGroupForm: FormGroup;
+  public logEventsGroupPayments: {body: string, error: boolean}[];
+  public donePaying: boolean;
 
   constructor(
     public groupState: GroupRepositoryService,
@@ -47,12 +53,19 @@ export class GroupOptionsComponent implements OnInit {
   ){}
 
   ngOnInit(): void {
+    this.logEventsGroupPayments = [];
+    this.donePaying = false;
+
     this.onMemberLeft();
     this.onMemberJoined();
     this.onGroupDeleted();
     this.onGroupEdited();
     this.onPaymentInitialized();
-    this.onPaymentDone();
+    this.onAllGroupPaymentDone();
+    this.onErrorWhileMemberPaying();
+    this.onAppPayingAdmin();
+    this.onErrorWhilePayingToAdmin();
+    this.onMemberPaidToApp();
 
     this.serverEventListener.connect();
 
@@ -218,9 +231,48 @@ export class GroupOptionsComponent implements OnInit {
     });
   }
 
-  private onPaymentDone(): void {
+  private onMemberPaidToApp(): void {
+    this.eventSubscriber.subscribe<MemberPayingAppDone>('group-payment-member-app-done', res => {
+
+      if(this.auth.getUserId() == res.groupMemberUserId)
+        this.logEventsGroupPayments.push({error: false, body: `You have been charged ${res.money}`});
+    })
+  }
+
+  private onErrorWhileMemberPaying(): void {
+    this.eventSubscriber.subscribe<ErrorWhileMemberPaying>('group-payment-error-member-paying', res => {
+      const username = this.groupState.getGroupMemberUserByUserId(res.groupId).username;
+
+      if(this.isLoggedUserAdminOfCurrentGroup())
+        this.logEventsGroupPayments.push({error: true, body: `${username} couldnt be charged. Reason: ${res.reason}`});
+
+      if(res.groupMemberUserId == this.auth.getUserId())
+        this.logEventsGroupPayments.push({error: true, body: `You couldnt be charged. Reason: ${res.reason}`});
+    });
+  }
+
+  private onAppPayingAdmin(): void {
+    this.eventSubscriber.subscribe<AppPayingAdminDone>('group-payment-app-admin-done', res => {
+      if(this.isLoggedUserAdminOfCurrentGroup())
+        this.logEventsGroupPayments.push({error: false, body: `You recieved the payment ${res.money}`});
+    });
+  }
+
+  private onErrorWhilePayingToAdmin(): void {
+    this.eventSubscriber.subscribe<ErrorWhilePayingToAdmin>('group-payment-error-paying-admin', res => {
+      if(this.isLoggedUserAdminOfCurrentGroup()){
+        this.logEventsGroupPayments.push({
+          error: true,
+          body: `You couldnt recieve the payment all members have been charged the funds havent get lost,
+            they have been retained. Contact support to recieve it. error message: ${res.reason}`
+        });
+      }
+    });
+  }
+
+  private onAllGroupPaymentDone(): void {
     this.eventSubscriber.subscribe<PaymentDone>("group-payment-all-done", res => {
-      this.modalService.dismissAll();
+      this.donePaying = true;
       this.httpLoader.isLoading.next(false);
     });
   }
