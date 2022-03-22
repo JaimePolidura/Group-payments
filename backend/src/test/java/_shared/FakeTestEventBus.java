@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class FakeEventBus implements TestEventBus {
+public class FakeTestEventBus implements TestEventBus {
     private final Map<Class<? extends DomainEvent>, DomainEvent> eventsRaised;
 
-    public FakeEventBus() {
+    public FakeTestEventBus() {
         this.eventsRaised = new HashMap<>();
     }
 

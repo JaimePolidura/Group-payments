@@ -10,7 +10,7 @@ public class TestMother implements UsingTestEventBus{
     protected TestEventBus testEventBus;
 
     public TestMother(){
-        this.testEventBus = new FakeEventBus();
+        this.testEventBus = new FakeTestEventBus();
     }
 
     @Override

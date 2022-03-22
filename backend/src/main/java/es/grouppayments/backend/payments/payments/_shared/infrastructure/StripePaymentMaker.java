@@ -17,7 +17,6 @@ import java.util.UUID;
 @Service
 public final class StripePaymentMaker implements PaymentMakerService {
     private final StripeUsersService stripeUsersService;
-
     private final StripeService stripeService;
 
     @Override
