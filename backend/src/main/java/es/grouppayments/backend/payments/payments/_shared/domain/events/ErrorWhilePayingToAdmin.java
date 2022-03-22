@@ -11,14 +11,13 @@ import java.util.UUID;
 @AllArgsConstructor
 public final class ErrorWhilePayingToAdmin extends GroupDomainEvent {
     @Getter private final Group group;
-    private final UUID groupId;
     @Getter private final String reason;
     @Getter private final UUID member;
     @Getter private final double money;
 
     @Override
     public UUID getGroupId() {
-        return this.groupId;
+        return this.getGroup().getGroupId();
     }
 
     @Override
@@ -29,7 +28,7 @@ public final class ErrorWhilePayingToAdmin extends GroupDomainEvent {
     @Override
     public Map<String, Object> body() {
         return Map.of(
-                "groupId", this.groupId,
+                "groupId", this.getGroup().getGroupId(),
                 "reason", this.reason
         );
     }

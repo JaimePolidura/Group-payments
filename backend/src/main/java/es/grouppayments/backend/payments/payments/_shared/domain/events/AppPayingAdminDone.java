@@ -10,14 +10,12 @@ import java.util.UUID;
 
 @AllArgsConstructor
 public final class AppPayingAdminDone extends GroupDomainEvent {
-    private final UUID groupId;
-    @Getter private final UUID adminUserId;
     @Getter private final double money;
     @Getter private final Group group;
 
     @Override
     public UUID getGroupId() {
-        return this.groupId;
+        return this.group.getGroupId();
     }
 
     @Override
@@ -28,8 +26,8 @@ public final class AppPayingAdminDone extends GroupDomainEvent {
     @Override
     public Map<String, Object> body() {
         return Map.of(
-                "groupId", groupId.toString(),
-                "adminUserId", adminUserId.toString(),
+                "groupId", this.group.getAdminUserId(),
+                "adminUserId", this.group.getAdminUserId(),
                 "money", money
         );
     }

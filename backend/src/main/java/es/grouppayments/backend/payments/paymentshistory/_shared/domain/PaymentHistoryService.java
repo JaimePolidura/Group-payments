@@ -16,7 +16,7 @@ public class PaymentHistoryService {
     public void save(UUID userId, double money, String groupDescription, PaymentType type){
         this.paymentsHistory.save(new Payment(
                 UUID.randomUUID(), LocalDateTime.now(), type == PaymentType.APP_TO_ADMIN ? "APP" : userId.toString(),
-                type == PaymentType.MEMBER_TO_APP ? "APP" : userId.toString(), money, groupDescription, PaymentState.SUCESS, type, null
+                type == PaymentType.MEMBER_TO_APP ? "APP" : userId.toString(), money, groupDescription, PaymentState.SUCCESS, type, null
         ));
     }
 

@@ -3,12 +3,14 @@ package es.grouppayments.backend.payments.paymentshistory._shared.domain;
 import es.jaime.javaddd.domain.Aggregate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
+@ToString
 public class Payment extends Aggregate {
     @Getter private final UUID paymentId;
     @Getter private final LocalDateTime date;
