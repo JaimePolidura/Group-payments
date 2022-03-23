@@ -12,7 +12,7 @@ import java.util.UUID;
 public final class ErrorWhileMemberPaying extends GroupDomainEvent {
     @Getter private final Group group;
     @Getter private final String reason;
-    @Getter private final UUID member;
+    @Getter private final UUID groupMemberUserId;
 
     @Override
     public UUID getGroupId() {
@@ -28,7 +28,8 @@ public final class ErrorWhileMemberPaying extends GroupDomainEvent {
     public Map<String, Object> body() {
         return Map.of(
                 "groupId", this.group.getGroupId(),
-                "reason", this.reason
+                "reason", this.reason,
+                "groupMemberUserId", this.groupMemberUserId
         );
     }
 }

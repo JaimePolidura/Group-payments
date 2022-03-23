@@ -15,26 +15,32 @@ public final class StripeUser extends Aggregate {
     @Getter private final String paymentMethod;
     @Getter private final String customerId;
     @Getter private final String connectedAccountId;
+    @Getter private final boolean addedDataInStripeConnectedAccount;
 
     public static StripeUser create(UUID userId, String customerId){
-        return new StripeUser(userId, null, customerId, null);
+        return new StripeUser(userId, null, customerId, null, false);
     }
 
     public StripeUser setPaymentMethod(String newPaymentMethod){
-        return new StripeUser(userId, newPaymentMethod, customerId, connectedAccountId);
+        return new StripeUser(userId, newPaymentMethod, customerId, connectedAccountId, false);
     }
 
     public StripeUser setConnectedAccountId(String newConnectedAccountId){
-        return new StripeUser(userId, paymentMethod, customerId, newConnectedAccountId);
+        return new StripeUser(userId, paymentMethod, customerId, newConnectedAccountId, false);
+    }
+
+    public StripeUser setAddedDataInStripeConnectedAccount(){
+        return new StripeUser(userId, paymentMethod, customerId, connectedAccountId, true);
     }
 
     @Override
     public Map<String, Object> toPrimitives() {
         return Map.of(
                 "userId", userId,
-               "paymentMethod", paymentMethod,
+                "paymentMethod", paymentMethod,
                 "customerId", customerId,
-                "connectedAccountId", connectedAccountId
+                "connectedAccountId", connectedAccountId,
+                "addedDataInStripeConnectedAccount", addedDataInStripeConnectedAccount
         );
     }
 

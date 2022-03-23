@@ -18,13 +18,12 @@ public final class CreateConnectedAccountController extends ApplicationControlle
     @PostMapping("/payments/stripe/createconnectedaccount")
     public ResponseEntity<CreateConnectedAccountResponse> createCustomer(){
         Account account = stripeService.createConnectedAccount(getLoggedUsername());
-        String accountLink = stripeService.createConnectedAccountLink(getLoggedUsername(), account.getId());
 
-        return buildNewHttpResponseOK(new CreateConnectedAccountResponse(accountLink));
+        return buildNewHttpResponseOK(new CreateConnectedAccountResponse(account.getId()));
     }
 
     @AllArgsConstructor
     private static class CreateConnectedAccountResponse {
-        public final String accountLink;
+        public final String connectedAcocuntId;
     }
 }

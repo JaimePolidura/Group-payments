@@ -19,15 +19,50 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-                .antMatchers("/auth/oauth/**", "/sse", "/socket/**")
+
+                .antMatchers(this.routesWithoutAuthentication())
                     .permitAll()
-                .antMatchers("/groups/**")
+
+                .antMatchers(this.routesWithoutAuthentication())
                     .hasAuthority(UserState.SIGNUP_ALL_COMPLETED.name())
-                .antMatchers("/payments/stripe/**")
+
+                .antMatchers(this.routesWithSignUpOauthCompleted())
                     .hasAuthority(UserState.SIGNUP_OAUTH_COMPLETED.name())
+
+                .antMatchers(this.routesWithSignOauthCreditCardCompleted())
+                    .hasAuthority(UserState.SIGNUP_OAUTH_CREDIT_CARD_COMPLETED.name())
+
                 .anyRequest()
                     .authenticated();
 
         http.addFilterBefore(jwtFilterRequest, UsernamePasswordAuthenticationFilter.class);
+    }
+
+    private String[] routesWithSignOauthCreditCardCompleted(){
+        return new String[]{
+                "/payments/stripe/createlink",
+        };
+    }
+
+    private String[] routesWithSignUpAllCompleted(){
+        return new String[]{
+                "/groups/**", "/payments/makepayment"
+        };
+    }
+
+    private String[] routesWithoutAuthentication(){
+        return new String[]{
+                "/auth/oauth/**",
+                "/see",
+                "/socket/**"
+        };
+    }
+
+    private String[] routesWithSignUpOauthCompleted(){
+        return new String[]{
+                "/payments/stripe/createconnectedaccount",
+                "/payments/stripe/createcustomer",
+                "/payments/stripe/setupintent"
+        };
     }
 }

@@ -14,7 +14,7 @@ public final class OnErrorWhileMemberPaying {
 
     @EventListener({ErrorWhileMemberPaying.class})
     public void on(ErrorWhileMemberPaying event){
-        paymentHistoryService.save(event.getMember(), event.getGroup().getMoney(), event.getGroup().getDescription(),
+        paymentHistoryService.save(event.getGroupMemberUserId(), event.getGroup().getMoney(), event.getGroup().getDescription(),
                 PaymentType.MEMBER_TO_APP, event.getReason());
     }
 }

@@ -2,6 +2,7 @@ package es.grouppayments.backend.payments.userpaymentsinfo._shared.infrastructur
 
 import com.stripe.model.*;
 import com.stripe.param.*;
+import es.grouppayments.backend.payments.userpaymentsinfo._shared.domain.StripeUsersService;
 import es.grouppayments.backend.payments.userpaymentsinfo._shared.domain.events.StripeConnectedAccountCreated;
 import es.grouppayments.backend.payments.userpaymentsinfo._shared.domain.events.StripeCustomerCreated;
 import es.grouppayments.backend.users._shared.domain.User;
@@ -18,6 +19,7 @@ import java.util.UUID;
 public final class StripeService {
     private final EventBus eventBus;
     private final UsersService usersService;
+    private final StripeUsersService stripeUsersService;
 
     @SneakyThrows
     public String setupIntent()  {
@@ -43,7 +45,7 @@ public final class StripeService {
     public Account createConnectedAccount(UUID userId){
         User user = this.usersService.findByUserId(userId).get();
 
-        return Account.create(
+        Account account = Account.create(
                 AccountCreateParams.builder()
                         .setCountry("ES")
                         .setEmail(user.getEmail())
@@ -67,13 +69,30 @@ public final class StripeService {
                         .setType(AccountCreateParams.Type.EXPRESS)
                         .build()
         );
+
+        this.eventBus.publish(new StripeConnectedAccountCreated(userId, account.getId()));
+
+        return account;
+    }
+
+
+    @SneakyThrows
+    public boolean hasRegisteredInConnectedAccount(UUID userId){
+        String connectedAccountId = this.stripeUsersService.getdByUserId(userId)
+                .getConnectedAccountId();
+
+        String email = Account.retrieve(connectedAccountId).getEmail();
+
+        return email == null || email.equals("");
     }
 
     @SneakyThrows
-    public String createConnectedAccountLink(UUID userId, String connectedAccountId){
-        String url = AccountLink.create(
-                AccountLinkCreateParams
-                        .builder()
+    public String createConnectedAccountLink(UUID userId){
+        String connectedAccountId = stripeUsersService.getdByUserId(userId)
+                .getConnectedAccountId();
+
+        return AccountLink.create(
+                AccountLinkCreateParams.builder()
                         .setCollect(AccountLinkCreateParams.Collect.EVENTUALLY_DUE)
                         .setAccount(connectedAccountId)
                         .setRefreshUrl("http://localhost:4200/register")
@@ -81,9 +100,5 @@ public final class StripeService {
                         .setType(AccountLinkCreateParams.Type.ACCOUNT_ONBOARDING)
                         .build()
         ).getUrl();
-
-        this.eventBus.publish(new StripeConnectedAccountCreated(userId, connectedAccountId));
-
-        return url;
     }
 }
