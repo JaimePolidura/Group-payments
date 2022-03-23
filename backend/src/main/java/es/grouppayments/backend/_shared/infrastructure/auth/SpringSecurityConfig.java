@@ -23,7 +23,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(this.routesWithoutAuthentication())
                     .permitAll()
 
-                .antMatchers(this.routesWithoutAuthentication())
+                .antMatchers(this.routesWithSignUpAllCompleted())
                     .hasAuthority(UserState.SIGNUP_ALL_COMPLETED.name())
 
                 .antMatchers(this.routesWithSignUpOauthCompleted())
@@ -46,7 +46,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private String[] routesWithSignUpAllCompleted(){
         return new String[]{
-                "/groups/**", "/payments/makepayment"
+                "/groups/**",
+                "/payments/makepayment"
         };
     }
 

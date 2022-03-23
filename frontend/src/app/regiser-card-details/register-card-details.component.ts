@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {ConfirmCardSetupData, StripeElement, StripeElements} from "@stripe/stripe-js";
 import {StripeService} from "ngx-stripe";
-import {Authentication} from "../../../backend/authentication/authentication";
-import {PaymentsService} from "../../../backend/payments/payments.service";
-import {HttpLoadingService} from "../../../backend/http-loading.service";
-import {UserState} from "../../../model/user-state";
+import {Authentication} from "../../backend/authentication/authentication";
+import {PaymentsService} from "../../backend/payments/payments.service";
+import {HttpLoadingService} from "../../backend/http-loading.service";
+import {UserState} from "../../model/user-state";
 
 @Component({
   selector: 'app-regiser-card-details',
@@ -26,6 +26,11 @@ export class RegisterCardDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.setupStripeElements();
+
+    if(this.auth.getUserState() == UserState.SIGNUP_OAUTH_CREDIT_CARD_COMPLETED){
+      this.createStripeConnecetdAccountLink();
+    }
+
     this.setupIntent();
   }
 
@@ -67,6 +72,7 @@ export class RegisterCardDetailsComponent implements OnInit {
       try{
         // @ts-ignore
         await this.createStripeCustomerAndConnectedAccount(confirmCardResult.setupIntent.payment_method);
+        await this.createStripeConnecetdAccountLink();
       }catch (error){
         window.alert("Error try later");
       }
@@ -86,12 +92,14 @@ export class RegisterCardDetailsComponent implements OnInit {
   private async createStripeCustomerAndConnectedAccount(paymentMethod: string) {
     await this.paymentsService.createCustomer({paymentMethod: paymentMethod})
       .toPromise();
+  }
 
+  private async createStripeConnecetdAccountLink() {
     const connectedAccount = await this.paymentsService.createConnectedAccount()
       .toPromise();
 
     this.httpLoader.isLoading.next(false);
-    this.auth.setUserState(UserState.SIGNUP_ALL_COMPLETED);
+    this.auth.setUserState(UserState.SIGNUP_OAUTH_CREDIT_CARD_COMPLETED);
 
     // @ts-ignore
     this.goToLink(connectedAccount.accountLink);

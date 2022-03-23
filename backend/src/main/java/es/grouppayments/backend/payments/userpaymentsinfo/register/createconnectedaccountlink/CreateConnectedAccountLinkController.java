@@ -14,10 +14,16 @@ public final class CreateConnectedAccountLinkController extends ApplicationContr
     private final StripeService stripeService;
 
     @PostMapping("/payments/stripe/createlink")
-    public ResponseEntity<Response> createlink () {
-        String link = stripeService.createConnectedAccountLink(getLoggedUsername());
+    public ResponseEntity<Response> createlink (@RequestBody Request request) {
+        String link = stripeService.createConnectedAccountLink(request.connectedAccountId);
 
         return buildNewHttpResponseOK(new Response(link));
+    }
+
+    @AllArgsConstructor
+    private static class Request {
+        public final String connectedAccountId;
+        private final String ignoreThis;
     }
 
     @AllArgsConstructor

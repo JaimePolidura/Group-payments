@@ -81,16 +81,13 @@ public final class StripeService {
         String connectedAccountId = this.stripeUsersService.getdByUserId(userId)
                 .getConnectedAccountId();
 
-        String email = Account.retrieve(connectedAccountId).getEmail();
+        boolean registered = Account.retrieve(connectedAccountId).getDetailsSubmitted();
 
-        return email == null || email.equals("");
+        return registered;
     }
 
     @SneakyThrows
-    public String createConnectedAccountLink(UUID userId){
-        String connectedAccountId = stripeUsersService.getdByUserId(userId)
-                .getConnectedAccountId();
-
+    public String createConnectedAccountLink(String connectedAccountId){
         return AccountLink.create(
                 AccountLinkCreateParams.builder()
                         .setCollect(AccountLinkCreateParams.Collect.EVENTUALLY_DUE)
