@@ -1,4 +1,4 @@
-package es.grouppayments.backend.payments.userpaymentsinfo.register.newregister;
+package es.grouppayments.backend.payments.userpaymentsinfo.register;
 
 import es.grouppayments.backend.payments.userpaymentsinfo._shared.infrastructure.StripeService;
 import es.jaime.javaddd.domain.cqrs.command.CommandHandler;

@@ -1,4 +1,4 @@
-package es.grouppayments.backend.payments.userpaymentsinfo.register.setupintent;
+package es.grouppayments.backend.payments.userpaymentsinfo.setupintent;
 
 import es.grouppayments.backend._shared.infrastructure.ApplicationController;
 import es.grouppayments.backend.payments.userpaymentsinfo._shared.infrastructure.StripeService;

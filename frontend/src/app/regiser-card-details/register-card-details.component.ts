@@ -37,11 +37,13 @@ export class RegisterCardDetailsComponent implements OnInit {
   private async loadStripeConnectedAccountAndGetLink() {
     this.httpLoader.isLoading.next(true);
 
-    const connectedAccountId = await this.paymentsService.getConnectedAccountId()
-      .toPromise();
+    this.paymentsService.getConnectedAccuntLink().subscribe(res => {
+      const link: string = res.link;
 
-    // @ts-ignore
-    await this.createStripeConnecetdAccountLink(connectedAccountId.connectedAcccountId);
+      this.auth.setUserState(UserState.SIGNUP_OAUTH_CREDIT_CARD_COMPLETED);
+
+      this.goToLink(link);
+    });
   }
 
   private async setupIntent() {
@@ -95,16 +97,6 @@ export class RegisterCardDetailsComponent implements OnInit {
             name: this.auth.getName()
           },
       }};
-  }
-
-  private async createStripeConnecetdAccountLink(connectedAccountId: string) {
-    const link = await this.paymentsService.getConnectedAccuntLink()
-      .toPromise();
-
-    this.auth.setUserState(UserState.SIGNUP_OAUTH_CREDIT_CARD_COMPLETED);
-
-    // @ts-ignore
-    this.goToLink(link?.link);
   }
 
   public goToLink(url: string){

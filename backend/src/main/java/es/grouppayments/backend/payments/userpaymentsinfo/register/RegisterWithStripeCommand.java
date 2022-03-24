@@ -1,4 +1,4 @@
-package es.grouppayments.backend.payments.userpaymentsinfo.register.newregister;
+package es.grouppayments.backend.payments.userpaymentsinfo.register;
 
 import es.jaime.javaddd.domain.cqrs.command.Command;
 import lombok.AllArgsConstructor;
