@@ -5,11 +5,6 @@ import {Authentication} from "../../backend/authentication/authentication";
 import {PaymentsService} from "../../backend/payments/payments.service";
 import {HttpLoadingService} from "../../backend/http-loading.service";
 import {UserState} from "../../model/user-state";
-import {CreateConnectedAccountResponse} from "../../backend/payments/response/create-connected-account-response";
-import {CreateConnectedAccountLinkRequest} from "../../backend/payments/request/create-connected-account-link-request";
-import {
-  CreateConnectedAccountLinkResponse
-} from "../../backend/payments/response/create-connected-account-link-response";
 
 @Component({
   selector: 'app-regiser-card-details',
@@ -40,22 +35,13 @@ export class RegisterCardDetailsComponent implements OnInit {
   }
 
   private async loadStripeConnectedAccountAndGetLink() {
-    try{
-      this.httpLoader.isLoading.next(true);
+    this.httpLoader.isLoading.next(true);
 
-      console.log("HOla");
+    const connectedAccountId = await this.paymentsService.getConnectedAccountId()
+      .toPromise();
 
-      const connectedAccountId = await this.paymentsService.getConnectedAccountId()
-        .toPromise();
-      // @ts-ignore
-
-      console.log(connectedAccountId);
-
-      // @ts-ignore
-      await this.createStripeConnecetdAccountLink(connectedAccountId.connectedAcccountId);
-    }catch (error){
-      console.log(error);
-    }
+    // @ts-ignore
+    await this.createStripeConnecetdAccountLink(connectedAccountId.connectedAcccountId);
   }
 
   private async setupIntent() {
@@ -74,7 +60,6 @@ export class RegisterCardDetailsComponent implements OnInit {
     this.stripeService.elements({locale: 'es'}).subscribe(elements => {
       this.elements = elements;
 
-      // Only mount the element the first time
       if (!this.card) {
         this.card = this.elements.create('card');
         this.card.mount('#card-element');
@@ -85,25 +70,20 @@ export class RegisterCardDetailsComponent implements OnInit {
   async registerCarDetails() {
     this.httpLoader.isLoading.next(true);
 
-    // @ts-ignore
+    //@ts-ignore
     const confirmCardResult = await this.stripeService.confirmCardSetup(this.clientSecret, this.buildConfirmCardSetupRequest())
       .toPromise();
-
     const confirmCardResultNotNull = confirmCardResult != undefined && confirmCardResult.setupIntent
       && confirmCardResult.setupIntent.payment_method != null;
 
     if(confirmCardResultNotNull){
-      try{
-        // @ts-ignore
-        await this.createStripeCustomerAndConnectedAccount(confirmCardResult.setupIntent.payment_method);
-        // @ts-ignore
-        const connectedAccount: CreateConnectedAccountResponse = await this.paymentsService.createConnectedAccount()
-          .toPromise();
+      // @ts-ignore
+      const result = await this.paymentsService.registerWithStripe({paymentMethod: confirmCardResult.setupIntent.payment_method})
+        .toPromise();
 
-        await this.createStripeConnecetdAccountLink(connectedAccount.connectedAcocuntId);
-      }catch (error){
-        window.alert("Error try later");
-      }
+      this.auth.setUserState(UserState.SIGNUP_OAUTH_CREDIT_CARD_COMPLETED);
+      // @ts-ignore
+      this.goToLink(result.link);
     }
   }
 
@@ -117,28 +97,14 @@ export class RegisterCardDetailsComponent implements OnInit {
       }};
   }
 
-  private async createStripeCustomerAndConnectedAccount(paymentMethod: string) {
-    await this.paymentsService.createCustomer({paymentMethod: paymentMethod})
-      .toPromise();
-  }
-
   private async createStripeConnecetdAccountLink(connectedAccountId: string) {
-    try {
-      // @ts-ignore
-      const connectedAccountLink: CreateConnectedAccountLinkResponse = await this.paymentsService.createConnectedAccountLink(
-        {connectedAccountId: connectedAccountId}
-      )
-        .toPromise();
+    const link = await this.paymentsService.getConnectedAccuntLink()
+      .toPromise();
 
-      this.httpLoader.isLoading.next(false);
-      this.auth.setUserState(UserState.SIGNUP_OAUTH_CREDIT_CARD_COMPLETED);
+    this.auth.setUserState(UserState.SIGNUP_OAUTH_CREDIT_CARD_COMPLETED);
 
-      // @ts-ignore
-      this.goToLink(connectedAccountLink.link);
-    }catch (error){
-      console.log(error);
-      window.alert("Error try later");
-    }
+    // @ts-ignore
+    this.goToLink(link?.link);
   }
 
   public goToLink(url: string){

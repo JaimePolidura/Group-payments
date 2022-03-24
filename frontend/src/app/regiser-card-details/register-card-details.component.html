@@ -1,5 +1,6 @@
 <div class="myContainer div-config-dif-background">
-  <h1 style="text-align: center">Register</h1>
+  <h1 *ngIf="!(httpLoader.isLoading | async)" style="text-align: center">Register</h1>
+  <h1 *ngIf="httpLoader.isLoading | async" style="text-align: center">Loading...</h1>
   <hr>
 
   <div *ngIf="httpLoader.isLoading | async">

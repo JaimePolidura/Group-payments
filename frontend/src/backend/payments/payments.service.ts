@@ -9,6 +9,9 @@ import {MakePaymentRequest} from "../groups/request/make-payment-request";
 import {CreateConnectedAccountLinkRequest} from "./request/create-connected-account-link-request";
 import {CreateConnectedAccountLinkResponse} from "./response/create-connected-account-link-response";
 import {GetConnectedAccountIdResponse} from "./response/get-connected-account-id-response";
+import {RegisterWithStripeResponse} from "./response/register-with-stripe-response";
+import {RegisterWithStripeRequest} from "./request/register-with-stripe-request";
+import {GetConnectedAccountLinkResponse} from "./response/get-connected-account-link-response";
 
 @Injectable({
   providedIn: 'root'
@@ -41,5 +44,13 @@ export class PaymentsService {
 
   public getConnectedAccountId(): Observable<GetConnectedAccountIdResponse> {
     return this.http.get<GetConnectedAccountIdResponse>(`${this.usingRoutes.USING}/payments/stripe/getconnectedaccountid`);
+  }
+
+  public registerWithStripe(request: RegisterWithStripeRequest): Observable<RegisterWithStripeResponse> {
+    return this.http.post<RegisterWithStripeResponse>(`${this.usingRoutes.USING}/payments/stripe/register`, {...request, ignoreThis: ''});
+  }
+
+  public getConnectedAccuntLink(): Observable<GetConnectedAccountLinkResponse> {
+    return this.http.get<GetConnectedAccountLinkResponse>(`${this.usingRoutes.USING}/payments/stripe/getconnectedaccountlink`);
   }
 }
