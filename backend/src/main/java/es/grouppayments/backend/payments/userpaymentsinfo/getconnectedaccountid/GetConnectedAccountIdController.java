@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public final class GetConnectedAccountIdController extends ApplicationController {
     private final QueryBus queryBus;
 
-    @GetMapping("/payments/stripe/connectedaccountid")
+    @GetMapping("/payments/stripe/getconnectedaccountid")
     public ResponseEntity<GetConnectedAccountIdQueryResponse> getConnectedAccountId(){
         GetConnectedAccountIdQueryResponse response = this.queryBus.ask(new GetConnectedAccountIdQuery(
                 getLoggedUsername()

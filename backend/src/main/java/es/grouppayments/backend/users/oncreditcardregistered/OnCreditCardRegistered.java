@@ -19,11 +19,6 @@ public final class OnCreditCardRegistered {
                 .get()
                 .updateSignUpState(UserState.SIGNUP_OAUTH_CREDIT_CARD_COMPLETED);
 
-
-        System.out.println("1 -> " + user.getState());
-
         this.usersService.update(user);
-
-        System.out.println("2 -> " + this.usersService.findByUserId(user.getUserId()).get().getState());
     }
 }
