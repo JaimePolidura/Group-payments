@@ -17,11 +17,16 @@ export class UserStateOAuthCompleted implements CanActivate {
     actualRoute: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-    const userStateOAuthCompleted = this.authentication.getUserState() == UserState.SIGNUP_OAUTH_COMPLETED;
+    const allAuthCompleted = this.authentication.getUserState() == UserState.SIGNUP_ALL_COMPLETED;
+    const hasOAuthComplated = this.authentication.getUserState() == UserState.SIGNUP_OAUTH_COMPLETED;
+    const hasRegisredCreditCardDetails = this.authentication.getUserState() == UserState.SIGNUP_OAUTH_CREDIT_CARD_COMPLETED;
 
-    if(!userStateOAuthCompleted)
-      this.router.navigate(["/register"]);
+    console.log(allAuthCompleted);
+    console.log(hasOAuthComplated);
 
-    return userStateOAuthCompleted;
+    if(allAuthCompleted)
+      this.router.navigate(["/main"]);
+
+    return hasOAuthComplated || hasRegisredCreditCardDetails;
   }
 }

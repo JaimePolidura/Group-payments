@@ -1,3 +1,3 @@
 export interface CreateConnectedAccountResponse {
-  accountLink: string;
+  connectedAcocuntId: string;
 }

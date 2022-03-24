@@ -6,6 +6,9 @@ import {BackendUsingRoutesService} from "../backend-using-routes.service";
 import {CreateCustomerRequest} from "./request/create-customer-request";
 import {CreateConnectedAccountResponse} from "./response/create-connected-account-response";
 import {MakePaymentRequest} from "../groups/request/make-payment-request";
+import {CreateConnectedAccountLinkRequest} from "./request/create-connected-account-link-request";
+import {CreateConnectedAccountLinkResponse} from "./response/create-connected-account-link-response";
+import {GetConnectedAccountIdResponse} from "./response/get-connected-account-id-response";
 
 @Injectable({
   providedIn: 'root'
@@ -30,5 +33,13 @@ export class PaymentsService {
 
   public makePayment(request: MakePaymentRequest): Observable<any> {
     return this.http.post(`${this.usingRoutes.USING}/payments/makepayment`, request);
+  }
+
+  public createConnectedAccountLink(request: CreateConnectedAccountLinkRequest): Observable<CreateConnectedAccountLinkResponse> {
+    return this.http.post<CreateConnectedAccountLinkResponse>(`${this.usingRoutes.USING}/payments/stripe/createlink`, {...request, ignoreThis: ''});
+  }
+
+  public getConnectedAccountId(): Observable<GetConnectedAccountIdResponse> {
+    return this.http.get<GetConnectedAccountIdResponse>(`${this.usingRoutes.USING}/payments/stripe/getconnectedaccountid`);
   }
 }

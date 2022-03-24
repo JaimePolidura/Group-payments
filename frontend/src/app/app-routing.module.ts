@@ -6,7 +6,7 @@ import {UserStateSignUpAllCompleted} from "./guards/user-state-sign-up-all-compl
 import {JoinGroupComponent} from "./join-group/join-group.component";
 import {
   RegisterCardDetailsComponent
-} from "./login/regiser-card-details/register-card-details.component";
+} from "./regiser-card-details/register-card-details.component";
 import {
   UserStateOAuthCompleted
 } from "./guards/user-state-oauth-completed.service";

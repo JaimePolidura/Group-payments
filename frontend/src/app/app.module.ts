@@ -18,7 +18,7 @@ import {ServerEventListener} from "../backend/eventlistener/server-event-listene
 import {
   ServerEventListenerWSStompService
 } from "../backend/eventlistener/websocketstomp/server-event-listener-wsstomp.service";
-import { RegisterCardDetailsComponent } from './login/regiser-card-details/register-card-details.component';
+import { RegisterCardDetailsComponent } from './regiser-card-details/register-card-details.component';
 import {NgxStripeModule} from "ngx-stripe";
 import { LoadingProgressBarComponent } from './loading-progress-bar/loading-progress-bar.component';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
