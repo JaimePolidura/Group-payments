@@ -40,8 +40,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private String[] routesWithSignOauthCreditCardCompleted(){
         return new String[]{
-                "/payments/stripe/createlink",
-                "/payments/stripe/getconnectedaccountid"
+                "/payments/stripe/getconnectedaccountlink"
         };
     }
 
@@ -62,9 +61,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private String[] routesWithSignUpOauthCompleted(){
         return new String[]{
-                "/payments/stripe/createconnectedaccount",
-                "/payments/stripe/createcustomer",
-                "/payments/stripe/setupintent"
+                "/payments/stripe/setupintent",
+                "/payments/stripe/register",
         };
     }
 }
