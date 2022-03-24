@@ -2,7 +2,7 @@ package es.grouppayments.backend.payments.userpaymentsinfo._shared.infrastructur
 
 import com.stripe.model.*;
 import com.stripe.param.*;
-import es.grouppayments.backend.payments.userpaymentsinfo._shared.domain.StripeUsersService;
+import es.grouppayments.backend.payments.userpaymentsinfo._shared.application.StripeUsersService;
 import es.grouppayments.backend.payments.userpaymentsinfo._shared.domain.events.StripeConnectedAccountCreated;
 import es.grouppayments.backend.payments.userpaymentsinfo._shared.domain.events.StripeCustomerCreated;
 import es.grouppayments.backend.users._shared.domain.User;

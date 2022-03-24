@@ -1,5 +1,7 @@
-package es.grouppayments.backend.payments.userpaymentsinfo._shared.domain;
+package es.grouppayments.backend.payments.userpaymentsinfo._shared.application;
 
+import es.grouppayments.backend.payments.userpaymentsinfo._shared.domain.StripeUser;
+import es.grouppayments.backend.payments.userpaymentsinfo._shared.domain.StripeUserRepository;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

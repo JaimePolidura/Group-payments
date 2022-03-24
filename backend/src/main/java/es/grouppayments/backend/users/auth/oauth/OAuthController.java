@@ -6,7 +6,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import es.grouppayments.backend._shared.infrastructure.auth.JWTUtils;
 import es.grouppayments.backend.payments.userpaymentsinfo._shared.domain.StripeUser;
-import es.grouppayments.backend.payments.userpaymentsinfo._shared.domain.StripeUsersService;
+import es.grouppayments.backend.payments.userpaymentsinfo._shared.application.StripeUsersService;
 import es.grouppayments.backend.payments.userpaymentsinfo._shared.domain.events.StripeConnectedAccountRegistered;
 import es.grouppayments.backend.payments.userpaymentsinfo._shared.infrastructure.StripeService;
 import es.grouppayments.backend.users._shared.domain.User;
@@ -55,7 +55,7 @@ public class OAuthController {
 
         User user = createNewUserIfNotExistsAndGetUserId(request.username, payload.getEmail(), String.valueOf(payload.get("picture")));
 
-        this.checkIfRegisteredInStripeConnectedAccount(user);
+        user = this.checkIfRegisteredInStripeConnectedAccount(user);
 
         String newToken = jwtUtils.generateToken(user.getUserId());
 
@@ -69,7 +69,7 @@ public class OAuthController {
             return usersService.findByEmail(email).get();
     }
 
-    private void checkIfRegisteredInStripeConnectedAccount(User user){
+    private User checkIfRegisteredInStripeConnectedAccount(User user){
         if(user.getState() == UserState.SIGNUP_OAUTH_CREDIT_CARD_COMPLETED){
             StripeUser stripeUser = this.stripeUsersService.getdByUserId(user.getUserId());
 
@@ -79,9 +79,13 @@ public class OAuthController {
 
                 if(hasRegistedConnectedAccount){
                     this.eventBus.publish(new StripeConnectedAccountRegistered(user.getUserId()));
+
+                    return user.updateSignUpState(UserState.SIGNUP_ALL_COMPLETED);
                 }
             }
         }
+
+        return user;
 
     }
 

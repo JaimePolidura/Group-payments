@@ -2,7 +2,7 @@ package es.grouppayments.backend.payments.userpaymentsinfo._shared.application.o
 
 
 import es.grouppayments.backend.payments.userpaymentsinfo._shared.domain.StripeUser;
-import es.grouppayments.backend.payments.userpaymentsinfo._shared.domain.StripeUsersService;
+import es.grouppayments.backend.payments.userpaymentsinfo._shared.application.StripeUsersService;
 import es.grouppayments.backend.payments.userpaymentsinfo._shared.domain.events.StripePaymentMethodCreated;
 import lombok.AllArgsConstructor;
 import org.springframework.context.event.EventListener;

@@ -6,7 +6,7 @@ import com.stripe.param.PaymentIntentCreateParams;
 import com.stripe.param.TransferCreateParams;
 import es.grouppayments.backend.payments.payments._shared.domain.PaymentMakerService;
 import es.grouppayments.backend.payments.userpaymentsinfo._shared.domain.StripeUser;
-import es.grouppayments.backend.payments.userpaymentsinfo._shared.domain.StripeUsersService;
+import es.grouppayments.backend.payments.userpaymentsinfo._shared.application.StripeUsersService;
 import es.grouppayments.backend.payments.userpaymentsinfo._shared.infrastructure.StripeService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
