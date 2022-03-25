@@ -1,4 +1,4 @@
-package es.grouppayments.backend.payments.paymenteshistory;
+package es.grouppayments.backend.payments.paymenteshistory.onpaymentaction;
 
 import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups._shared.domain.GroupState;
@@ -9,10 +9,10 @@ import es.grouppayments.backend.payments.payments._shared.domain.events.MemberPa
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentHistoryService;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentState;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentType;
-import es.grouppayments.backend.payments.paymentshistory.onapppayingadmindone.OnAppPayingAdminDone;
-import es.grouppayments.backend.payments.paymentshistory.onerrorwhilememberpaying.OnErrorWhileMemberPaying;
-import es.grouppayments.backend.payments.paymentshistory.onerrorwhilepayingtoadmin.OnErrorWhilePayingToAdmin;
-import es.grouppayments.backend.payments.paymentshistory.onmemberpayingappdone.OnMemberPayingAppDone;
+import es.grouppayments.backend.payments.paymentshistory.onpaymentaction.onapppayingadmindone.OnAppPayingAdminDone;
+import es.grouppayments.backend.payments.paymentshistory.onpaymentaction.onerrorwhilememberpaying.OnErrorWhileMemberPaying;
+import es.grouppayments.backend.payments.paymentshistory.onpaymentaction.onerrorwhilepayingtoadmin.OnErrorWhilePayingToAdmin;
+import es.grouppayments.backend.payments.paymentshistory.onpaymentaction.onmemberpayingappdone.OnMemberPayingAppDone;
 import org.junit.Test;
 
 import java.time.LocalDateTime;

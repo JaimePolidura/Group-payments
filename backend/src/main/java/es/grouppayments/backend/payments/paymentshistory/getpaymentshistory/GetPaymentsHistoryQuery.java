@@ -12,4 +12,8 @@ public final class GetPaymentsHistoryQuery implements Query {
     @Getter private final int pageNumber;
     @Getter private final int itemsPerPage;
     @Getter private final SearchPaymentByType paymentTypeSearch;
+
+    public static GetPaymentsHistoryQuery of(UUID userId, int pageNumber, int itemsPerPage, SearchPaymentByType paymentTypeSearch){
+        return new GetPaymentsHistoryQuery(userId, pageNumber, itemsPerPage, paymentTypeSearch);
+    }
 }

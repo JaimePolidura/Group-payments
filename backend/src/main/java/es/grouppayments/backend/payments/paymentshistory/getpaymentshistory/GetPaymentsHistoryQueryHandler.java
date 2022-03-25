@@ -26,7 +26,7 @@ public final class GetPaymentsHistoryQueryHandler implements QueryHandler<GetPay
         List<Payment> paymentsFiltered = this.paymentHistoryService.findByUserId(query.getUserId()).stream()
                 .filter(searchPaymentByType.paymentTypeMatcherPredicate)
                 .sorted() //Payments implemnts comparable
-                .skip(getMinIndexFromPageNumberAndItemsPerPage(itemsPerPage, pageNumber))
+                .skip(getMinIndexFromPageNumberAndItemsPerPage(pageNumber, itemsPerPage))
                 .limit(itemsPerPage)
                 .toList();
 
@@ -43,7 +43,7 @@ public final class GetPaymentsHistoryQueryHandler implements QueryHandler<GetPay
     }
 
     private void ensureCorrectItemsPerPage(int itemsPerPage){
-        if(itemsPerPage > 50 || itemsPerPage <= 10)
+        if(itemsPerPage > 50 || itemsPerPage < 10)
             throw new IllegalQuantity("Items per page cannot be bigger than 50 and smaller than 10");
     }
 }

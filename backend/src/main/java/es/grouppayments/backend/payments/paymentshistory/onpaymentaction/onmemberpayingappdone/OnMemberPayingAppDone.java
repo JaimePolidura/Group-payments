@@ -1,4 +1,4 @@
-package es.grouppayments.backend.payments.paymentshistory.onmemberpayingappdone;
+package es.grouppayments.backend.payments.paymentshistory.onpaymentaction.onmemberpayingappdone;
 
 import es.grouppayments.backend.payments.payments._shared.domain.events.MemberPayingAppDone;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentHistoryService;

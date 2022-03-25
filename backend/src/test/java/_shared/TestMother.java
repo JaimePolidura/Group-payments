@@ -22,6 +22,10 @@ public class TestMother implements UsingTestEventBus{
         assertTrue(collection.isEmpty());
     }
 
+    protected void assertCollectionNotEmpty(Collection<?> collection){
+        assertTrue(collection.size() > 0);
+    }
+
     protected <T> void assertContentListMatches(List<T> list, Predicate<T> matcher){
         assertTrue(list.stream().allMatch(matcher));
     }
