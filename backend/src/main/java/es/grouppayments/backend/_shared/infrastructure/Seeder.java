@@ -4,11 +4,13 @@ import es.grouppayments.backend.groupmembers._shared.domain.GroupMember;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberRole;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
+import es.grouppayments.backend.payments.paymentshistory._shared.domain.*;
 import es.grouppayments.backend.payments.userpaymentsinfo._shared.domain.StripeUser;
 import es.grouppayments.backend.payments.userpaymentsinfo._shared.application.StripeUsersService;
 import es.grouppayments.backend.users._shared.domain.User;
 import es.grouppayments.backend.users._shared.domain.UserState;
 import es.grouppayments.backend.users._shared.domain.UsersService;
+import es.jaime.javaddd.domain.Utils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -24,14 +26,16 @@ public class Seeder implements CommandLineRunner {
     private final GroupService groupService;
     private final GroupMemberService groupMemberService;
     private final StripeUsersService stripeUsersService;
+    private final PaymentsHistoryRepository paymentsHistoryRepository;
     private final boolean useAuthStripeAccounts;
 
     public Seeder(UsersService usersService, GroupService groupService, GroupMemberService groupMemberService, StripeUsersService stripeUsersService,
-                  @Value("${grouppayments.db.seeder.stripeaccountswithauth}") boolean useAuthStripeAccounts) {
+                  PaymentsHistoryRepository paymentsHistoryRepository, @Value("${grouppayments.db.seeder.stripeaccountswithauth}") boolean useAuthStripeAccounts) {
         this.usersService = usersService;
         this.groupService = groupService;
         this.groupMemberService = groupMemberService;
         this.stripeUsersService = stripeUsersService;
+        this.paymentsHistoryRepository = paymentsHistoryRepository;
         this.useAuthStripeAccounts = useAuthStripeAccounts;
     }
 
@@ -55,6 +59,32 @@ public class Seeder implements CommandLineRunner {
             stripeUsersService.save(new StripeUser(findUserIdByEmail("jaimetruman@gmail.com"),"pm_1Kfh4lHd6M46OJ6A4n0DZ5xN", "cus_LMPuzvpWBNNMJe", "acct_1Kfh4nQUa7cp5fFM", true));
             stripeUsersService.save(new StripeUser(findUserIdByEmail("jaime.polidura@alumnos.uneatlantico.es"),"pm_1Kfh6yHd6M46OJ6AjKt1RVNy", "cus_LMPwcLvWt9AtwD", "acct_1Kfh70QlGiEMtOxm", true));
         }
+
+        this.addRandomPayments(findUserIdByEmail("jaime.polidura@gmail.com"), 20);
+        this.addRandomPayments(findUserIdByEmail("jaimetruman@gmail.com"), 20);
+        this.addRandomPayments(findUserIdByEmail("jaime.polidura@alumnos.uneatlantico.es"), 20);
+    }
+
+    private void addRandomPayments(UUID userId, int number){
+        Utils.repeat(number, () -> addRandomPayment(userId));
+    }
+
+    private void addRandomPayment(UUID userId){
+        PaymentType paymentType = Math.random() < 0.5 ? PaymentType.APP_TO_ADMIN : PaymentType.MEMBER_TO_APP;
+        boolean isUserIdAdmin = Math.random() < 0.5;
+        boolean isError = Math.random() < 0.3;
+
+        this.paymentsHistoryRepository.save(new Payment(
+                UUID.randomUUID(),
+                LocalDateTime.now(),
+                paymentType == PaymentType.APP_TO_ADMIN ? "APP" : userId.toString(),
+                paymentType == PaymentType.MEMBER_TO_APP ? "APP" : userId.toString(),
+                Math.random() * 100,
+                "Payment",
+                isError ? PaymentState.ERROR : PaymentState.SUCCESS,
+                paymentType,
+                isError ? "Not enough balance" : null
+        ));
     }
 
     private UUID findUserIdByEmail(String email){

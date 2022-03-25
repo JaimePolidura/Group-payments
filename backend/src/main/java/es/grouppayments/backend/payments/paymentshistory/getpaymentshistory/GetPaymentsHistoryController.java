@@ -15,13 +15,12 @@ public final class GetPaymentsHistoryController extends ApplicationController {
     @GetMapping("/payments/paymentshistory")
     public ResponseEntity<GetPaymentsHistoryQueryResponse> getPaymentsHistory(@RequestParam int pageNumber,
                                                 @RequestParam int itemsPerPage,
-                                                @RequestParam SearchPaymentByType paymentTypeSearch){
-
+                                                @RequestParam SearchPaymentByType paymentType){
         GetPaymentsHistoryQueryResponse response = this.queryBus.ask(new GetPaymentsHistoryQuery(
                 getLoggedUsername(),
                 pageNumber,
                 itemsPerPage,
-                paymentTypeSearch
+                paymentType
         ));
 
         return buildNewHttpResponseOK(response);

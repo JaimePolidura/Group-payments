@@ -1,0 +1,35 @@
+<div class="modal-header">
+  <h2 style="text-align: center">{{payment.description}}</h2>
+  <button class="btn-close" type="button" (click)="activeModal.dismiss()"></button>
+</div>
+<div class="modal-body modal-body-centered">
+  <div *ngIf="payment.type == 'APP_TO_ADMIN'">
+    Money: <span class="green">~ +{{roundNumber(payment.money)}}</span>
+  </div>
+  <div *ngIf="payment.type == 'MEMBER_TO_APP'">
+    Money: <span class="red">~ -{{roundNumber(payment.money)}}</span>
+  </div>
+  <div *ngIf="payment.type == 'APP_TO_ADMIN'">
+    Type: You were the admin of a group
+  </div>
+  <div *ngIf="payment.type == 'MEMBER_TO_APP'">
+    Type: You were the member of a group
+  </div>
+  Date: {{payment.date.split("T")[0]}}<br>
+  Description: {{payment.description}}<br>
+  State: {{payment.state}}<br>
+  <div *ngIf="payment.state == 'ERROR'">
+    Reason of failure: {{payment.errorMessage}}
+  </div>
+  <br>
+  <div *ngIf="payment.state == 'ERROR'">
+    <br>
+    <p class="red" *ngIf="payment.type == 'MEMBER_TO_APP'">This payment failed, the payment was cancelled, you havent lost the money. If you believe this
+    is a application error please contact with the support, paymentid: {{payment.paymentId}}</p>
+    <p class="red" *ngIf="payment.type == 'APP_TO_ADMIN'">You couldnt recieve the payment, all members have been charged, the funds have not been lost,
+      they have been retained. Contact support to get paid it. Refer to this payment as <span style="font-weight: bold">{{payment.paymentId}}</span></p>
+  </div>
+</div>
+<div class="modal-footer payment-confirm-options">
+  <button type="submit" class="myButton myButton-footer" (click)="activeModal.dismiss()">✓ Ok ✓</button>
+</div>

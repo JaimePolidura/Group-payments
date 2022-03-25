@@ -1,5 +1,41 @@
 <div class="paymenthistory-container">
-  <div class="paymenthistory-options"><h1>hola</h1></div>
-  <div class="paymenthistory-separator"></div>
-  <div class="paymenthistory-payments"><h6>xddd</h6></div>
+  <div class="paymenthistory-options">
+    <select class="form-control" (change)="onPaymentSearchTypeChanged($event)">
+      <option value="ALL">All</option>
+      <option value="MEMBER_TO_APP">You paid</option>
+      <option value="APP_TO_ADMIN">You got paid</option>
+    </select>
+  </div>
+
+  <div class="paymenthistory-separator">
+    <hr>
+  </div>
+
+  <div class="paymenthistory-payments">
+    <table>
+      <thead>
+        <tr class="paymenthistory-payments-table-head">
+          <th>Date</th>
+          <th>Money</th>
+          <th>State</th>
+          <th>Info</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let payment of paymentsWithItsPage[actualPage]" class="paymenthistory-payments-table-body">
+          <td [ngClass]="{'gray': payment.state == 'ERROR'}">{{payment.date.split("T")[0]}}</td>
+          <td>
+            <div *ngIf="payment.paid == auth.getUserId()" class="green" [ngClass]="{'gray': payment.state == 'ERROR'}">~ +{{roundNumber(payment.money)}}</div>
+            <div *ngIf="payment.payer == auth.getUserId()" class="red" [ngClass]="{'gray': payment.state == 'ERROR'}">~ -{{roundNumber(payment.money)}}</div>
+          </td>
+          <td>
+            <div *ngIf="payment.state == 'SUCCESS'" class="green">Success</div>
+            <div *ngIf="payment.state == 'ERROR'" class="red">Error</div>
+          </td>
+          <td><i class="fa-solid fa-circle-info" (click)="openModalPaymentInfo(payment)"></i></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

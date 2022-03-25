@@ -24,6 +24,8 @@ import { LoadingProgressBarComponent } from './loading-progress-bar/loading-prog
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MatInputModule} from "@angular/material/input";
+import {PaymentsHistoryComponent} from "./main/non-group-options/payments-history/payments-history.component";
+import { PaymentInfoModalComponent } from './main/non-group-options/payments-history/payment-info-modal/payment-info-modal.component';
 
 const STRIPE_PUBLIC_KEY = "pk_test_51KdFRuHd6M46OJ6AWkTIoAh6RRcusDTqAEin4zxmvSkAEotVSwhmD6rD02ymmU3PJCAtylGS8ARrxejFlbscO8as00icxHNy4i";
 
@@ -38,6 +40,8 @@ const STRIPE_PUBLIC_KEY = "pk_test_51KdFRuHd6M46OJ6AWkTIoAh6RRcusDTqAEin4zxmvSkA
     JoinGroupComponent,
     RegisterCardDetailsComponent,
     LoadingProgressBarComponent,
+    PaymentsHistoryComponent,
+    PaymentInfoModalComponent,
   ],
   imports: [
     BrowserModule,
