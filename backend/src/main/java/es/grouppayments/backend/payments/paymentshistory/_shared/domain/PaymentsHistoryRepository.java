@@ -7,9 +7,7 @@ import java.util.UUID;
 public interface PaymentsHistoryRepository {
     void save(Payment transaction);
 
-    List<Payment> findByUserIdPayer(UUID userIdPayer);
-
-    List<Payment> findByUserIdPaid(UUID userIdPaid);
+    List<Payment> findByUserId(UUID userId);
 
     Optional<Payment> findByPaymentId(UUID paymentId);
 }

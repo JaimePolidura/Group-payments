@@ -6,12 +6,13 @@ import lombok.Getter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
 @ToString
-public class Payment extends Aggregate {
+public class Payment extends Aggregate implements Comparable<Payment> {
     @Getter private final UUID paymentId;
     @Getter private final LocalDateTime date;
     @Getter private final String payer;
@@ -35,5 +36,10 @@ public class Payment extends Aggregate {
                 "type", this.type.toString(),
                 "errorMessage", this.errorMessage
         );
+    }
+
+    @Override
+    public int compareTo(Payment o) {
+        return o.getDate().compareTo(this.date);
     }
 }

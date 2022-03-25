@@ -27,12 +27,8 @@ public class PaymentHistoryService {
         ));
     }
 
-    public List<Payment> findByUserIdPayer(UUID userIdPayer) {
-        return paymentsHistory.findByUserIdPayer(userIdPayer);
-    }
-
-    public List<Payment> findByUserIdPaid(UUID userIdPaid) {
-        return paymentsHistory.findByUserIdPaid(userIdPaid);
+    public List<Payment> findByUserId(UUID userId) {
+        return this.paymentsHistory.findByUserId(userId);
     }
 
     public Optional<Payment> findByPaymentId(UUID paymentId) {

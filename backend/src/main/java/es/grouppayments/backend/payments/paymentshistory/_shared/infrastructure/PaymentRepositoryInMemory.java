@@ -5,6 +5,7 @@ import es.grouppayments.backend.payments.paymentshistory._shared.domain.Payments
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Repository
@@ -21,17 +22,15 @@ public class PaymentRepositoryInMemory implements PaymentsHistoryRepository {
     }
 
     @Override
-    public List<Payment> findByUserIdPayer(UUID userIdPayer) {
-        return paymentTransactions.stream()
-                .filter(payment -> payment.getPayer().equals(userIdPayer.toString()))
+    public List<Payment> findByUserId(UUID userId) {
+        return this.paymentTransactions.stream()
+                .filter(isUserInPayment(userId))
                 .toList();
     }
 
-    @Override
-    public List<Payment> findByUserIdPaid(UUID userIdPaid) {
-        return paymentTransactions.stream()
-                .filter(transaction -> transaction.getPaid().equals(userIdPaid.toString()))
-                .toList();
+    private Predicate<? super Payment> isUserInPayment(UUID userId){
+        return payment -> payment.getPayer().equals(userId.toString()) ||
+                payment.getPaid().equals(userId.toString());
     }
 
     @Override
