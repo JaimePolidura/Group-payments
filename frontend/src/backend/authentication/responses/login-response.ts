@@ -1,4 +1,4 @@
-import {UserState} from "../../../model/user-state";
+import {UserState} from "../../../model/user/user-state";
 
 export interface LoginResponse {
   userId: string,

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {Group} from "../../model/group";
-import {User} from "../../model/user";
-import {GroupState} from "../../model/group-state";
+import {Group} from "../../model/group/group";
+import {User} from "../../model/user/user";
+import {GroupState} from "../../model/group/group-state";
 
 @Injectable({
   providedIn: 'root'

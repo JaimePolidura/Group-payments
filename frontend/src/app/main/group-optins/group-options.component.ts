@@ -1,7 +1,7 @@
 import {ApplicationRef, Component, OnInit, ViewChild} from '@angular/core';
 import {GroupRepositoryService} from "../group-repository.service";
-import {Group} from "../../../model/group";
-import {User} from "../../../model/user";
+import {Group} from "../../../model/group/group";
+import {User} from "../../../model/user/user";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {GroupsApiService} from "../../../backend/groups/groups-api.service";
 import {KickGroupMemberRequest} from "../../../backend/groups/request/kick-group-member-request";
@@ -17,7 +17,7 @@ import {GroupEdited} from "../../../backend/eventlistener/events/group-edited";
 import {ServerEventsSubscriberService} from "../../../backend/eventlistener/server-events-subscriber.service";
 import {ServerEventListener} from "../../../backend/eventlistener/server-event-listener";
 import {PaymentInitialized} from "../../../backend/eventlistener/events/payment-initialized";
-import {GroupState} from "../../../model/group-state";
+import {GroupState} from "../../../model/group/group-state";
 import {HttpLoadingService} from "../../../backend/http-loading.service";
 import {PaymentsService} from "../../../backend/payments/payments.service";
 import {PaymentDone} from "../../../backend/eventlistener/events/payment-done";

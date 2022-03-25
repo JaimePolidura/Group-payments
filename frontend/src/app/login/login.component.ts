@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {Authentication} from "../../backend/authentication/authentication";
 import {LoginResponse} from "../../backend/authentication/responses/login-response";
-import {UserState} from "../../model/user-state";
+import {UserState} from "../../model/user/user-state";
 
 @Component({
   selector: 'app-login',

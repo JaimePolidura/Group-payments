@@ -5,10 +5,9 @@ import { Injectable } from '@angular/core';
 })
 export class BackendUsingRoutesService {
   private LOCALHOST: string = "http://localhost:8080";
-  private HOME_IP: string = "http://192.168.1.161:8080";
-  private EXTRA: string = "http://192.168.1.179:8080";
+  private HOME_IP: string = "http://192.168.1.172:8080";
 
-  public USING: string = this.LOCALHOST;
+  public USING: string = this.HOME_IP;
 
   constructor() { }
 }

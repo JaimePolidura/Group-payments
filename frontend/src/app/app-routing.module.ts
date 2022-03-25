@@ -11,6 +11,7 @@ import {
   UserStateOAuthCompleted
 } from "./guards/user-state-oauth-completed.service";
 import {NeedsToBeAuthenticated} from "./guards/needs-to-be-authenticated.service";
+import {PaymentsHistoryComponent} from "./main/non-group-options/payments-history/payments-history.component";
 
 const routes: Routes = [
   {path: '', component: LoginComponent},
@@ -19,7 +20,8 @@ const routes: Routes = [
   {path: 'login/groupToJoin/:groupId', component: LoginComponent},
   {path: 'register', component: RegisterCardDetailsComponent, canActivate: [NeedsToBeAuthenticated, UserStateOAuthCompleted]},
   {path: 'main', component: MainComponent, canActivate: [NeedsToBeAuthenticated, UserStateSignUpAllCompleted]},
-  {path: 'join/:groupId', component: JoinGroupComponent, canActivate: [NeedsToBeAuthenticated, UserStateSignUpAllCompleted]}
+  {path: 'join/:groupId', component: JoinGroupComponent, canActivate: [NeedsToBeAuthenticated, UserStateSignUpAllCompleted]},
+  {path: 'paymenthistory', component: PaymentsHistoryComponent, canActivate: [NeedsToBeAuthenticated, UserStateSignUpAllCompleted]},
 ];
 
 @NgModule({

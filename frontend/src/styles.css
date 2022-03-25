@@ -98,6 +98,10 @@ body {
   cursor: progress;
 }
 
+.cursor-disabled {
+  cursor: default;
+}
+
 /** {outline: 1px solid #f00 !important;}*/
 
 

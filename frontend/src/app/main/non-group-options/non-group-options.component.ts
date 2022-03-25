@@ -102,4 +102,8 @@ export class NonGroupOptionsComponent implements OnInit {
   private closeModal(): void {
     this.modalService.dismissAll();
   }
+
+  public goToPaymentHistory() {
+    this.router.navigateByUrl("paymenthistory");
+  }
 }

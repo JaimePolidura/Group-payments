@@ -3,7 +3,7 @@ import {GoogleLoginProvider, SocialAuthService, SocialUser} from "angularx-socia
 import {HttpClient} from "@angular/common/http";
 import {LoginResponse} from "./responses/login-response";
 import {LoginRequest} from "./request/login-request";
-import {UserState} from "../../model/user-state";
+import {UserState} from "../../model/user/user-state";
 
 @Injectable({
   providedIn: 'root'

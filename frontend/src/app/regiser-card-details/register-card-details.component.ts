@@ -4,7 +4,7 @@ import {StripeService} from "ngx-stripe";
 import {Authentication} from "../../backend/authentication/authentication";
 import {PaymentsService} from "../../backend/payments/payments.service";
 import {HttpLoadingService} from "../../backend/http-loading.service";
-import {UserState} from "../../model/user-state";
+import {UserState} from "../../model/user/user-state";
 
 @Component({
   selector: 'app-regiser-card-details',
@@ -27,11 +27,10 @@ export class RegisterCardDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.setupStripeElements();
 
-    if(this.auth.getUserState() == UserState.SIGNUP_OAUTH_CREDIT_CARD_COMPLETED){
+    if(this.auth.getUserState() == UserState.SIGNUP_OAUTH_CREDIT_CARD_COMPLETED)
       this.loadStripeConnectedAccountAndGetLink();
-    }else{
+    else
       this.setupIntent();
-    }
   }
 
   private async loadStripeConnectedAccountAndGetLink() {

@@ -7,6 +7,8 @@ import {MakePaymentRequest} from "../groups/request/make-payment-request";
 import {RegisterWithStripeResponse} from "./response/register-with-stripe-response";
 import {RegisterWithStripeRequest} from "./request/register-with-stripe-request";
 import {GetConnectedAccountLinkResponse} from "./response/get-connected-account-link-response";
+import {GetPaymentHistoryRequest} from "./request/get-payment-history-request";
+import {GetPaymentsHistoryResponse} from "./response/get-payments-history-response";
 
 @Injectable({
   providedIn: 'root'
@@ -31,5 +33,9 @@ export class PaymentsService {
 
   public getConnectedAccuntLink(): Observable<GetConnectedAccountLinkResponse> {
     return this.http.get<GetConnectedAccountLinkResponse>(`${this.usingRoutes.USING}/payments/stripe/getconnectedaccountlink`);
+  }
+
+  public getPaymentHistory(req: GetPaymentHistoryRequest): Observable<GetPaymentsHistoryResponse> {
+    return this.http.get<GetPaymentsHistoryResponse>(`${this.usingRoutes.USING}/payments/paymentshistory?pageNumber=${req.pageNumber}&itemsPerPage=${req.itemsPerPage}&paymentType=${req.paymentTypeSearch}`);
   }
 }

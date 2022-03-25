@@ -1,0 +1,42 @@
+.paymenthistory-container {
+  position: absolute;
+
+  border-radius: 0;
+
+  width: 100%;
+  height: 100%;
+
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: 5% 5% auto;
+}
+
+.paymenthistory-container .paymenthistory-options {
+  margin-top: 1%;
+  margin-left: 1%;
+  margin-right: 1%;
+}
+
+.paymenthistory-container .paymenthistory-payments{
+  margin-left: 1%;
+}
+
+.paymenthistory-options{
+  grid-row: 1;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.paymenthistory-separator{
+  grid-row: 2;
+}
+
+.paymenthistory-payments{
+  grid-row: 3;
+  display: flex;
+  flex-direction: column;
+  height: 90%;
+}
