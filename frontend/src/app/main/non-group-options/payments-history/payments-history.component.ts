@@ -40,8 +40,15 @@ export class PaymentsHistoryComponent implements OnInit {
   }
 
   public onPaymentSearchTypeChanged(e: any) {
-    //TODO
-    // const newTypeSearch: PaymentTypeSearch = e.target.value;
+    const newTypeSearch: PaymentTypeSearch = e.target.value;
+
+    if(newTypeSearch == this.paymentTypeSearch) return;
+
+    this.paymentTypeSearch = newTypeSearch;
+    this.paymentsPages = {};
+    this.actualPage = 0;
+
+    this.getPayments(this.actualPage + 1, this.paymentTypeSearch);
   }
 
   public roundNumber(number: number): number {
