@@ -17,7 +17,7 @@
         <ul ngbDropdownMenu aria-labelledby="dropdownMenuButton1">
           <li><a ngbDropdownItem (click)="modalService.open(shareGroupModal)"><i class="fa-solid fa-share-nodes fa-1x"></i> Share</a></li>
           <li><a ngbDropdownItem (click)="leaveGroup()"><i class="fa-solid fa-arrow-right-from-bracket fa-1x"></i> Leave</a></li>
-          <li *ngIf="!isAdminOfCurrentGroup(groupState.getCurrentGroup().groupId)" (click)="modalService.open(editGroupModal)"><a ngbDropdownItem><i class="fa-solid fa-pen-to-square fa-1x"></i> Edit</a></li>
+          <li *ngIf="isAdminOfCurrentGroup(auth.getUserId())" (click)="modalService.open(editGroupModal)"><a ngbDropdownItem><i class="fa-solid fa-pen-to-square fa-1x"></i> Edit</a></li>
         </ul>
       </div>
     </div>

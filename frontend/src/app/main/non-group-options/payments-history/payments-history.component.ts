@@ -25,14 +25,17 @@ export class PaymentsHistoryComponent implements OnInit {
   ){}
 
   ngOnInit(): void {
-    this.getPayments(this.actualPage + 1, this.paymentTypeSearch);
+    this.getPayments(this.actualPage + 1, this.paymentTypeSearch, () => {});
   }
 
-  private getPayments(newPageNumber: number, paymentTypeSearch: PaymentTypeSearch): void {
+  private getPayments(newPageNumber: number, paymentTypeSearch: PaymentTypeSearch, onDataRecievedCallback: () => void): void {
     this.paymentsService.getPaymentHistory({pageNumber: newPageNumber,
                                                 paymentTypeSearch: paymentTypeSearch,
                                                 itemsPerPage: ITEMS_PER_PAGE
     }).subscribe(res => {
+
+      onDataRecievedCallback();
+
       this.actualPage++;
 
       this.paymentsPages[this.actualPage] = res.payments;
@@ -44,11 +47,11 @@ export class PaymentsHistoryComponent implements OnInit {
 
     if(newTypeSearch == this.paymentTypeSearch) return;
 
-    this.paymentTypeSearch = newTypeSearch;
-    this.paymentsPages = {};
-    this.actualPage = 0;
-
-    this.getPayments(this.actualPage + 1, this.paymentTypeSearch);
+    this.getPayments( 1, newTypeSearch, () => {
+      this.paymentTypeSearch = newTypeSearch;
+      this.paymentsPages = {};
+      this.actualPage = 0;
+    });
   }
 
   public roundNumber(number: number): number {
@@ -80,11 +83,10 @@ export class PaymentsHistoryComponent implements OnInit {
 
     let newPageNumberToGoForward = this.actualPage + 1;
 
-    if(this.hasPaymentPageLoaded(newPageNumberToGoForward)){
+    if(this.hasPaymentPageLoaded(newPageNumberToGoForward))
       this.actualPage++;
-    }else{
-      this.getPayments(newPageNumberToGoForward, this.paymentTypeSearch);
-    }
+    else
+      this.getPayments(newPageNumberToGoForward, this.paymentTypeSearch, () => {});
   }
 
   private hasPaymentPageLoaded(pageNumber: number): boolean {

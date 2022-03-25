@@ -23,7 +23,7 @@ public class SpringSocketConfiguartion implements WebSocketMessageBrokerConfigur
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/socket")
+        registry.addEndpoint("/eventstreaming/socket")
                 .setAllowedOrigins("http://localhost:4200")
                 .withSockJS();
     }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {HttpLoadingService} from "../../backend/http-loading.service";
+import {ProgressBarService} from "../progress-bar.service";
 
 @Component({
   selector: 'app-loading-progress-bar',
@@ -9,7 +9,7 @@ import {HttpLoadingService} from "../../backend/http-loading.service";
 export class LoadingProgressBarComponent implements OnInit {
 
   constructor(
-    public loaderService: HttpLoadingService,
+    public loaderService: ProgressBarService,
   ){}
 
   ngOnInit(): void {

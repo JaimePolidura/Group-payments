@@ -18,7 +18,7 @@ export class ServerEventListenerSseService implements ServerEventListener{
   }
 
   public connect(): void {
-    this.eventSource = new EventSource(`${this.backendRoutes.USING}/sse?token=${this.auth.getToken()}&userId=${this.auth.getUserId()}`);
+    this.eventSource = new EventSource(`${this.backendRoutes.USING}/eventstreaming/sse?token=${this.auth.getToken()}&userId=${this.auth.getUserId()}`);
     this.eventSource.onopen = () => console.log("opened");
     this.eventSource.onmessage = (msg): void => {
       this.onNewEvent(msg);

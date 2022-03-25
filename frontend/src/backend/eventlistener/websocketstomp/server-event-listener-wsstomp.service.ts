@@ -22,7 +22,7 @@ export class ServerEventListenerWSStompService implements ServerEventListener{
   }
 
   connect(): void {
-    const severUrl: string = `${this.backendRoutes.USING}/socket`;
+    const severUrl: string = `${this.backendRoutes.USING}/eventstreaming/socket`;
     const serverSocketToSubscribe: string = `/group/${this.groupState.getCurrentGroup().groupId}`;
     const headers: AuthenticationSocketHeader = {token: this.auth.getToken(), userId: this.auth.getUserId(), groupId: this.groupState.getCurrentGroup().groupId};
 

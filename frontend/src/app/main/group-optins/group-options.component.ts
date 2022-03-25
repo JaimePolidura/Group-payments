@@ -18,7 +18,7 @@ import {ServerEventsSubscriberService} from "../../../backend/eventlistener/serv
 import {ServerEventListener} from "../../../backend/eventlistener/server-event-listener";
 import {PaymentInitialized} from "../../../backend/eventlistener/events/payment-initialized";
 import {GroupState} from "../../../model/group/group-state";
-import {HttpLoadingService} from "../../../backend/http-loading.service";
+import {ProgressBarService} from "../../progress-bar.service";
 import {PaymentsService} from "../../../backend/payments/payments.service";
 import {PaymentDone} from "../../../backend/eventlistener/events/payment-done";
 import {ErrorWhileMemberPaying} from "../../../backend/eventlistener/events/error-while-member-paying";
@@ -43,13 +43,13 @@ export class GroupOptionsComponent implements OnInit {
     public groupState: GroupRepositoryService,
     public modalService: NgbModal,
     private groupsApi: GroupsApiService,
-    private auth: Authentication,
     private serverEventListener: ServerEventListener,
     private applicationRef: ApplicationRef,
     private frontendHost: FrontendUsingRoutesService,
     private eventSubscriber: ServerEventsSubscriberService,
-    private httpLoader: HttpLoadingService,
+    private progressBar: ProgressBarService,
     private paymentService: PaymentsService,
+    public auth: Authentication,
   ){}
 
   ngOnInit(): void {
@@ -225,7 +225,7 @@ export class GroupOptionsComponent implements OnInit {
     this.eventSubscriber.subscribe<PaymentInitialized>('group-payment-initialized', (event) => {
       this.modalService.open(this.paymentInitializedModal);
       this.groupState.setGroupState(GroupState.PAYING);
-      this.httpLoader.isLoading.next(true);
+      this.progressBar.isLoading.next(true);
 
       this.refreshChangesInUI();
     });
@@ -261,6 +261,7 @@ export class GroupOptionsComponent implements OnInit {
   private onErrorWhilePayingToAdmin(): void {
     this.eventSubscriber.subscribe<ErrorWhilePayingToAdmin>('group-payment-error-paying-admin', res => {
       if(this.isLoggedUserAdminOfCurrentGroup()){
+        this.progressBar.isLoading.next(false);
         this.logEventsGroupPayments.push({
           error: true,
           body: `You couldnt recieve the payment all members have been charged the funds havent get lost,
@@ -273,7 +274,7 @@ export class GroupOptionsComponent implements OnInit {
   private onAllGroupPaymentDone(): void {
     this.eventSubscriber.subscribe<PaymentDone>("group-payment-all-done", res => {
       this.donePaying = true;
-      this.httpLoader.isLoading.next(false);
+      this.progressBar.isLoading.next(false);
     });
   }
 

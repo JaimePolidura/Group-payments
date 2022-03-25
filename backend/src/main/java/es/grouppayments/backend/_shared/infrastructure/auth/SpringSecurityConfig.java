@@ -55,8 +55,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     private String[] routesWithoutAuthentication(){
         return new String[]{
                 "/auth/oauth/**",
-                "/see",
-                "/socket/**"
+                "/eventstreaming/**"
         };
     }
 

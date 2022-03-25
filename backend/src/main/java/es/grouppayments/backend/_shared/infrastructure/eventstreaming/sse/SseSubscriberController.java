@@ -23,7 +23,7 @@ public class SseSubscriberController extends ApplicationController {
     private final SseSubscribersRegistry subscribersRegistry;
     private final JWTUtils jwtUtils;
 
-    @RequestMapping("/sse")
+    @RequestMapping("/eventstreaming/sse")
     public SseEmitter sseEmitter(@RequestParam String token,
                                  @RequestParam String userId){
         validateTokenOrThrowException(token, userId);

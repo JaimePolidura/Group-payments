@@ -3,7 +3,7 @@ import {ConfirmCardSetupData, StripeElement, StripeElements} from "@stripe/strip
 import {StripeService} from "ngx-stripe";
 import {Authentication} from "../../backend/authentication/authentication";
 import {PaymentsService} from "../../backend/payments/payments.service";
-import {HttpLoadingService} from "../../backend/http-loading.service";
+import {ProgressBarService} from "../progress-bar.service";
 import {UserState} from "../../model/user/user-state";
 
 @Component({
@@ -21,7 +21,7 @@ export class RegisterCardDetailsComponent implements OnInit {
     private stripeService: StripeService,
     private auth: Authentication,
     private paymentsService: PaymentsService,
-    public httpLoader: HttpLoadingService,
+    public httpLoader: ProgressBarService,
   ){}
 
   ngOnInit(): void {

@@ -54,10 +54,11 @@
   justify-content: space-around;
 }
 
-.paymenthistory-payments-pageoptions button{
+.paymenthistory-payments-pageoptions-button{
   background-color: transparent;
   background-repeat: no-repeat;
   border: none;
+  border-radius: 50%;
   cursor: pointer;
   overflow: hidden;
   outline: none;
