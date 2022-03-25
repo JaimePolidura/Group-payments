@@ -14,7 +14,7 @@ const ITEMS_PER_PAGE: number = 15;
   styleUrls: ['./payments-history.component.css']
 })
 export class PaymentsHistoryComponent implements OnInit {
-  public paymentsWithItsPage: {[pageNumber: number]: Payment[]} = {};
+  public paymentsPages: {[pageNumber: number]: Payment[]} = {};
   public actualPage: number = 0;
   private paymentTypeSearch: PaymentTypeSearch = PaymentTypeSearch.ALL;
 
@@ -35,7 +35,7 @@ export class PaymentsHistoryComponent implements OnInit {
     }).subscribe(res => {
       this.actualPage++;
 
-      this.paymentsWithItsPage[this.actualPage] = res.payments;
+      this.paymentsPages[this.actualPage] = res.payments;
     });
   }
 
@@ -51,5 +51,36 @@ export class PaymentsHistoryComponent implements OnInit {
   public openModalPaymentInfo(payment: Payment): void {
     const modalRef = this.modalService.open(PaymentInfoModalComponent);
     modalRef.componentInstance.payment = payment;
+  }
+
+  public canGoForwardInPage(): boolean{
+    return this.paymentsPages[this.actualPage] != undefined && this.paymentsPages[this.actualPage] != [] &&
+      ITEMS_PER_PAGE <= this.paymentsPages[this.actualPage].length;
+  }
+
+  public canGoBackwardInPage(): boolean {
+    return this.actualPage > 1;
+  }
+
+  public goBackwardInPage(): void {
+    if (!this.canGoBackwardInPage()) return;
+
+    this.actualPage--;
+  }
+
+  public goForwardInPage() {
+    if(!this.canGoForwardInPage()) return;
+
+    let newPageNumberToGoForward = this.actualPage + 1;
+
+    if(this.hasPaymentPageLoaded(newPageNumberToGoForward)){
+      this.actualPage++;
+    }else{
+      this.getPayments(newPageNumberToGoForward, this.paymentTypeSearch);
+    }
+  }
+
+  private hasPaymentPageLoaded(pageNumber: number): boolean {
+    return this.paymentsPages[pageNumber] != undefined;
   }
 }

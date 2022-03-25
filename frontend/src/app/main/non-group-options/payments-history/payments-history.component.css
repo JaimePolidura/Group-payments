@@ -47,3 +47,18 @@
 .paymenthistory-payments-table-body {
   text-align: center;
 }
+
+.paymenthistory-payments-pageoptions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.paymenthistory-payments-pageoptions button{
+  background-color: transparent;
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  outline: none;
+}
