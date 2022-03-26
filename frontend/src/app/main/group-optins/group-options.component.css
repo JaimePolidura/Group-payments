@@ -1,4 +1,6 @@
 .group-container {
+  overflow: hidden;
+
   position: absolute;
 
   border-radius: 0;
