@@ -53,7 +53,8 @@ public class OAuthController {
         var googleIdToken = GoogleIdToken.parse(verifier.getJsonFactory(), request.token);
         var payload = googleIdToken.getPayload();
 
-        User user = createNewUserIfNotExistsAndGetUserId(request.username, payload.getEmail(), String.valueOf(payload.get("picture")));
+        User user = createNewUserIfNotExistsAndGetUserId(request.username, payload.getEmail(), String.valueOf(payload.get("picture")),
+                String.valueOf(payload.get("locale")));
 
         user = this.checkIfRegisteredInStripeConnectedAccount(user);
 
@@ -62,9 +63,9 @@ public class OAuthController {
         return ResponseEntity.ok(new Response(newToken, user.getUserId(), user.getState().toString()));
     }
 
-    private User createNewUserIfNotExistsAndGetUserId(String username, String email, String phtoUrl) {
+    private User createNewUserIfNotExistsAndGetUserId(String username, String email, String phtoUrl, String country) {
         if(usersService.findByEmail(email).isEmpty())
-            return usersService.create(username, email, phtoUrl);
+            return usersService.create(username, email, phtoUrl, country);
         else
             return usersService.findByEmail(email).get();
     }

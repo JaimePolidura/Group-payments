@@ -12,8 +12,8 @@ import java.util.UUID;
 public class UsersService {
     private final UserRepository userRepository;
 
-    public User create(String username, String email, String photoUrl) {
-        User newUser = new User(UUID.randomUUID(), username, email, LocalDateTime.now(), photoUrl, UserState.SIGNUP_OAUTH_COMPLETED);
+    public User create(String username, String email, String photoUrl, String country) {
+        User newUser = new User(UUID.randomUUID(), username, email, LocalDateTime.now(), photoUrl, UserState.SIGNUP_OAUTH_COMPLETED, country);
 
         userRepository.save(newUser);
 

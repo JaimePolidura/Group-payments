@@ -16,9 +16,10 @@ public final class User extends Aggregate {
     @Getter private final LocalDateTime loggedDate;
     @Getter private final String photoUrl;
     @Getter private final UserState state;
+    @Getter private final String country;
 
     public User updateSignUpState(UserState newState){
-        return new User(userId, username, email, loggedDate, photoUrl, newState);
+        return new User(userId, username, email, loggedDate, photoUrl, newState, country);
     }
 
     @Override
@@ -29,7 +30,8 @@ public final class User extends Aggregate {
                 "email", email,
                 "photoUrl", photoUrl,
                 "loggedDate", loggedDate.toString(),
-                "state", state
+                "state", state,
+                "country", country
         );
     }
 }
