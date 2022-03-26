@@ -11,6 +11,8 @@ import {GroupState} from "../../model/group/group-state";
   styleUrls: ['./main.component.css']
 })
 export class MainComponent implements OnInit {
+  public isGroupHTTPRequestDone: boolean = false;
+
   constructor(
     public auth: Authentication,
     private groupService: GroupsApiService,
@@ -28,10 +30,12 @@ export class MainComponent implements OnInit {
 
         console.log(res.group.state == GroupState.PAYING);
 
+        this.isGroupHTTPRequestDone = true;
+
         this.groupService.getGroupMembersByGroupId(res.group.groupId).subscribe(res =>  {
           this.groupState.setCurrentGroupMembers(res.members);
         });
       }
-    });
+    }, err => this.isGroupHTTPRequestDone = true);
   }
 }

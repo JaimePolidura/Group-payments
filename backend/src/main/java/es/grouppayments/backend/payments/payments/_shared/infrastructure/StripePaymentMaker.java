@@ -20,7 +20,7 @@ public final class StripePaymentMaker implements PaymentMakerService {
     private final StripeService stripeService;
 
     @Override
-    public String paymentMemberToApp(UUID userId, double money) throws Exception {
+    public String paymentMemberToApp(UUID userId, double money, String currencyCode) throws Exception {
         StripeUser stripeUser = this.stripeUsersService.getdByUserId(userId);
         String consumerId = stripeUser.getCustomerId();
         String paymentMethodId = stripeUser.getPaymentMethod();
@@ -28,7 +28,7 @@ public final class StripePaymentMaker implements PaymentMakerService {
         return PaymentIntent.create(
                 PaymentIntentCreateParams.builder()
                         .setAmount((long) (money * 100))
-                        .setCurrency("eur")
+                        .setCurrency(currencyCode.toLowerCase())
                         .addPaymentMethodType("card")
                         .setCustomer(consumerId)
                         .setPaymentMethod(paymentMethodId)
@@ -39,15 +39,14 @@ public final class StripePaymentMaker implements PaymentMakerService {
     }
 
     @Override
-    public String paymentAppToAdmin(UUID userId, double money) throws Exception {
+    public String paymentAppToAdmin(UUID userId, double money, String currencyCode) throws Exception {
         String stripeConnectedAccountId = this.stripeUsersService.getdByUserId(userId)
                 .getConnectedAccountId();
 
         return Transfer.create(
-                TransferCreateParams
-                        .builder()
-                        .setAmount(4000L)
-                        .setCurrency("eur")
+                TransferCreateParams.builder()
+                        .setAmount((long) (money * 100))
+                        .setCurrency(currencyCode.toLowerCase())
                         .setDestination(stripeConnectedAccountId)
                         .setTransferGroup("order#1")
                         .build()

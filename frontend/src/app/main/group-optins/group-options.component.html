@@ -5,7 +5,7 @@
         <h3 class="group-desc">{{currentGroup().description}}- &nbsp;&nbsp;&nbsp;&nbsp;</h3>
       </div>
       <div class="group-data">
-        <h3 *ngIf="!groupState.isGroupInPayingState()">Total {{currentGroup().money}}€ &nbsp;&nbsp;Total/Member ~ {{calculateTotalMoneyPerMember()}}€</h3>
+        <h3 *ngIf="!groupState.isGroupInPayingState()">Total {{currentGroup().money}}{{auth.getCurrency().symbol}} &nbsp;&nbsp;Total/Member ~ {{calculateTotalMoneyPerMember()}}{{auth.getCurrency().symbol}}</h3>
         <h3 *ngIf="groupState.isGroupInPayingState()">Paying in progress...</h3>
       </div>
     </div>
@@ -74,7 +74,7 @@
     <h6>Are you sure to make the payment?</h6>
     <br>
     <h6>Total bill: {{currentGroup().money}}</h6>
-    <h6>Total bill/member ~ {{calculateTotalMoneyPerMember()}} €</h6>
+    <h6>Total bill/member ~ {{calculateTotalMoneyPerMember()}} {{auth.getCurrency().symbol}}</h6>
   </div>
   <div class="modal-footer payment-confirm-options">
     <button type="submit" class="btn btn-success" (click)="makePayment()">✓ Pay ✓</button>

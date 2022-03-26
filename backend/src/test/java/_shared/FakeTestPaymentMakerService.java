@@ -10,7 +10,7 @@ public final class FakeTestPaymentMakerService implements TestPaymentMaker {
     private boolean paymentMembersToAppWillFail;
 
     @Override
-    public String paymentMemberToApp(UUID userId, double money) throws Exception {
+    public String paymentMemberToApp(UUID userId, double money, String currencyCode) throws Exception {
         if(paymentMembersToAppWillFail){
             this.paymentMembersToAppWillFail = false;
             throw new Exception();
@@ -23,7 +23,7 @@ public final class FakeTestPaymentMakerService implements TestPaymentMaker {
     }
 
     @Override
-    public String paymentAppToAdmin(UUID userId, double money) throws Exception {
+    public String paymentAppToAdmin(UUID userId, double money, String currencyCode) throws Exception {
         if(paymentToAdminWillFail){
             this.paymentToAdminWillFail = false;
             throw new Exception();

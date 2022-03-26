@@ -16,8 +16,4 @@ public final class GetCurrencyByCountryCodeController extends ApplicationControl
     public ResponseEntity<GetCurrencyByCountryCodeQueryResponse> getByCountryCode(@RequestParam String countryCode){
         return buildNewHttpResponseOK(this.queryBus.ask(new GetCurrencyByCountryCodeQuery(countryCode)));
     }
-
-    private static class Response {
-        private final String
-    }
 }

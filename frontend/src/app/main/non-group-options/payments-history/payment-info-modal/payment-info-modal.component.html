@@ -4,10 +4,10 @@
 </div>
 <div class="modal-body modal-body-centered">
   <div *ngIf="payment.type == 'APP_TO_ADMIN'">
-    Money: <span class="green">~ +{{roundNumber(payment.money)}}</span>
+    Money: <span class="green">~ +{{roundNumber(payment.money)}}{{auth.getCurrency().symbol}}</span>
   </div>
   <div *ngIf="payment.type == 'MEMBER_TO_APP'">
-    Money: <span class="red">~ -{{roundNumber(payment.money)}}</span>
+    Money: <span class="red">~ -{{roundNumber(payment.money)}}{{auth.getCurrency().symbol}}</span>
   </div>
   <div *ngIf="payment.type == 'APP_TO_ADMIN'">
     Type: You were the admin of a group

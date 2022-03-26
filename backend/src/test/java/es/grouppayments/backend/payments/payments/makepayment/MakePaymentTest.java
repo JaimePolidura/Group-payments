@@ -1,6 +1,5 @@
 package es.grouppayments.backend.payments.payments.makepayment;
 
-import es.grouppayments.backend._shared.domain.Utils;
 import es.grouppayments.backend.groups._shared.domain.GroupState;
 import es.grouppayments.backend.payments.payments._shared.domain.events.*;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;

@@ -26,8 +26,12 @@
         <tr *ngFor="let payment of paymentsPages[actualPage]" class="paymenthistory-payments-table-body">
           <td [ngClass]="{'gray': payment.state == 'ERROR'}">{{payment.date.split("T")[0]}}</td>
           <td>
-            <div *ngIf="payment.paid == auth.getUserId()" class="green" [ngClass]="{'gray': payment.state == 'ERROR'}">~ +{{roundNumber(payment.money)}}</div>
-            <div *ngIf="payment.payer == auth.getUserId()" class="red" [ngClass]="{'gray': payment.state == 'ERROR'}">~ -{{roundNumber(payment.money)}}</div>
+            <div *ngIf="payment.paid == auth.getUserId()" class="green" [ngClass]="{'gray': payment.state == 'ERROR'}">
+              ~ +{{roundNumber(payment.money)}}{{auth.getCurrency().symbol}}
+            </div>
+            <div *ngIf="payment.payer == auth.getUserId()" class="red" [ngClass]="{'gray': payment.state == 'ERROR'}">
+              ~ -{{roundNumber(payment.money)}}{{auth.getCurrency().symbol}}
+            </div>
           </td>
           <td>
             <div *ngIf="payment.state == 'SUCCESS'" class="green">Success</div>

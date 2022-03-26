@@ -16,7 +16,7 @@ export class Authentication {
   private token: string;
   private userState: UserState;
   private countryCode: string;
-  private usingCurrency: Currency;
+  private currency: Currency;
 
   constructor(
     private oauthProvider: SocialAuthService,
@@ -35,7 +35,7 @@ export class Authentication {
       this.userState = loginResponse.userState;
       this.countryCode = loginResponse.countryCode;
       // @ts-ignore
-      this.usingCurrency = await this.getCurrency(this.countryCode);
+      this.currency = await this.getCurrencyFromApi(this.countryCode);
 
       onSuccess(loginResponse);
     }catch(exception){
@@ -48,7 +48,7 @@ export class Authentication {
       .toPromise();
   }
 
-  private async getCurrency(countryCode: string, onCurrencyNotSuported: () => void) {
+  private async getCurrencyFromApi(countryCode: string, onCurrencyNotSuported: () => void) {
     try{
       return await this.paymentsService.getCurrencyByCountryCode(countryCode)
         .toPromise();
@@ -90,6 +90,10 @@ export class Authentication {
 
   public setUserState(newUserState: UserState): void {
     this.userState = newUserState;
+  }
+
+  public getCurrency(): Currency {
+    return this.currency;
   }
 
   public getUserId(): string {
