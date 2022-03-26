@@ -41,9 +41,9 @@ public class Seeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        usersService.update(new User(UUID.randomUUID(), "Jaime", "jaime.polidura@gmail.com", LocalDateTime.now(), "https://lh3.googleusercontent.com/a/AATXAJz7wrFagWv7s_MyF8vEv4ZNz72ciRuD3fk2i_lrsQ=s96-c", UserState.SIGNUP_ALL_COMPLETED));
-        usersService.update(new User(UUID.randomUUID(), "JaimeTruman", "jaimetruman@gmail.com", LocalDateTime.now(), "https://lh3.googleusercontent.com/a/AATXAJz7wrFagWv7s_MyF8vEv4ZNz72ciRuD3fk2i_lrsQ=s96-c", UserState.SIGNUP_ALL_COMPLETED));
-        usersService.update(new User(UUID.randomUUID(), "Jaime Polidura", "jaime.polidura@alumnos.uneatlantico.es", LocalDateTime.now(), "https://lh3.googleusercontent.com/a-/AOh14Gg2u6SQhIvGMiX1y5_8gPdDvswOr2O8INkFNVq4=s96-c", UserState.SIGNUP_ALL_COMPLETED));
+        usersService.update(new User(UUID.randomUUID(), "Jaime", "jaime.polidura@gmail.com", LocalDateTime.now(), "https://lh3.googleusercontent.com/a/AATXAJz7wrFagWv7s_MyF8vEv4ZNz72ciRuD3fk2i_lrsQ=s96-c", UserState.SIGNUP_ALL_COMPLETED, "es"));
+        usersService.update(new User(UUID.randomUUID(), "JaimeTruman", "jaimetruman@gmail.com", LocalDateTime.now(), "https://lh3.googleusercontent.com/a/AATXAJz7wrFagWv7s_MyF8vEv4ZNz72ciRuD3fk2i_lrsQ=s96-c", UserState.SIGNUP_ALL_COMPLETED, "es"));
+        usersService.update(new User(UUID.randomUUID(), "Jaime Polidura", "jaime.polidura@alumnos.uneatlantico.es", LocalDateTime.now(), "https://lh3.googleusercontent.com/a-/AOh14Gg2u6SQhIvGMiX1y5_8gPdDvswOr2O8INkFNVq4=s96-c", UserState.SIGNUP_ALL_COMPLETED, "es"));
 
         UUID groupId = UUID.randomUUID();
         groupService.create(groupId, "Group", 120, findUserIdByEmail("jaime.polidura@gmail.com"));

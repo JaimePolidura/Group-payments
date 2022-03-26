@@ -2,14 +2,15 @@ package es.grouppayments.backend.payments.currencies._shared.domain;
 
 import es.jaime.javaddd.domain.Aggregate;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.util.Map;
 
 @AllArgsConstructor
 public final class Currency extends Aggregate {
-    private final String code;
-    private final String symbol;
-    private final String countryCode;
+    @Getter private final String code;
+    @Getter private final String symbol;
+    @Getter private final String countryCode;
 
     @Override
     public Map<String, Object> toPrimitives() {
