@@ -19,6 +19,11 @@ public final class CurrencyRepositoryInMemory implements CurrencyRepository {
     }
 
     @Override
+    public void save(Currency currency) {
+        this.countryCodeWithCurrencies.put(currency.getCode(), currency);
+    }
+
+    @Override
     public Optional<Currency> findCurrencyByCountryCode(String countryCode) {
         return Optional.ofNullable(this.countryCodeWithCurrencies.get(countryCode.toUpperCase()));
     }
