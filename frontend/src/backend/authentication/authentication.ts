@@ -4,6 +4,8 @@ import {HttpClient} from "@angular/common/http";
 import {LoginResponse} from "./responses/login-response";
 import {LoginRequest} from "./request/login-request";
 import {UserState} from "../../model/user/user-state";
+import {Currency} from "../../model/currencies/currency";
+import {PaymentsService} from "../payments/payments.service";
 
 @Injectable({
   providedIn: 'root'
@@ -13,32 +15,48 @@ export class Authentication {
   private userId: string;
   private token: string;
   private userState: UserState;
+  private countryCode: string;
+  private usingCurrency: Currency;
 
   constructor(
     private oauthProvider: SocialAuthService,
     private http: HttpClient,
+    private paymentsService: PaymentsService,
   ){}
 
-  public async signInWithGoogle(onSuccess: ((loginResponse: LoginResponse) => void)) {
+  public async signInWithGoogle(onSuccess: ((loginResponse: LoginResponse) => void), onCurrencyNotSuported: (() => void)) {
     try{
       const dataFromOAuthProvider = await this.oauthProvider.signIn(GoogleLoginProvider.PROVIDER_ID);
-      const loginResponse = await this.verifyTokenAndGetJWT({username: dataFromOAuthProvider.name, token: dataFromOAuthProvider.idToken});
+      const loginResponse: LoginResponse = await this.verifyTokenAndGetJWT({username: dataFromOAuthProvider.name, token: dataFromOAuthProvider.idToken});
 
       this.loggedUser = dataFromOAuthProvider;
       this.userId = loginResponse.userId;
       this.token = loginResponse.token;
       this.userState = loginResponse.userState;
+      this.countryCode = loginResponse.countryCode;
+      // @ts-ignore
+      this.usingCurrency = await this.getCurrency(this.countryCode);
 
       onSuccess(loginResponse);
     }catch(exception){
-      window.alert("ERROR");
       console.error(exception);
     }
   }
 
-  public async verifyTokenAndGetJWT(loginRequest: LoginRequest): Promise<any | LoginResponse>{
+  private async verifyTokenAndGetJWT(loginRequest: LoginRequest): Promise<any | LoginResponse>{
     return this.http.post<LoginResponse>('http://localhost:8080/auth/oauth/google', loginRequest)
       .toPromise();
+  }
+
+  private async getCurrency(countryCode: string, onCurrencyNotSuported: () => void) {
+    try{
+      return await this.paymentsService.getCurrencyByCountryCode(countryCode)
+        .toPromise();
+    }catch (error) {
+      onCurrencyNotSuported();
+
+      return undefined;
+    }
   }
 
   public logout(onSuccess: () => void): void{

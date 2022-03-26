@@ -9,6 +9,7 @@ import {RegisterWithStripeRequest} from "./request/register-with-stripe-request"
 import {GetConnectedAccountLinkResponse} from "./response/get-connected-account-link-response";
 import {GetPaymentHistoryRequest} from "./request/get-payment-history-request";
 import {GetPaymentsHistoryResponse} from "./response/get-payments-history-response";
+import {Currency} from "../../model/currencies/currency";
 
 @Injectable({
   providedIn: 'root'
@@ -37,5 +38,9 @@ export class PaymentsService {
 
   public getPaymentHistory(req: GetPaymentHistoryRequest): Observable<GetPaymentsHistoryResponse> {
     return this.http.get<GetPaymentsHistoryResponse>(`${this.usingRoutes.USING}/payments/paymentshistory?pageNumber=${req.pageNumber}&itemsPerPage=${req.itemsPerPage}&paymentType=${req.paymentTypeSearch}`);
+  }
+
+  public getCurrencyByCountryCode(countryCode: string): Observable<Currency>{
+    return this.http.get<Currency>(`${this.usingRoutes.USING}/payments/currencies/getbycountrycode?countryCode=${countryCode}`);
   }
 }

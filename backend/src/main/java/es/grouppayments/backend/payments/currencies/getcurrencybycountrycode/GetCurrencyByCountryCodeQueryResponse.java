@@ -6,6 +6,6 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public final class GetCurrencyByCountryCodeQueryResponse implements QueryResponse {
-    @Getter private final String currencyCode;
-    @Getter private final String currencySymbol;
+    @Getter private final String code;
+    @Getter private final String symbol;
 }

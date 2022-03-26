@@ -27,6 +27,11 @@ export class LoginComponent implements OnInit {
         this.redirectToMain();
       else
         this.redirectToRegistration();
+    }, () => {
+      this.oauth.logout(() => {});
+      window.alert("Currency not supported, impossible to login");
+
+      this.router.navigate(["/"]);
     });
   }
 

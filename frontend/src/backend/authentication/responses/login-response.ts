@@ -4,4 +4,5 @@ export interface LoginResponse {
   userId: string,
   token: string,
   userState: UserState,
+  countryCode: string,
 }

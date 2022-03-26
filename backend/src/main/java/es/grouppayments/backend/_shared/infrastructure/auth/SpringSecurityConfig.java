@@ -49,14 +49,14 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/groups/**",
                 "/payments/makepayment",
                 "/payments/paymentshistory",
-                "/payments/currencies/getbycountrycode"
         };
     }
-
+        
     private String[] routesWithoutAuthentication(){
         return new String[]{
                 "/auth/oauth/**",
-                "/eventstreaming/**"
+                "/eventstreaming/**",
+                "/payments/currencies/getbycountrycode"
         };
     }
 

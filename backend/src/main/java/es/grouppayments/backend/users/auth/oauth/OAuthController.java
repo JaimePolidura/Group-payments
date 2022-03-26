@@ -53,14 +53,16 @@ public class OAuthController {
         var googleIdToken = GoogleIdToken.parse(verifier.getJsonFactory(), request.token);
         var payload = googleIdToken.getPayload();
 
-        User user = createNewUserIfNotExistsAndGetUserId(request.username, payload.getEmail(), String.valueOf(payload.get("picture")),
-                String.valueOf(payload.get("locale")));
+        String pictureUrl = String.valueOf(payload.get("picture"));
+        String countryCode = String.valueOf(payload.get("locale"));
+
+        User user = createNewUserIfNotExistsAndGetUserId(request.username, payload.getEmail(), pictureUrl, countryCode);
 
         user = this.checkIfRegisteredInStripeConnectedAccount(user);
 
         String newToken = jwtUtils.generateToken(user.getUserId());
 
-        return ResponseEntity.ok(new Response(newToken, user.getUserId(), user.getState().toString()));
+        return ResponseEntity.ok(new Response(newToken, user.getUserId(), user.getState().toString(), countryCode));
     }
 
     private User createNewUserIfNotExistsAndGetUserId(String username, String email, String phtoUrl, String country) {
@@ -101,5 +103,6 @@ public class OAuthController {
         @Getter private String token;
         @Getter private UUID userId;
         @Getter private String userState;
+        @Getter private String countryCode;
     }
 }
