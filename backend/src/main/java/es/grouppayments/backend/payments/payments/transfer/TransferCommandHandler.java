@@ -1,13 +1,12 @@
 package es.grouppayments.backend.payments.payments.transfer;
 
 import es.grouppayments.backend.payments.currencies._shared.domain.CurrencyService;
-import es.grouppayments.backend.payments.payments._shared.domain.ComimssionPolicy;
+import es.grouppayments.backend.payments.payments._shared.domain.CommissionPolicy;
 import es.grouppayments.backend.payments.payments._shared.domain.PaymentMakerService;
 import es.grouppayments.backend.payments.payments._shared.domain.events.other.AppPaidToUser;
 import es.grouppayments.backend.payments.payments._shared.domain.events.other.ErrorAppPaidToUser;
 import es.grouppayments.backend.payments.payments._shared.domain.events.other.ErrorUserPaidToApp;
 import es.grouppayments.backend.payments.payments._shared.domain.events.other.UserPaidToApp;
-import es.grouppayments.backend.payments.payments._shared.infrastructure.CommissionPolicyImpl;
 import es.grouppayments.backend.users._shared.domain.User;
 import es.grouppayments.backend.users._shared.domain.UserState;
 import es.grouppayments.backend.users._shared.domain.UsersService;
@@ -17,7 +16,6 @@ import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
 import es.jaime.javaddd.domain.exceptions.IllegalLength;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.IllegalState;
-import io.vavr.control.Try;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +28,7 @@ public final class TransferCommandHandler implements CommandHandler<TransferComm
     private final PaymentMakerService paymentMakerService;
     private final CurrencyService currencyService;
     private final EventBus eventBus;
-    private final ComimssionPolicy comimssionPolicy;
+    private final CommissionPolicy comimssionPolicy;
 
     @Override
     public void handle(TransferCommand command) {

@@ -9,19 +9,19 @@ public interface UsingTestPaymentMakerService {
         assertEquals(expected, testPaymentMaker().getNumebrOfTimesMembersPaid(), 0);
     }
 
-    default void assertMoneyMembersPaidToApp(double expected){
+    default void assertMoneyUsersPaidToApp(double expected){
         assertEquals(expected, testPaymentMaker().getAllMoneyMembersPaidToApp(), 0);
     }
 
-    default void assertMoneyPaidToAdmin(double expected){
+    default void assertMoneyAppPaidToUser(double expected){
         assertEquals(expected, testPaymentMaker().getMoneyPaidToAdmin(), 0);
     }
 
-    default void payingToAdminWillFail(){
+    default void payingTAppToUserWillFail(){
         this.testPaymentMaker().payingToAdminWillFail();
     }
 
-    default void payingMembersToAppWillFail(){
+    default void payingUserToAppWillFail(){
         this.testPaymentMaker().payingMembersToAppWillFail();;
     }
 

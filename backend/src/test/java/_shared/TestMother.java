@@ -1,16 +1,21 @@
 package _shared;
 
+import es.grouppayments.backend.users._shared.domain.UserRepository;
+import es.grouppayments.backend.users._shared.infrastructure.UserRepositoryInMemory;
+
 import java.util.*;
 import java.util.function.Predicate;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class TestMother implements UsingTestEventBus{
+public class TestMother implements UsingTestEventBus, UsingUsers{
     protected TestEventBus testEventBus;
+    private final UserRepository userRepository;
 
     public TestMother(){
         this.testEventBus = new FakeTestEventBus();
+        this.userRepository = new UserRepositoryInMemory();
     }
 
     @Override
@@ -32,5 +37,10 @@ public class TestMother implements UsingTestEventBus{
 
     protected void assertCollectionSize(Collection<?> collection, int size){
         assertEquals(collection.size(), size);
+    }
+
+    @Override
+    public UserRepository usersRepository() {
+        return this.userRepository;
     }
 }

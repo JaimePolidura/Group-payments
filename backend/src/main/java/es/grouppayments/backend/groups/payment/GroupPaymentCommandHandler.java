@@ -6,7 +6,7 @@ import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
 import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
 import es.grouppayments.backend.payments.currencies._shared.domain.CurrencyService;
-import es.grouppayments.backend.payments.payments._shared.domain.ComimssionPolicy;
+import es.grouppayments.backend.payments.payments._shared.domain.CommissionPolicy;
 import es.grouppayments.backend.payments.payments._shared.domain.PaymentMakerService;
 import es.grouppayments.backend.payments.payments._shared.domain.events.*;
 import es.grouppayments.backend.users._shared.domain.UsersService;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class GroupPaymentCommandHandler implements CommandHandler<GroupPaymentCommand> {
-    private final ComimssionPolicy commissionPolicy;
+    private final CommissionPolicy commissionPolicy;
     private final GroupService groupService;
     private final GroupMemberService groupMembers;
     private final PaymentMakerService paymentService;

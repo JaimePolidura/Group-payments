@@ -26,8 +26,8 @@ public final class MakePaymentTest extends MakePaymentTestMother{
         assertEventRaised(GroupPaymentInitialized.class, GroupMemberPayingAppDone.class, GroupPaymentDone.class, AppPayingGroupAdminDone.class);
         assertContentOfEventEquals(GroupPaymentDone.class, GroupPaymentDone::getMoneyPaidPerMember, deductFrom(moneyOfGroup, FEE));
         assertNumebrOfTimesMembersPaid(2);
-        assertMoneyPaidToAdmin(deductFrom(moneyOfGroup, FEE));
-        assertMoneyMembersPaidToApp(moneyOfGroup);
+        assertMoneyAppPaidToUser(deductFrom(moneyOfGroup, FEE));
+        assertMoneyUsersPaidToApp(moneyOfGroup);
     }
 
     @Test
@@ -37,14 +37,14 @@ public final class MakePaymentTest extends MakePaymentTestMother{
         UUID adminUserId = UUID.randomUUID();
         addGroup(groupId, adminUserId, moneyOfGroup, UUID.randomUUID(), UUID.randomUUID());
 
-        payingToAdminWillFail();
+        payingTAppToUserWillFail();
         execute(groupId, adminUserId);
 
         assertEventRaised(GroupPaymentInitialized.class, GroupMemberPayingAppDone.class, GroupPaymentDone.class, ErrorWhilePayingToGroupAdmin.class);
         assertContentOfEventEquals(GroupPaymentDone.class, GroupPaymentDone::getMoneyPaidPerMember, deductFrom(moneyOfGroup, FEE));
         assertNumebrOfTimesMembersPaid(2);
-        assertMoneyPaidToAdmin(0);
-        assertMoneyMembersPaidToApp(moneyOfGroup);
+        assertMoneyAppPaidToUser(0);
+        assertMoneyUsersPaidToApp(moneyOfGroup);
     }
 
     @Test
@@ -55,14 +55,14 @@ public final class MakePaymentTest extends MakePaymentTestMother{
         addGroup(groupId, adminUserId, moneyOfGroup, UUID.randomUUID(), UUID.randomUUID());
 
         //Only one member will fail
-        payingMembersToAppWillFail();
+        payingUserToAppWillFail();
         execute(groupId, adminUserId);
 
         assertEventRaised(GroupPaymentInitialized.class, GroupMemberPayingAppDone.class, GroupPaymentDone.class, AppPayingGroupAdminDone.class, ErrorWhileGroupMemberPaying.class);
         assertContentOfEventEquals(GroupPaymentDone.class, GroupPaymentDone::getMoneyPaidPerMember, deductFrom(moneyOfGroup, FEE));
         assertNumebrOfTimesMembersPaid(1);
-        assertMoneyPaidToAdmin(deductFrom(moneyOfGroup/2, FEE));
-        assertMoneyMembersPaidToApp(moneyOfGroup/2);
+        assertMoneyAppPaidToUser(deductFrom(moneyOfGroup/2, FEE));
+        assertMoneyUsersPaidToApp(moneyOfGroup/2);
     }
 
     @Test(expected = ResourceNotFound.class)

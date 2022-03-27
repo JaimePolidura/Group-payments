@@ -1,6 +1,6 @@
 package es.grouppayments.backend.payments.payments._shared.domain;
 
-public interface ComimssionPolicy {
+public interface CommissionPolicy {
     double collecteFee(double money);
 
     default double deductCommission(double money) {

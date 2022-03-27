@@ -6,7 +6,7 @@ import es.grouppayments.backend.payments.currencies._shared.domain.CurrencyRepos
 public interface UsingCurrencies {
     CurrencyRepository currencyRepository();
 
-    default void add(Currency currency){
+    default void addCurrency(Currency currency){
         this.currencyRepository().save(currency);
     }
 }
