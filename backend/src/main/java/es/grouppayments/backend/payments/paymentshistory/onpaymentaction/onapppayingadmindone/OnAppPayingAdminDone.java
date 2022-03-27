@@ -15,6 +15,6 @@ public final class OnAppPayingAdminDone {
     @EventListener({AppPayingGroupAdminDone.class})
     public void on (AppPayingGroupAdminDone event){
         this.paymentHistoryService.save(event.getGroup().getAdminUserId(), event.getMoney(),
-                event.getGroup().getDescription(), PaymentType.APP_TO_ADMIN);
+                event.getGroup().getDescription(), PaymentType.APP_TO_USER);
     }
 }

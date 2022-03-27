@@ -34,7 +34,7 @@ public final class PaymentHistoryEventListenerTest extends PaymentHistoryTestMot
         assertContentOfPayment(paidUserId, payment -> payment.getMoney() == 10);
         assertContentOfPayment(paidUserId, payment -> payment.getPayer().equals("APP"));
         assertContentOfPayment(paidUserId, payment -> payment.getState() == PaymentState.SUCCESS);
-        assertContentOfPayment(paidUserId, payment -> payment.getType() == PaymentType.APP_TO_ADMIN);
+        assertContentOfPayment(paidUserId, payment -> payment.getType() == PaymentType.APP_TO_USER);
     }
 
     @Test
@@ -52,7 +52,7 @@ public final class PaymentHistoryEventListenerTest extends PaymentHistoryTestMot
         assertContentOfPayment(payerdUserIdMember, payment -> payment.getMoney() == 10);
         assertContentOfPayment(payerdUserIdMember, payment -> payment.getPayer().equals(payerdUserIdMember.toString()));
         assertContentOfPayment(payerdUserIdMember, payment -> payment.getState() == PaymentState.ERROR);
-        assertContentOfPayment(payerdUserIdMember, payment -> payment.getType() == PaymentType.MEMBER_TO_APP);
+        assertContentOfPayment(payerdUserIdMember, payment -> payment.getType() == PaymentType.USER_TO_APP);
         assertContentOfPayment(payerdUserIdMember, payment -> payment.getPaid().equalsIgnoreCase("APP"));
     }
 
@@ -71,7 +71,7 @@ public final class PaymentHistoryEventListenerTest extends PaymentHistoryTestMot
         assertContentOfPayment(paidUserIdMember, payment -> payment.getMoney() == 20);
         assertContentOfPayment(paidUserIdMember, payment -> payment.getPayer().equals("APP"));
         assertContentOfPayment(paidUserIdMember, payment -> payment.getState() == PaymentState.ERROR);
-        assertContentOfPayment(paidUserIdMember, payment -> payment.getType() == PaymentType.APP_TO_ADMIN);
+        assertContentOfPayment(paidUserIdMember, payment -> payment.getType() == PaymentType.APP_TO_USER);
         assertContentOfPayment(paidUserIdMember, payment -> payment.getPaid().equalsIgnoreCase(paidUserIdMember.toString()));
     }
 
@@ -89,7 +89,7 @@ public final class PaymentHistoryEventListenerTest extends PaymentHistoryTestMot
         assertContentOfPayment(payerUserIdMember, payment -> payment.getMoney() == 30);
         assertContentOfPayment(payerUserIdMember, payment -> payment.getPaid().equals("APP"));
         assertContentOfPayment(payerUserIdMember, payment -> payment.getState() == PaymentState.SUCCESS);
-        assertContentOfPayment(payerUserIdMember, payment -> payment.getType() == PaymentType.MEMBER_TO_APP);
+        assertContentOfPayment(payerUserIdMember, payment -> payment.getType() == PaymentType.USER_TO_APP);
         assertContentOfPayment(payerUserIdMember, payment -> payment.getPayer().equalsIgnoreCase(payerUserIdMember.toString()));
     }
 }

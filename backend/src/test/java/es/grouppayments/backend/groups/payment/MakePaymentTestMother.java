@@ -12,6 +12,7 @@ import es.grouppayments.backend.groups.payment.GroupPaymentCommandHandler;
 import es.grouppayments.backend.payments.currencies._shared.domain.CurrencyRepository;
 import es.grouppayments.backend.payments.currencies._shared.domain.CurrencyService;
 import es.grouppayments.backend.payments.currencies._shared.infrastructure.CurrencyRepositoryInMemory;
+import es.grouppayments.backend.payments.payments._shared.infrastructure.CommissionPolicyImpl;
 import es.grouppayments.backend.users._shared.domain.UserRepository;
 import es.grouppayments.backend.users._shared.domain.UsersService;
 import es.grouppayments.backend.users._shared.infrastructure.UserRepositoryInMemory;
@@ -35,11 +36,11 @@ public class MakePaymentTestMother extends TestMother implements UsingGroups, Us
         this.groupMemberRepository = new GroupMemberRepositoryInMemory();
         this.groupRepository = new GroupsRepositoryInMemory();
         this.makePaymentCommandHandler = new GroupPaymentCommandHandler(
+                new CommissionPolicyImpl(FEE),
                 new GroupService(this.groupRepository, super.testEventBus),
                 new GroupMemberService(this.groupMemberRepository, super.testEventBus),
                 this.testPaymentMaker,
                 super.testEventBus,
-                FEE,
                 new UsersService(this.userRepository),
                 new CurrencyService(this.currencyRepository()));
     }

@@ -2,11 +2,12 @@ package es.grouppayments.backend.groups._shared.domain.events;
 
 import es.grouppayments.backend._shared.domain.GroupDomainEvent;
 import es.grouppayments.backend.groups._shared.domain.Group;
+import es.jaime.javaddd.domain.event.DomainEvent;
 
 import java.util.Map;
 import java.util.UUID;
 
-public class GroupEdited extends GroupDomainEvent {
+public class GroupEdited extends DomainEvent implements GroupDomainEvent {
     private final Group group;
 
     public GroupEdited(Group group) {

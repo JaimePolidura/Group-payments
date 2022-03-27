@@ -6,10 +6,12 @@ import es.grouppayments.backend.users._shared.domain.User;
 import es.grouppayments.backend.users._shared.domain.UserState;
 import es.grouppayments.backend.users._shared.domain.UsersService;
 import es.jaime.javaddd.domain.cqrs.command.CommandHandler;
+import es.jaime.javaddd.domain.event.EventBus;
 import es.jaime.javaddd.domain.exceptions.CannotBeYourself;
 import es.jaime.javaddd.domain.exceptions.IllegalLength;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.IllegalState;
+import io.vavr.control.Try;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,7 @@ public final class TransferCommandHandler implements CommandHandler<TransferComm
     private final UsersService usersService;
     private final PaymentMakerService paymentMakerService;
     private final CurrencyService currencyService;
+    private final EventBus eventBus;
 
     @Override
     public void handle(TransferCommand command) {
@@ -32,6 +35,25 @@ public final class TransferCommandHandler implements CommandHandler<TransferComm
 
         User userFrom = this.usersService.getByUserId(command.getUserIdFrom());
         String currenyCode = currencyService.getByCountryCode(userFrom.getCountry()).getCode();
+
+        this.tryPaymentUserFromToApp(userFrom.getUserId(), command.getMoney(), currenyCode);
+        this.tryPaymentAppToUserTo(userTo.getUserId(), command.getMoney(), currenyCode);
+    }
+
+    private void tryPaymentUserFromToApp(UUID userIdFrom, double money, String currencyCode){
+        try {
+            this.paymentMakerService.paymentUserToApp(userIdFrom, money, currencyCode);
+        } catch (Exception e) {
+            //TODO
+        }
+    }
+
+    private void tryPaymentAppToUserTo(UUID usaerIdTo, double money, String currencyCode){
+        try {
+            this.paymentMakerService.paymentAppToUser(usaerIdTo, money, currencyCode);
+        } catch (Exception e) {
+            //TODO
+        }
     }
 
     private void ensureUserNotTheSame(TransferCommand command){

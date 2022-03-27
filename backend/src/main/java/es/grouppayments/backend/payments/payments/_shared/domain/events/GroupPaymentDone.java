@@ -1,6 +1,7 @@
 package es.grouppayments.backend.payments.payments._shared.domain.events;
 
 import es.grouppayments.backend._shared.domain.GroupDomainEvent;
+import es.jaime.javaddd.domain.event.DomainEvent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -9,7 +10,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
-public class GroupPaymentDone extends GroupDomainEvent {
+public class GroupPaymentDone extends DomainEvent implements GroupDomainEvent {
     @Getter private final UUID groupId;
     @Getter private final List<UUID> membersUsersId;
     @Getter private final UUID adminUserId;

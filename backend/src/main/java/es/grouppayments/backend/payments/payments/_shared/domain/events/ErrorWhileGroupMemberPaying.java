@@ -2,6 +2,7 @@ package es.grouppayments.backend.payments.payments._shared.domain.events;
 
 import es.grouppayments.backend._shared.domain.GroupDomainEvent;
 import es.grouppayments.backend.groups._shared.domain.Group;
+import es.grouppayments.backend.payments.payments._shared.domain.events.other.ErrorUserPaidToApp;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -9,10 +10,13 @@ import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class ErrorWhileGroupMemberPaying extends GroupDomainEvent {
+public final class ErrorWhileGroupMemberPaying extends ErrorUserPaidToApp implements GroupDomainEvent {
     @Getter private final Group group;
-    @Getter private final String reason;
-    @Getter private final UUID groupMemberUserId;
+
+    public ErrorWhileGroupMemberPaying(double money, String currencyCode, String description, UUID userId, String errorMessage, Group group) {
+        super(money, currencyCode, description, userId, errorMessage);
+        this.group = group;
+    }
 
     @Override
     public UUID getGroupId() {
@@ -28,8 +32,8 @@ public final class ErrorWhileGroupMemberPaying extends GroupDomainEvent {
     public Map<String, Object> body() {
         return Map.of(
                 "groupId", this.group.getGroupId(),
-                "reason", this.reason,
-                "groupMemberUserId", this.groupMemberUserId
+                "errorMessage", this.errorMessage(),
+                "groupMemberUserId", this.userId()
         );
     }
 }

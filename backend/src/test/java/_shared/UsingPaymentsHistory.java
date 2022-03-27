@@ -20,15 +20,15 @@ public interface UsingPaymentsHistory {
     }
 
     default void addRandom(UUID userId){
-        PaymentType paymentType = Math.random() < 0.5 ? PaymentType.APP_TO_ADMIN : PaymentType.MEMBER_TO_APP;
+        PaymentType paymentType = Math.random() < 0.5 ? PaymentType.APP_TO_USER : PaymentType.USER_TO_APP;
         boolean isUserIdAdmin = Math.random() < 0.5;
         boolean isError = Math.random() < 0.3;
 
         this.paymentsHistoryRepository().save(new Payment(
                 UUID.randomUUID(),
                 LocalDateTime.now(),
-                paymentType == PaymentType.APP_TO_ADMIN ? "APP" : userId.toString(),
-                paymentType == PaymentType.MEMBER_TO_APP ? "APP" : userId.toString(),
+                paymentType == PaymentType.APP_TO_USER ? "APP" : userId.toString(),
+                paymentType == PaymentType.USER_TO_APP ? "APP" : userId.toString(),
                 Math.random() * 100,
                 "Payment",
                 isError ? PaymentState.ERROR : PaymentState.SUCCESS,

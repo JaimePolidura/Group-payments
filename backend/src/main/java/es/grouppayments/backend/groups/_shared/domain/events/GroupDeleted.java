@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
-public class GroupDeleted extends GroupDomainEvent {
+public class GroupDeleted extends DomainEvent implements GroupDomainEvent {
     @Getter private final UUID groupId;
 
     @Override

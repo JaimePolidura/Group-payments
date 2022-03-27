@@ -1,10 +1,9 @@
 package es.grouppayments.backend._shared.domain;
 
-import es.grouppayments.backend._shared.domain.messages.AynchEvent;
-import es.jaime.javaddd.domain.event.DomainEvent;
+import es.jaime.javaddd.domain.async.AsyncDomainEvent;
 
 import java.util.UUID;
 
-public abstract class GroupDomainEvent extends DomainEvent implements AynchEvent {
-    public abstract UUID getGroupId();
+public interface GroupDomainEvent extends AsyncDomainEvent {
+    UUID getGroupId();
 }

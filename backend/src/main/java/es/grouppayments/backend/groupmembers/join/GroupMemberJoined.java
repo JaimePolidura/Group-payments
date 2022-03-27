@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
-public class GroupMemberJoined extends GroupDomainEvent {
+public class GroupMemberJoined extends DomainEvent implements GroupDomainEvent {
     @Getter private final UUID userId;
     @Getter private final UUID groupId;
 
