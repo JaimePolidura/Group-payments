@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class PaymentInitialized extends GroupDomainEvent {
+public final class GroupPaymentInitialized extends GroupDomainEvent {
     private final UUID groupId;
 
     @Override

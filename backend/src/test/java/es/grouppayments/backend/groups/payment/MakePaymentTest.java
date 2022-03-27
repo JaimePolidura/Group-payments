@@ -1,4 +1,4 @@
-package es.grouppayments.backend.payments.payments.makepayment;
+package es.grouppayments.backend.groups.payment;
 
 import es.grouppayments.backend.groups._shared.domain.GroupState;
 import es.grouppayments.backend.payments.payments._shared.domain.events.*;
@@ -23,7 +23,7 @@ public final class MakePaymentTest extends MakePaymentTestMother{
 
         execute(groupId, adminUserId);
 
-        assertEventRaised(PaymentInitialized.class, MemberPayingAppDone.class, GroupPaymentDone.class, AppPayingAdminDone.class);
+        assertEventRaised(GroupPaymentInitialized.class, GroupMemberPayingAppDone.class, GroupPaymentDone.class, AppPayingGroupAdminDone.class);
         assertContentOfEventEquals(GroupPaymentDone.class, GroupPaymentDone::getMoneyPaidPerMember, deductFrom(moneyOfGroup, FEE));
         assertNumebrOfTimesMembersPaid(2);
         assertMoneyPaidToAdmin(deductFrom(moneyOfGroup, FEE));
@@ -40,7 +40,7 @@ public final class MakePaymentTest extends MakePaymentTestMother{
         payingToAdminWillFail();
         execute(groupId, adminUserId);
 
-        assertEventRaised(PaymentInitialized.class, MemberPayingAppDone.class, GroupPaymentDone.class, ErrorWhilePayingToAdmin.class);
+        assertEventRaised(GroupPaymentInitialized.class, GroupMemberPayingAppDone.class, GroupPaymentDone.class, ErrorWhilePayingToGroupAdmin.class);
         assertContentOfEventEquals(GroupPaymentDone.class, GroupPaymentDone::getMoneyPaidPerMember, deductFrom(moneyOfGroup, FEE));
         assertNumebrOfTimesMembersPaid(2);
         assertMoneyPaidToAdmin(0);
@@ -58,7 +58,7 @@ public final class MakePaymentTest extends MakePaymentTestMother{
         payingMembersToAppWillFail();
         execute(groupId, adminUserId);
 
-        assertEventRaised(PaymentInitialized.class, MemberPayingAppDone.class, GroupPaymentDone.class, AppPayingAdminDone.class, ErrorWhileMemberPaying.class);
+        assertEventRaised(GroupPaymentInitialized.class, GroupMemberPayingAppDone.class, GroupPaymentDone.class, AppPayingGroupAdminDone.class, ErrorWhileGroupMemberPaying.class);
         assertContentOfEventEquals(GroupPaymentDone.class, GroupPaymentDone::getMoneyPaidPerMember, deductFrom(moneyOfGroup, FEE));
         assertNumebrOfTimesMembersPaid(1);
         assertMoneyPaidToAdmin(deductFrom(moneyOfGroup/2, FEE));

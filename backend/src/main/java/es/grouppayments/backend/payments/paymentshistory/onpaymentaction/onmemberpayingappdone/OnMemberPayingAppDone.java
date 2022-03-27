@@ -1,6 +1,6 @@
 package es.grouppayments.backend.payments.paymentshistory.onpaymentaction.onmemberpayingappdone;
 
-import es.grouppayments.backend.payments.payments._shared.domain.events.MemberPayingAppDone;
+import es.grouppayments.backend.payments.payments._shared.domain.events.GroupMemberPayingAppDone;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentHistoryService;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentType;
 import lombok.AllArgsConstructor;
@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 public final class OnMemberPayingAppDone {
     private final PaymentHistoryService paymentHistoryService;
 
-    @EventListener({MemberPayingAppDone.class})
-    public void on(MemberPayingAppDone event){
+    @EventListener({GroupMemberPayingAppDone.class})
+    public void on(GroupMemberPayingAppDone event){
         this.paymentHistoryService.save(event.getGroupMemberUserId(), event.getMoney(),
                 event.getGroup().getDescription(), PaymentType.MEMBER_TO_APP);
     }

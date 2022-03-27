@@ -9,10 +9,10 @@ import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class ErrorWhileMemberPaying extends GroupDomainEvent {
-    @Getter private final Group group;
-    @Getter private final String reason;
+public final class GroupMemberPayingAppDone extends GroupDomainEvent {
     @Getter private final UUID groupMemberUserId;
+    @Getter private final double money;
+    @Getter private final Group group;
 
     @Override
     public UUID getGroupId() {
@@ -21,15 +21,15 @@ public final class ErrorWhileMemberPaying extends GroupDomainEvent {
 
     @Override
     public String name() {
-        return "group-payment-error-member-paying";
+        return "group-payment-member-app-done";
     }
 
     @Override
     public Map<String, Object> body() {
         return Map.of(
                 "groupId", this.group.getGroupId(),
-                "reason", this.reason,
-                "groupMemberUserId", this.groupMemberUserId
+                "groupMemberUserId", groupMemberUserId.toString(),
+                "money", money
         );
     }
 }

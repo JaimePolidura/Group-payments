@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class AppPayingAdminDone extends GroupDomainEvent {
+public final class AppPayingGroupAdminDone extends GroupDomainEvent {
     @Getter private final double money;
     @Getter private final Group group;
 

@@ -1,4 +1,4 @@
-package es.grouppayments.backend.payments.payments.makepayment;
+package es.grouppayments.backend.groups.payment;
 
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMember;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberRole;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 import static es.grouppayments.backend._shared.domain.Utils.*;
 
 @Service
-public class MakePaymentCommandHandler implements CommandHandler<MakePaymentCommand> {
+public class GroupPaymentCommandHandler implements CommandHandler<GroupPaymentCommand> {
     private final double fee;
     private final GroupService groupService;
     private final GroupMemberService groupMembers;
@@ -35,9 +35,9 @@ public class MakePaymentCommandHandler implements CommandHandler<MakePaymentComm
     private final UsersService usersService;
     private final CurrencyService currencyService;
 
-    public MakePaymentCommandHandler(GroupService groupService, GroupMemberService groupMembers, PaymentMakerService paymentService,
-                                     EventBus eventBus, @Value("${grouppayments.fee}") double fee, UsersService usersService,
-                                     CurrencyService currencyService) {
+    public GroupPaymentCommandHandler(GroupService groupService, GroupMemberService groupMembers, PaymentMakerService paymentService,
+                                      EventBus eventBus, @Value("${grouppayments.fee}") double fee, UsersService usersService,
+                                      CurrencyService currencyService) {
         this.groupService = groupService;
         this.groupMembers = groupMembers;
         this.paymentService = paymentService;
@@ -48,7 +48,7 @@ public class MakePaymentCommandHandler implements CommandHandler<MakePaymentComm
     }
 
     @Override
-    public void handle(MakePaymentCommand command) {
+    public void handle(GroupPaymentCommand command) {
         Group group = this.ensureGroupExistsAndGet(command.getGruopId());
         this.ensureGroupAbleToMakePayments(group);
         this.ensureAdminOfGroup(group, command.getUserId());
@@ -57,7 +57,7 @@ public class MakePaymentCommandHandler implements CommandHandler<MakePaymentComm
         double moneyToPayPerMember = group.getMoney() / groupMembersWithoutAdmin.size();
         String currencyCodeForPayment = this.getCurrencyCodeForUser(group.getAdminUserId());
 
-        this.eventBus.publish(new PaymentInitialized(group.getGroupId()));
+        this.eventBus.publish(new GroupPaymentInitialized(group.getGroupId()));
 
         double totalMoneyPaid = 0;
 
@@ -67,9 +67,9 @@ public class MakePaymentCommandHandler implements CommandHandler<MakePaymentComm
 
                 totalMoneyPaid += moneyToPayPerMember;
 
-                this.eventBus.publish(new MemberPayingAppDone(groupMember.getUserId(), moneyToPayPerMember, group));
+                this.eventBus.publish(new GroupMemberPayingAppDone(groupMember.getUserId(), moneyToPayPerMember, group));
             }catch (Exception e){
-                this.eventBus.publish(new ErrorWhileMemberPaying(group, e.getMessage(), groupMember.getUserId()));
+                this.eventBus.publish(new ErrorWhileGroupMemberPaying(group, e.getMessage(), groupMember.getUserId()));
             }
         }
 
@@ -83,9 +83,9 @@ public class MakePaymentCommandHandler implements CommandHandler<MakePaymentComm
         try {
             this.paymentService.paymentAppToAdmin(group.getAdminUserId(), totalMoney, currencyCode);
 
-            this.eventBus.publish(new AppPayingAdminDone(totalMoney, group));
+            this.eventBus.publish(new AppPayingGroupAdminDone(totalMoney, group));
         } catch (Exception e) {
-            this.eventBus.publish(new ErrorWhilePayingToAdmin(group, e.getMessage(), group.getAdminUserId(), totalMoney));
+            this.eventBus.publish(new ErrorWhilePayingToGroupAdmin(group, e.getMessage(), group.getAdminUserId(), totalMoney));
         }
     }
 

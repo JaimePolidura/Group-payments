@@ -1,4 +1,4 @@
-package es.grouppayments.backend.payments.payments.makepayment;
+package es.grouppayments.backend.groups.payment;
 
 import _shared.*;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberRepository;
@@ -7,6 +7,8 @@ import es.grouppayments.backend.groupmembers._shared.infrastructure.GroupMemberR
 import es.grouppayments.backend.groups._shared.domain.GroupRepository;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
 import es.grouppayments.backend.groups._shared.infrastructure.GroupsRepositoryInMemory;
+import es.grouppayments.backend.groups.payment.GroupPaymentCommand;
+import es.grouppayments.backend.groups.payment.GroupPaymentCommandHandler;
 import es.grouppayments.backend.payments.currencies._shared.domain.CurrencyRepository;
 import es.grouppayments.backend.payments.currencies._shared.domain.CurrencyService;
 import es.grouppayments.backend.payments.currencies._shared.infrastructure.CurrencyRepositoryInMemory;
@@ -14,13 +16,12 @@ import es.grouppayments.backend.users._shared.domain.UserRepository;
 import es.grouppayments.backend.users._shared.domain.UsersService;
 import es.grouppayments.backend.users._shared.infrastructure.UserRepositoryInMemory;
 
-import java.util.Arrays;
 import java.util.UUID;
 
 public class MakePaymentTestMother extends TestMother implements UsingGroups, UsingTestPaymentMakerService, UsingUsers, UsingCurrencies {
     protected static final int FEE = 50;
 
-    private final MakePaymentCommandHandler makePaymentCommandHandler;
+    private final GroupPaymentCommandHandler makePaymentCommandHandler;
     private final GroupRepository groupRepository;
     private final GroupMemberRepository groupMemberRepository;
     private final TestPaymentMaker testPaymentMaker;
@@ -33,7 +34,7 @@ public class MakePaymentTestMother extends TestMother implements UsingGroups, Us
         this.testPaymentMaker = new FakeTestPaymentMakerService();
         this.groupMemberRepository = new GroupMemberRepositoryInMemory();
         this.groupRepository = new GroupsRepositoryInMemory();
-        this.makePaymentCommandHandler = new MakePaymentCommandHandler(
+        this.makePaymentCommandHandler = new GroupPaymentCommandHandler(
                 new GroupService(this.groupRepository, super.testEventBus),
                 new GroupMemberService(this.groupMemberRepository, super.testEventBus),
                 this.testPaymentMaker,
@@ -44,7 +45,7 @@ public class MakePaymentTestMother extends TestMother implements UsingGroups, Us
     }
 
     public void execute(UUID groupId, UUID userId){
-        this.makePaymentCommandHandler.handle(new MakePaymentCommand(groupId, userId));
+        this.makePaymentCommandHandler.handle(new GroupPaymentCommand(groupId, userId));
     }
 
     @Override

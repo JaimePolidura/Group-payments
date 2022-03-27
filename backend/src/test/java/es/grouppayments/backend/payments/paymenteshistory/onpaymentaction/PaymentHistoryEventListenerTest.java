@@ -2,10 +2,10 @@ package es.grouppayments.backend.payments.paymenteshistory.onpaymentaction;
 
 import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups._shared.domain.GroupState;
-import es.grouppayments.backend.payments.payments._shared.domain.events.AppPayingAdminDone;
-import es.grouppayments.backend.payments.payments._shared.domain.events.ErrorWhileMemberPaying;
-import es.grouppayments.backend.payments.payments._shared.domain.events.ErrorWhilePayingToAdmin;
-import es.grouppayments.backend.payments.payments._shared.domain.events.MemberPayingAppDone;
+import es.grouppayments.backend.payments.payments._shared.domain.events.AppPayingGroupAdminDone;
+import es.grouppayments.backend.payments.payments._shared.domain.events.ErrorWhileGroupMemberPaying;
+import es.grouppayments.backend.payments.payments._shared.domain.events.ErrorWhilePayingToGroupAdmin;
+import es.grouppayments.backend.payments.payments._shared.domain.events.GroupMemberPayingAppDone;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentHistoryService;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentState;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentType;
@@ -26,7 +26,7 @@ public final class PaymentHistoryEventListenerTest extends PaymentHistoryTestMot
                 new PaymentHistoryService(super.paymentsHistoryRepository())
         );
 
-        eventListener.on(new AppPayingAdminDone(10, new Group(UUID.randomUUID(), "1",
+        eventListener.on(new AppPayingGroupAdminDone(10, new Group(UUID.randomUUID(), "1",
                 LocalDateTime.now(), 10, paidUserId, GroupState.PAYING)));
 
         assertPaymentHistorySaved(paidUserId);
@@ -44,7 +44,7 @@ public final class PaymentHistoryEventListenerTest extends PaymentHistoryTestMot
                 new PaymentHistoryService(super.paymentsHistoryRepository())
         );
 
-        eventListener.on(new ErrorWhileMemberPaying(new Group(UUID.randomUUID(), "", LocalDateTime.now(),
+        eventListener.on(new ErrorWhileGroupMemberPaying(new Group(UUID.randomUUID(), "", LocalDateTime.now(),
                 10, UUID.randomUUID(), GroupState.PAYING), "error", payerdUserIdMember));
 
         assertPaymentHistorySaved(payerdUserIdMember);
@@ -63,7 +63,7 @@ public final class PaymentHistoryEventListenerTest extends PaymentHistoryTestMot
                 new PaymentHistoryService(super.paymentsHistoryRepository())
         );
 
-        eventListener.on(new ErrorWhilePayingToAdmin(new Group(UUID.randomUUID(), "", LocalDateTime.now(), 20,
+        eventListener.on(new ErrorWhilePayingToGroupAdmin(new Group(UUID.randomUUID(), "", LocalDateTime.now(), 20,
                 paidUserIdMember, GroupState.PAYING), "error", paidUserIdMember, 20));
 
         assertPaymentHistorySaved(paidUserIdMember);
@@ -82,7 +82,7 @@ public final class PaymentHistoryEventListenerTest extends PaymentHistoryTestMot
                 new PaymentHistoryService(super.paymentsHistoryRepository())
         );
 
-        eventListener.on(new MemberPayingAppDone(payerUserIdMember, 30, new Group(UUID.randomUUID(), "",
+        eventListener.on(new GroupMemberPayingAppDone(payerUserIdMember, 30, new Group(UUID.randomUUID(), "",
                 LocalDateTime.now(), 30, UUID.randomUUID(), GroupState.PAYING)));
 
         assertPaymentHistorySaved(payerUserIdMember);

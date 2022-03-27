@@ -43,11 +43,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/payments/stripe/getconnectedaccountlink"
         };
     }
-
+    
     private String[] routesWithSignUpAllCompleted(){
         return new String[]{
                 "/groups/**",
-                "/payments/makepayment",
                 "/payments/paymentshistory",
         };
     }

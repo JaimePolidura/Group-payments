@@ -9,27 +9,27 @@ import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class MemberPayingAppDone extends GroupDomainEvent {
-    @Getter private final UUID groupMemberUserId;
-    @Getter private final double money;
+public final class ErrorWhilePayingToGroupAdmin extends GroupDomainEvent {
     @Getter private final Group group;
+    @Getter private final String reason;
+    @Getter private final UUID member;
+    @Getter private final double money;
 
     @Override
     public UUID getGroupId() {
-        return this.group.getGroupId();
+        return this.getGroup().getGroupId();
     }
 
     @Override
     public String name() {
-        return "group-payment-member-app-done";
+        return "group-payment-error-paying-admin";
     }
 
     @Override
     public Map<String, Object> body() {
         return Map.of(
-                "groupId", this.group.getGroupId(),
-                "groupMemberUserId", groupMemberUserId.toString(),
-                "money", money
+                "groupId", this.getGroup().getGroupId(),
+                "reason", this.reason
         );
     }
 }
