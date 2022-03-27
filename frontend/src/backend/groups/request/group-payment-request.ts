@@ -1,4 +1,4 @@
-export interface MakePaymentRequest {
+export interface GroupPaymentRequest {
   groupId: string,
   userId: string,
 }

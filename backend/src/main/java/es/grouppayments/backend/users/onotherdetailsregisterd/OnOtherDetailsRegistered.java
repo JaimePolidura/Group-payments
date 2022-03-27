@@ -15,8 +15,7 @@ public final class OnOtherDetailsRegistered {
 
     @EventListener({StripeConnectedAccountRegistered.class})
     public void on(StripeConnectedAccountRegistered event){
-        User user = this.usersService.findByUserId(event.getUserId())
-                .get();
+        User user = this.usersService.getByUserId(event.getUserId());
 
         this.usersService.update(user.updateSignUpState(UserState.SIGNUP_ALL_COMPLETED));
     }

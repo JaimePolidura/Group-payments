@@ -20,8 +20,7 @@ public class GetMemberByUserIdQueryHandler implements QueryHandler<GetMemberByUs
     public GetMemberByUserIdQueryResponse handle(GetMemberByUserIdQuery query) {
         ensureMemberInGroupAndUserInGroup(query.getGroupId(), query.getUserIdToGet(), query.getUserId());
 
-        User user = usersService.findByUserId(query.getUserIdToGet())
-                .get();
+        User user = usersService.getByUserId(query.getUserIdToGet());
 
         return GetMemberByUserIdQueryResponse.fromUserAggregate(user);
     }

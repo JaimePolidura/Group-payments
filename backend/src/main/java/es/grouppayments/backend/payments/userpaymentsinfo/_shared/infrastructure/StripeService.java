@@ -2,6 +2,7 @@ package es.grouppayments.backend.payments.userpaymentsinfo._shared.infrastructur
 
 import com.stripe.model.*;
 import com.stripe.param.*;
+import es.grouppayments.backend.payments.currencies._shared.domain.CurrencyService;
 import es.grouppayments.backend.payments.userpaymentsinfo._shared.application.StripeUsersService;
 import es.grouppayments.backend.payments.userpaymentsinfo._shared.domain.events.StripeConnectedAccountCreated;
 import es.grouppayments.backend.payments.userpaymentsinfo._shared.domain.events.StripeCustomerCreated;
@@ -20,6 +21,7 @@ public final class StripeService {
     private final EventBus eventBus;
     private final UsersService usersService;
     private final StripeUsersService stripeUsersService;
+    private final CurrencyService currencyService;
 
     @SneakyThrows
     public String setupIntent()  {
@@ -43,17 +45,19 @@ public final class StripeService {
 
     @SneakyThrows
     public Account createConnectedAccount(UUID userId){
-        User user = this.usersService.findByUserId(userId).get();
+        User user = this.usersService.getByUserId(userId);
+        String countryCode = user.getCountry();
+        String currencyCode = this.currencyService.getByCountryCode(countryCode).getCode();
 
         Account account = Account.create(
                 AccountCreateParams.builder()
-                        .setCountry("ES")
+                        .setCountry(countryCode)
                         .setEmail(user.getEmail())
                         .setIndividual(AccountCreateParams.Individual.builder()
                                 .setFirstName(user.getUsername())
                                 .setEmail(user.getEmail())
                                 .build())
-                        .setDefaultCurrency("eur")
+                        .setDefaultCurrency(currencyCode)
                         .setBusinessType(AccountCreateParams.BusinessType.INDIVIDUAL)
                         .setCapabilities(AccountCreateParams.Capabilities.builder()
                                 .setTransfers(AccountCreateParams.Capabilities.Transfers.builder()
@@ -81,9 +85,7 @@ public final class StripeService {
         String connectedAccountId = this.stripeUsersService.getdByUserId(userId)
                 .getConnectedAccountId();
 
-        boolean registered = Account.retrieve(connectedAccountId).getDetailsSubmitted();
-
-        return registered;
+        return Account.retrieve(connectedAccountId).getDetailsSubmitted();
     }
 
     @SneakyThrows

@@ -20,7 +20,7 @@ public final class StripePaymentMaker implements PaymentMakerService {
     private final StripeService stripeService;
 
     @Override
-    public String paymentMemberToApp(UUID userId, double money, String currencyCode) throws Exception {
+    public String paymentUserToApp(UUID userId, double money, String currencyCode) throws Exception {
         StripeUser stripeUser = this.stripeUsersService.getdByUserId(userId);
         String consumerId = stripeUser.getCustomerId();
         String paymentMethodId = stripeUser.getPaymentMethod();
@@ -39,7 +39,7 @@ public final class StripePaymentMaker implements PaymentMakerService {
     }
 
     @Override
-    public String paymentAppToAdmin(UUID userId, double money, String currencyCode) throws Exception {
+    public String paymentAppToUser(UUID userId, double money, String currencyCode) throws Exception {
         String stripeConnectedAccountId = this.stripeUsersService.getdByUserId(userId)
                 .getConnectedAccountId();
 

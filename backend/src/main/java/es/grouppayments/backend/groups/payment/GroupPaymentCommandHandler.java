@@ -6,6 +6,7 @@ import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
 import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
 import es.grouppayments.backend.payments.currencies._shared.domain.CurrencyService;
+import es.grouppayments.backend.payments.payments._shared.domain.ComimssionPolicy;
 import es.grouppayments.backend.payments.payments._shared.domain.PaymentMakerService;
 import es.grouppayments.backend.payments.payments._shared.domain.events.*;
 import es.grouppayments.backend.users._shared.domain.UsersService;
@@ -14,8 +15,7 @@ import es.jaime.javaddd.domain.event.EventBus;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.IllegalState;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
-import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,29 +23,16 @@ import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static es.grouppayments.backend._shared.domain.Utils.*;
-
 @Service
+@AllArgsConstructor
 public class GroupPaymentCommandHandler implements CommandHandler<GroupPaymentCommand> {
-    private final double fee;
+    private final ComimssionPolicy commissionPolicy;
     private final GroupService groupService;
     private final GroupMemberService groupMembers;
     private final PaymentMakerService paymentService;
     private final EventBus eventBus;
     private final UsersService usersService;
     private final CurrencyService currencyService;
-
-    public GroupPaymentCommandHandler(GroupService groupService, GroupMemberService groupMembers, PaymentMakerService paymentService,
-                                      EventBus eventBus, @Value("${grouppayments.fee}") double fee, UsersService usersService,
-                                      CurrencyService currencyService) {
-        this.groupService = groupService;
-        this.groupMembers = groupMembers;
-        this.paymentService = paymentService;
-        this.eventBus = eventBus;
-        this.fee = fee;
-        this.usersService = usersService;
-        this.currencyService = currencyService;
-    }
 
     @Override
     public void handle(GroupPaymentCommand command) {
@@ -63,7 +50,7 @@ public class GroupPaymentCommandHandler implements CommandHandler<GroupPaymentCo
 
         for (GroupMember groupMember : groupMembersWithoutAdmin) {
             try{
-                this.paymentService.paymentMemberToApp(groupMember.getUserId(), moneyToPayPerMember, currencyCodeForPayment);
+                this.paymentService.paymentUserToApp(groupMember.getUserId(), moneyToPayPerMember, currencyCodeForPayment);
 
                 totalMoneyPaid += moneyToPayPerMember;
 
@@ -73,7 +60,7 @@ public class GroupPaymentCommandHandler implements CommandHandler<GroupPaymentCo
             }
         }
 
-        this.makePaymentAppToAdmin(group, deductFrom(totalMoneyPaid, fee), currencyCodeForPayment);
+        this.makePaymentAppToAdmin(group, this.commissionPolicy.deductCommission(totalMoneyPaid), currencyCodeForPayment);
 
         this.eventBus.publish(new GroupPaymentDone(group.getGroupId(), groupMembersWithoutAdmin.stream().map(GroupMember::getUserId).toList(),
                 group.getAdminUserId(), group.getDescription(), moneyToPayPerMember));
@@ -81,7 +68,7 @@ public class GroupPaymentCommandHandler implements CommandHandler<GroupPaymentCo
 
     private void makePaymentAppToAdmin(Group group, double totalMoney, String currencyCode){
         try {
-            this.paymentService.paymentAppToAdmin(group.getAdminUserId(), totalMoney, currencyCode);
+            this.paymentService.paymentAppToUser(group.getAdminUserId(), totalMoney, currencyCode);
 
             this.eventBus.publish(new AppPayingGroupAdminDone(totalMoney, group));
         } catch (Exception e) {
@@ -90,8 +77,7 @@ public class GroupPaymentCommandHandler implements CommandHandler<GroupPaymentCo
     }
 
     private String getCurrencyCodeForUser(UUID userId){
-        String countryCode = this.usersService.findByUserId(userId)
-                .orElseThrow(() -> new ResourceNotFound("Error"))
+        String countryCode = this.usersService.getByUserId(userId)
                 .getCountry();
 
         return this.currencyService.getByCountryCode(countryCode)

@@ -15,8 +15,7 @@ public final class OnCreditCardRegistered {
 
     @EventListener({StripeConnectedAccountCreated.class})
     public void on(StripeConnectedAccountCreated event){
-        User user = this.usersService.findByUserId(event.getUserId())
-                .get()
+        User user = this.usersService.getByUserId(event.getUserId())
                 .updateSignUpState(UserState.SIGNUP_OAUTH_CREDIT_CARD_COMPLETED);
 
         this.usersService.update(user);

@@ -1,5 +1,6 @@
 package es.grouppayments.backend.users._shared.domain;
 
+import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,8 @@ public class UsersService {
         return userRepository.findByEmail(email);
     }
 
-    public Optional<User> findByUserId(UUID id) {
-        return this.userRepository.findByUserId(id);
+    public User getByUserId(UUID id) {
+        return this.userRepository.findByUserId(id)
+                .orElseThrow(() -> new ResourceNotFound("User not found for that id"));
     }
 }

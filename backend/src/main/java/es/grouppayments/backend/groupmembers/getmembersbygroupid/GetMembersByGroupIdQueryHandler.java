@@ -24,7 +24,7 @@ public class GetMembersByGroupIdQueryHandler implements QueryHandler<GetMembersB
 
         List<GroupMember> groupMembers = groupMemberService.findMembersByGroupId(query.getGroupId());
         List<User> users = groupMembers.stream()
-                .map(groupMember -> usersService.findByUserId(groupMember.getUserId()).get())
+                .map(groupMember -> usersService.getByUserId(groupMember.getUserId()))
                 .toList();
 
         return GetMembersByGroupIdQueryResponse.fromAggregateUserList(users);
