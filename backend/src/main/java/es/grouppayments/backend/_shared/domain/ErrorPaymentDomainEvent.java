@@ -6,7 +6,7 @@ public interface ErrorPaymentDomainEvent extends PaymentDomainEvent{
     String errorMessage();
 
     @Override
-    default PaymentState state() {
+    default PaymentState getState() {
         return PaymentState.ERROR;
     }
 }

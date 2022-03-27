@@ -10,7 +10,7 @@ import {CreateGroupRequest} from "./request/create-group-request";
 import {GetGroupMembersByGroupIdResponse} from "./response/get-group-members-by-group-id-response";
 import {LeaveGroupRequest} from "./request/leave-group-request";
 import {KickGroupMemberRequest} from "./request/kick-group-member-request";
-import {MakePaymentRequest} from "./request/make-payment-request";
+import {GroupPaymentRequest} from "./request/group-payment-request";
 import {GetGroupMemberByUserIdRequest} from "./request/get-group-member-by-user-id-request";
 import {GetGroupMemberByUserIdResponse} from "./response/get-group-member-by-user-id-response";
 import {BackendUsingRoutesService} from "../backend-using-routes.service";
@@ -60,5 +60,9 @@ export class GroupsApiService {
 
   public editGroup(request: EditGroupRequest): Observable<any> {
     return this.http.post(`${this.routes.USING}/groups/edit`, request);
+  }
+
+  public makeGroupPayment(request: GroupPaymentRequest): Observable<any> {
+    return this.http.post(`${this.routes.USING}/groups/payment`, request);
   }
 }

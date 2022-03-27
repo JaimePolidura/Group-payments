@@ -6,7 +6,7 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {GroupsApiService} from "../../../backend/groups/groups-api.service";
 import {KickGroupMemberRequest} from "../../../backend/groups/request/kick-group-member-request";
 import {Authentication} from "../../../backend/authentication/authentication";
-import {MakePaymentRequest} from "../../../backend/groups/request/make-payment-request";
+import {GroupPaymentRequest} from "../../../backend/groups/request/group-payment-request";
 import {GetGroupMemberByUserIdRequest} from "../../../backend/groups/request/get-group-member-by-user-id-request";
 import {FrontendUsingRoutesService} from "../../../frontend-using-routes.service";
 import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/forms";
@@ -125,14 +125,14 @@ export class GroupOptionsComponent implements OnInit {
   }
 
   public makePayment(): void {
-    const request: MakePaymentRequest = {
+    const request: GroupPaymentRequest = {
       groupId: this.groupState.getCurrentGroup().groupId,
       userId: this.auth.getUserId(),
     };
 
     this.closeModal();
 
-    this.paymentService.makePayment(request).subscribe(
+    this.groupsApi.makeGroupPayment(request).subscribe(
       () => {},
       err => this.onPaymentFailure(err)
     );
@@ -244,10 +244,10 @@ export class GroupOptionsComponent implements OnInit {
       const username = this.groupState.getGroupMemberUserByUserId(res.groupId).username;
 
       if(this.isLoggedUserAdminOfCurrentGroup())
-        this.logEventsGroupPayments.push({error: true, body: `${username} couldnt be charged. Reason: ${res.reason}`});
+        this.logEventsGroupPayments.push({error: true, body: `${username} couldnt be charged. Reason: ${res.errorMessage}`});
 
       if(res.groupMemberUserId == this.auth.getUserId())
-        this.logEventsGroupPayments.push({error: true, body: `You couldnt be charged. Reason: ${res.reason}`});
+        this.logEventsGroupPayments.push({error: true, body: `You couldnt be charged. Reason: ${res.errorMessage}`});
     });
   }
 
@@ -265,7 +265,7 @@ export class GroupOptionsComponent implements OnInit {
         this.logEventsGroupPayments.push({
           error: true,
           body: `You couldnt recieve the payment all members have been charged the funds havent get lost,
-            they have been retained. Contact support to recieve it. error message: ${res.reason}`
+            they have been retained. Contact support to recieve it. error message: ${res.errorMessage}`
         });
       }
     });

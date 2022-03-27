@@ -7,10 +7,10 @@ import es.jaime.javaddd.domain.async.AsyncDomainEvent;
 import java.util.UUID;
 
 public interface PaymentDomainEvent extends AsyncDomainEvent {
-    double money();
-    String currencyCode();
-    PaymentType paymentType();
-    String description();
-    UUID userId();
-    PaymentState state();
+    double getMoney();
+    String getCurrencyCode();
+    PaymentType getPaymentType();
+    String getDescription();
+    UUID getUserId();
+    PaymentState getState();
 }

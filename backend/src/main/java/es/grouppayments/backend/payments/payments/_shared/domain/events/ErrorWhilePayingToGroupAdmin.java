@@ -10,7 +10,6 @@ import lombok.Getter;
 import java.util.Map;
 import java.util.UUID;
 
-@AllArgsConstructor
 public final class ErrorWhilePayingToGroupAdmin extends ErrorAppPaidToUser implements GroupDomainEvent {
     @Getter private final Group group;
 

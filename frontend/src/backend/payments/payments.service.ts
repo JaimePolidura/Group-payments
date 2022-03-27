@@ -3,7 +3,7 @@ import {Observable} from "rxjs";
 import {SetupIntentResult} from "@stripe/stripe-js";
 import {HttpClient} from "@angular/common/http";
 import {BackendUsingRoutesService} from "../backend-using-routes.service";
-import {MakePaymentRequest} from "../groups/request/make-payment-request";
+import {GroupPaymentRequest} from "../groups/request/group-payment-request";
 import {RegisterWithStripeResponse} from "./response/register-with-stripe-response";
 import {RegisterWithStripeRequest} from "./request/register-with-stripe-request";
 import {GetConnectedAccountLinkResponse} from "./response/get-connected-account-link-response";
@@ -22,10 +22,6 @@ export class PaymentsService {
 
   public setupIntent(): Observable<SetupIntentResult> {
     return this.http.get<SetupIntentResult>(`${this.usingRoutes.USING}/payments/stripe/setupintent`);
-  }
-
-  public makePayment(request: MakePaymentRequest): Observable<any> {
-    return this.http.post(`${this.usingRoutes.USING}/payments/makepayment`, request);
   }
 
   public registerWithStripe(request: RegisterWithStripeRequest): Observable<RegisterWithStripeResponse> {

@@ -1,5 +1,5 @@
 export interface ErrorWhileMemberPaying {
   groupId: string,
-  reason: string,
+  errorMessage: string,
   groupMemberUserId: string,
 }

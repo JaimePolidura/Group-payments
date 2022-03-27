@@ -14,7 +14,7 @@ public final class OnMemberPayingAppDone {
 
     @EventListener({GroupMemberPayingAppDone.class})
     public void on(GroupMemberPayingAppDone event){
-        this.paymentHistoryService.save(event.getGroupMemberUserId(), event.getMoney(),
-                event.getGroup().getDescription(), PaymentType.USER_TO_APP);
+        this.paymentHistoryService.save(event.getUserId(), event.getMoney(),
+                event.getDescription(), PaymentType.USER_TO_APP);
     }
 }

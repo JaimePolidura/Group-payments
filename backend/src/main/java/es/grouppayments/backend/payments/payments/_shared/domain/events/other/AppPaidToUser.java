@@ -22,7 +22,7 @@ public class AppPaidToUser extends DomainEvent implements SuccessfulPaymentDomai
                 "currencyCode", this.currencyCode,
                 "description", this.description,
                 "userId", userId,
-                "state", state()
+                "state", getState()
         );
     }
 
@@ -32,27 +32,27 @@ public class AppPaidToUser extends DomainEvent implements SuccessfulPaymentDomai
     }
 
     @Override
-    public double money() {
+    public double getMoney() {
         return this.money;
     }
 
     @Override
-    public String currencyCode() {
+    public String getCurrencyCode() {
         return this.currencyCode;
     }
 
     @Override
-    public PaymentType paymentType() {
+    public PaymentType getPaymentType() {
         return PaymentType.APP_TO_USER;
     }
 
     @Override
-    public String description() {
+    public String getDescription() {
         return this.description;
     }
 
     @Override
-    public UUID userId() {
+    public UUID getUserId() {
         return this.userId;
     }
 }

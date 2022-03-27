@@ -3,14 +3,11 @@ package es.grouppayments.backend.payments.payments._shared.domain.events;
 import es.grouppayments.backend._shared.domain.GroupDomainEvent;
 import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.payments.payments._shared.domain.events.other.AppPaidToUser;
-import es.jaime.javaddd.domain.event.DomainEvent;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.Map;
 import java.util.UUID;
 
-@AllArgsConstructor
 public final class AppPayingGroupAdminDone extends AppPaidToUser implements GroupDomainEvent {
     @Getter private final Group group;
 
@@ -34,7 +31,7 @@ public final class AppPayingGroupAdminDone extends AppPaidToUser implements Grou
         return Map.of(
                 "groupId", this.group.getAdminUserId(),
                 "adminUserId", this.group.getAdminUserId(),
-                "money", this.money()
+                "money", this.getMoney()
         );
     }
 }

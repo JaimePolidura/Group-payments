@@ -26,8 +26,9 @@ public final class PaymentHistoryEventListenerTest extends PaymentHistoryTestMot
                 new PaymentHistoryService(super.paymentsHistoryRepository())
         );
 
-        eventListener.on(new AppPayingGroupAdminDone(10, new Group(UUID.randomUUID(), "1",
-                LocalDateTime.now(), 10, paidUserId, GroupState.PAYING)));
+        Group group = new Group(UUID.randomUUID(), "1", LocalDateTime.now(), 10, paidUserId, GroupState.PAYING);
+
+        eventListener.on(new AppPayingGroupAdminDone(10, "EUR", "", paidUserId, group));
 
         assertPaymentHistorySaved(paidUserId);
         assertContentOfPayment(paidUserId, payment -> payment.getErrorMessage() == null || payment.getErrorMessage().equals(""));
@@ -44,8 +45,9 @@ public final class PaymentHistoryEventListenerTest extends PaymentHistoryTestMot
                 new PaymentHistoryService(super.paymentsHistoryRepository())
         );
 
-        eventListener.on(new ErrorWhileGroupMemberPaying(new Group(UUID.randomUUID(), "", LocalDateTime.now(),
-                10, UUID.randomUUID(), GroupState.PAYING), "error", payerdUserIdMember));
+        Group group = new Group(UUID.randomUUID(), "", LocalDateTime.now(), 10, UUID.randomUUID(), GroupState.PAYING);
+
+        eventListener.on(new ErrorWhileGroupMemberPaying(10, "EUR", "", payerdUserIdMember, "error", group));
 
         assertPaymentHistorySaved(payerdUserIdMember);
         assertContentOfPayment(payerdUserIdMember, payment -> payment.getErrorMessage().equals("error"));
@@ -63,8 +65,9 @@ public final class PaymentHistoryEventListenerTest extends PaymentHistoryTestMot
                 new PaymentHistoryService(super.paymentsHistoryRepository())
         );
 
-        eventListener.on(new ErrorWhilePayingToGroupAdmin(new Group(UUID.randomUUID(), "", LocalDateTime.now(), 20,
-                paidUserIdMember, GroupState.PAYING), "error", paidUserIdMember, 20));
+        Group group = new Group(UUID.randomUUID(), "", LocalDateTime.now(), 20, paidUserIdMember, GroupState.PAYING);
+
+        eventListener.on(new ErrorWhilePayingToGroupAdmin(20, "EUR", "", paidUserIdMember, "error", group));
 
         assertPaymentHistorySaved(paidUserIdMember);
         assertContentOfPayment(paidUserIdMember, payment -> payment.getErrorMessage().equals("error"));
@@ -82,8 +85,9 @@ public final class PaymentHistoryEventListenerTest extends PaymentHistoryTestMot
                 new PaymentHistoryService(super.paymentsHistoryRepository())
         );
 
-        eventListener.on(new GroupMemberPayingAppDone(payerUserIdMember, 30, new Group(UUID.randomUUID(), "",
-                LocalDateTime.now(), 30, UUID.randomUUID(), GroupState.PAYING)));
+        Group group = new Group(UUID.randomUUID(), "", LocalDateTime.now(), 30, UUID.randomUUID(), GroupState.PAYING);
+
+        eventListener.on(new GroupMemberPayingAppDone(30, "EUR", "", payerUserIdMember, group));
 
         assertPaymentHistorySaved(payerUserIdMember);
         assertContentOfPayment(payerUserIdMember, payment -> payment.getMoney() == 30);

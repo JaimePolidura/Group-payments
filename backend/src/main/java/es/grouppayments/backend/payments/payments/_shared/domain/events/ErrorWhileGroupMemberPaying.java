@@ -3,13 +3,11 @@ package es.grouppayments.backend.payments.payments._shared.domain.events;
 import es.grouppayments.backend._shared.domain.GroupDomainEvent;
 import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.payments.payments._shared.domain.events.other.ErrorUserPaidToApp;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.Map;
 import java.util.UUID;
 
-@AllArgsConstructor
 public final class ErrorWhileGroupMemberPaying extends ErrorUserPaidToApp implements GroupDomainEvent {
     @Getter private final Group group;
 
@@ -33,7 +31,7 @@ public final class ErrorWhileGroupMemberPaying extends ErrorUserPaidToApp implem
         return Map.of(
                 "groupId", this.group.getGroupId(),
                 "errorMessage", this.errorMessage(),
-                "groupMemberUserId", this.userId()
+                "groupMemberUserId", this.getUserId()
         );
     }
 }

@@ -1,4 +1,4 @@
 export enum PaymentType {
-  MEMBER_TO_APP = "MEMBER_TO_APP",
-  APP_TO_ADMIN = "APP_TO_ADMIN",
+  USER_TO_APP = "USER_TO_APP",
+  APP_TO_USER = "APP_TO_USER",
 }
