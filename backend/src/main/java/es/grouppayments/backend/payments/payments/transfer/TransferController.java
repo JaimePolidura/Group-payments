@@ -16,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public final class TransferController extends ApplicationController {
     private final CommandBus commandBus;
-
+    
     @PostMapping("/payments/transfer")
     public ResponseEntity<?> transfer(@RequestBody Request request){
         this.commandBus.dispatch(new TransferCommand(

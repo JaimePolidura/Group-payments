@@ -1,7 +1,13 @@
 package es.grouppayments.backend.payments.payments.transfer;
 
 import es.grouppayments.backend.payments.currencies._shared.domain.CurrencyService;
+import es.grouppayments.backend.payments.payments._shared.domain.ComimssionPolicy;
 import es.grouppayments.backend.payments.payments._shared.domain.PaymentMakerService;
+import es.grouppayments.backend.payments.payments._shared.domain.events.other.AppPaidToUser;
+import es.grouppayments.backend.payments.payments._shared.domain.events.other.ErrorAppPaidToUser;
+import es.grouppayments.backend.payments.payments._shared.domain.events.other.ErrorUserPaidToApp;
+import es.grouppayments.backend.payments.payments._shared.domain.events.other.UserPaidToApp;
+import es.grouppayments.backend.payments.payments._shared.infrastructure.CommissionPolicyImpl;
 import es.grouppayments.backend.users._shared.domain.User;
 import es.grouppayments.backend.users._shared.domain.UserState;
 import es.grouppayments.backend.users._shared.domain.UsersService;
@@ -24,6 +30,7 @@ public final class TransferCommandHandler implements CommandHandler<TransferComm
     private final PaymentMakerService paymentMakerService;
     private final CurrencyService currencyService;
     private final EventBus eventBus;
+    private final ComimssionPolicy comimssionPolicy;
 
     @Override
     public void handle(TransferCommand command) {
@@ -36,23 +43,33 @@ public final class TransferCommandHandler implements CommandHandler<TransferComm
         User userFrom = this.usersService.getByUserId(command.getUserIdFrom());
         String currenyCode = currencyService.getByCountryCode(userFrom.getCountry()).getCode();
 
-        this.tryPaymentUserFromToApp(userFrom.getUserId(), command.getMoney(), currenyCode);
-        this.tryPaymentAppToUserTo(userTo.getUserId(), command.getMoney(), currenyCode);
+        var sucess = this.tryPaymentUserFromToApp(command, currenyCode);
+        if(sucess)
+            this.tryPaymentAppToUserTo(command, currenyCode);
     }
 
-    private void tryPaymentUserFromToApp(UUID userIdFrom, double money, String currencyCode){
+    private boolean tryPaymentUserFromToApp(TransferCommand command, String currencyCode){
         try {
-            this.paymentMakerService.paymentUserToApp(userIdFrom, money, currencyCode);
+            this.paymentMakerService.paymentUserToApp(command.getUserIdFrom(), command.getMoney(), currencyCode);
+
+            this.eventBus.publish(new UserPaidToApp(command.getMoney(), currencyCode, command.getDescription(), command.getUserIdFrom()));
+
+            return true;
         } catch (Exception e) {
-            //TODO
+            this.eventBus.publish(new ErrorUserPaidToApp(command.getMoney(), currencyCode, command.getDescription(), command.getUserIdFrom(), e.getMessage()));
+
+            return false;
         }
     }
 
-    private void tryPaymentAppToUserTo(UUID usaerIdTo, double money, String currencyCode){
+    private void tryPaymentAppToUserTo(TransferCommand command, String currencyCode){
         try {
-            this.paymentMakerService.paymentAppToUser(usaerIdTo, money, currencyCode);
+            double moneyDeductedCommission = this.comimssionPolicy.deductCommission(command.getMoney());
+            this.paymentMakerService.paymentAppToUser(command.getUserIdTo(), moneyDeductedCommission, currencyCode);
+
+            this.eventBus.publish(new AppPaidToUser(moneyDeductedCommission, currencyCode, command.getDescription(), command.getUserIdTo()));
         } catch (Exception e) {
-            //TODO
+            this.eventBus.publish(new ErrorAppPaidToUser(command.getMoney(), currencyCode, command.getDescription(), command.getUserIdTo(), e.getMessage()));
         }
     }
 
