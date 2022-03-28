@@ -10,6 +10,7 @@ import {GetConnectedAccountLinkResponse} from "./response/get-connected-account-
 import {GetPaymentHistoryRequest} from "./request/get-payment-history-request";
 import {GetPaymentsHistoryResponse} from "./response/get-payments-history-response";
 import {Currency} from "../../model/currencies/currency";
+import {MakeTransferRquest} from "./request/make-transfer-rquest";
 
 @Injectable({
   providedIn: 'root'
@@ -39,4 +40,11 @@ export class PaymentsService {
   public getCurrencyByCountryCode(countryCode: string): Observable<Currency>{
     return this.http.get<Currency>(`${this.usingRoutes.USING}/payments/currencies/getbycountrycode?countryCode=${countryCode}`);
   }
+
+  public makeTransfer(transfer: MakeTransferRquest): Observable<any>{
+    return this.http.post(`${this.usingRoutes.USING}/payments/transfer`, transfer);
+  }
 }
+
+
+

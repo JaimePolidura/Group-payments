@@ -21,7 +21,7 @@ public final class TransferController extends ApplicationController {
     public ResponseEntity<?> transfer(@RequestBody Request request){
         this.commandBus.dispatch(new TransferCommand(
                 getLoggedUsername(),
-                request.toUserId,
+                request.to,
                 request.money,
                 request.description
         ));
@@ -31,7 +31,7 @@ public final class TransferController extends ApplicationController {
 
     @AllArgsConstructor
     private final static class Request {
-        public final UUID toUserId;
+        public final UUID to;
         public final double money;
         public final String description;
     }

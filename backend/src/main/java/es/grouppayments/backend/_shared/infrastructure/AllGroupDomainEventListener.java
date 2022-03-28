@@ -1,6 +1,6 @@
 package es.grouppayments.backend._shared.infrastructure;
 
-import es.grouppayments.backend._shared.domain.GroupDomainEvent;
+import es.grouppayments.backend._shared.domain.events.GroupDomainEvent;
 import org.json.JSONObject;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.event.EventListener;

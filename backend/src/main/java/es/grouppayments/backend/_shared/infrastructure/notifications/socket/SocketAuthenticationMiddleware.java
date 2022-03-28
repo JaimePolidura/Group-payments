@@ -1,7 +1,10 @@
-package es.grouppayments.backend._shared.infrastructure.eventstreaming.socket;
+package es.grouppayments.backend._shared.infrastructure.notifications.socket;
 
 import es.grouppayments.backend._shared.infrastructure.auth.JWTUtils;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
+import es.grouppayments.backend.users._shared.domain.UserState;
+import es.grouppayments.backend.users._shared.domain.UsersService;
+import es.jaime.javaddd.domain.exceptions.IllegalState;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.messaging.Message;
@@ -19,9 +22,11 @@ import java.util.UUID;
 @Component
 @AllArgsConstructor
 @ConditionalOnProperty(value = "eventsclientdispatcher.method", havingValue = "stomp")
-public class AuthenticationMiddleware implements ChannelInterceptor {
+public class SocketAuthenticationMiddleware implements ChannelInterceptor {
+    private static final UserState REQUIRED_STATE = UserState.SIGNUP_ALL_COMPLETED;
+
     private final JWTUtils jwtUtils;
-    private final GroupMemberService groupMemberService;
+    private final UsersService usersService;
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
@@ -45,10 +50,9 @@ public class AuthenticationMiddleware implements ChannelInterceptor {
 
         String token = getElementFromNativeHeader(accessor, "token");
         String userId = getElementFromNativeHeader(accessor, "userId");
-        String groupId = getElementFromNativeHeader(accessor, "groupId");
 
-        authenticateUserOrThrowException(token, userId);
-        ensureUserInGroup(userId, groupId);
+        ensureTokenIsValid(token, userId);
+        ensureUserHasCorrectState(userId);
     }
 
     private void ensureAllNecesaryHeadersPresent(StompHeaderAccessor accessor, MessageHeaders headers){
@@ -71,16 +75,16 @@ public class AuthenticationMiddleware implements ChannelInterceptor {
         return accessor.getNativeHeader(headerName).get(0);
     }
 
-    private void authenticateUserOrThrowException(String token, String userId){
+    private void ensureTokenIsValid(String token, String userId){
         if(!jwtUtils.isValid(token, UUID.fromString(userId)))
             throw new IllegalArgumentException("Illegal token");
     }
 
-    private void ensureUserInGroup(String userId, String groupId) {
-        var isInGroup = this.groupMemberService.findMembersByGroupId(UUID.fromString(groupId)).stream()
-                .anyMatch(groupMember -> groupMember.getUserId().toString().equals(userId));
+    private void ensureUserHasCorrectState(String userId){
+        UserState state = this.usersService.getByUserId(UUID.fromString(userId)).getState();
 
-        if(!isInGroup)
-            throw new IllegalArgumentException("Incorrect group");
+        if(state != REQUIRED_STATE)
+            throw new IllegalState("Incorrect state, you should fully sign up");
     }
+
 }

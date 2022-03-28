@@ -1,4 +1,4 @@
-package es.grouppayments.backend._shared.domain;
+package es.grouppayments.backend._shared.domain.events;
 
 import es.jaime.javaddd.domain.async.AsyncDomainEvent;
 

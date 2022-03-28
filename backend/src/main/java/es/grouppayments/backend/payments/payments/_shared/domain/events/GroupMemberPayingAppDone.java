@@ -1,6 +1,6 @@
 package es.grouppayments.backend.payments.payments._shared.domain.events;
 
-import es.grouppayments.backend._shared.domain.GroupDomainEvent;
+import es.grouppayments.backend._shared.domain.events.GroupDomainEvent;
 import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.payments.payments._shared.domain.events.other.UserPaidToApp;
 

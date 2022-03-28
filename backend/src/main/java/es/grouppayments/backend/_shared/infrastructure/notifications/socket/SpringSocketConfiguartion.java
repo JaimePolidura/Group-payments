@@ -1,4 +1,4 @@
-package es.grouppayments.backend._shared.infrastructure.eventstreaming.socket;
+package es.grouppayments.backend._shared.infrastructure.notifications.socket;
 
 import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -13,17 +13,17 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @ConditionalOnProperty(value = "eventsclientdispatcher.method", havingValue = "stomp")
 @AllArgsConstructor
 public class SpringSocketConfiguartion implements WebSocketMessageBrokerConfigurer {
-    private final AuthenticationMiddleware authenticationMiddleware;
+    private final SocketAuthenticationMiddleware authenticationMiddleware;
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/app")
-                .enableSimpleBroker("/group");
+                .enableSimpleBroker("/user");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/eventstreaming/socket")
+        registry.addEndpoint("/notifications/socket")
                 .setAllowedOrigins("http://localhost:4200")
                 .withSockJS();
     }

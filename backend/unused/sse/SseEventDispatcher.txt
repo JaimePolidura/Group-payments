@@ -1,7 +1,7 @@
 package es.grouppayments.backend._shared.infrastructure.eventstreaming.sse;
 
-import es.grouppayments.backend._shared.domain.GroupDomainEvent;
-import es.grouppayments.backend._shared.infrastructure.eventstreaming.GroupEventClientDispatcher;
+import es.grouppayments.backend._shared.domain.events.GroupDomainEvent;
+import es.grouppayments.backend._shared.domain.notifications.NotificationClientDispatcher;
 import lombok.AllArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

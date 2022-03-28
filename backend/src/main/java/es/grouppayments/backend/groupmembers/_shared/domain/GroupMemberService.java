@@ -1,6 +1,8 @@
 package es.grouppayments.backend.groupmembers._shared.domain;
 
+import es.grouppayments.backend._shared.domain.Utils;
 import es.grouppayments.backend.groupmembers._shared.domain.events.GroupMemberLeft;
+import es.grouppayments.backend.payments.payments._shared.domain.events.GroupPaymentDone;
 import es.jaime.javaddd.domain.event.EventBus;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import lombok.AllArgsConstructor;
@@ -9,6 +11,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import static es.grouppayments.backend._shared.domain.Utils.*;
 
 @Service
 @AllArgsConstructor

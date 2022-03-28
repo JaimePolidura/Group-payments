@@ -3,6 +3,8 @@ import {NgbActiveModal, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/forms";
 import {UsersService} from "../../../../backend/users/users.service";
 import {Authentication} from "../../../../backend/users/authentication/authentication";
+import {PaymentsService} from "../../../../backend/payments/payments.service";
+import {MakeTransferRquest} from "../../../../backend/payments/request/make-transfer-rquest";
 
 @Component({
   selector: 'app-make-transfer-modal',
@@ -18,6 +20,7 @@ export class MakeTransferModalComponent implements OnInit {
     public activeModal: NgbActiveModal,
     private usersService: UsersService,
     private auth: Authentication,
+    private paymentService: PaymentsService,
   ){}
 
   ngOnInit(): void {
@@ -41,7 +44,15 @@ export class MakeTransferModalComponent implements OnInit {
   }
 
   public makeTransfer(): void {
+    const req: MakeTransferRquest = {
+      to: this.to.value,
+      money: this.money.value,
+      description: this.description.value,
+    }
 
+    this.paymentService.makeTransfer(req).subscribe(res => {
+
+    });
   }
 
   public onKeyupEmailsDestinationCheckNotHisSelf(): void {

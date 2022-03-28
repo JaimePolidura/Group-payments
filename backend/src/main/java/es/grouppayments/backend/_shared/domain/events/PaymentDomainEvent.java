@@ -1,4 +1,4 @@
-package es.grouppayments.backend._shared.domain;
+package es.grouppayments.backend._shared.domain.events;
 
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentState;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentType;

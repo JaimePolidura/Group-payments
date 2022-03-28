@@ -1,6 +1,6 @@
 package es.grouppayments.backend.groups._shared.domain.events;
 
-import es.grouppayments.backend._shared.domain.GroupDomainEvent;
+import es.grouppayments.backend._shared.domain.events.GroupDomainEvent;
 import es.jaime.javaddd.domain.event.DomainEvent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
