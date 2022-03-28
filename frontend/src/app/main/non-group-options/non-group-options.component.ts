@@ -6,6 +6,7 @@ import {GroupsApiService} from "../../../backend/groups/groups-api.service";
 import {CreateGroupRequest} from "../../../backend/groups/request/create-group-request";
 import {GroupRepositoryService} from "../group-repository.service";
 import {Router} from "@angular/router";
+import {MakeTransferModalComponent} from "./make-transfer-modal/make-transfer-modal.component";
 
 @Component({
   selector: 'app-non-group-options',
@@ -101,6 +102,10 @@ export class NonGroupOptionsComponent implements OnInit {
 
   private closeModal(): void {
     this.modalService.dismissAll();
+  }
+
+  public openMakeTransferModal(): void {
+    this.modalService.open(MakeTransferModalComponent);
   }
 
   public goToPaymentHistory() {
