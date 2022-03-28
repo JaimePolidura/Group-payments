@@ -22,4 +22,8 @@ public interface UsingUsers {
     default void addUser(UUID userId, UserState state){
         this.usersRepository().save(new User(userId, "sa", "jhksa", LocalDateTime.now(), "", state, "ES"));
     }
+
+    default void addUser(UUID userId, String email){
+        this.usersRepository().save(new User(userId, "sa", email, LocalDateTime.now(), "", UserState.SIGNUP_ALL_COMPLETED, "ES"));
+    }
 }
