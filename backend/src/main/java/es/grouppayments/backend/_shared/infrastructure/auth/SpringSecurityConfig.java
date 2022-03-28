@@ -48,7 +48,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         return new String[]{
                 "/groups/**",
                 "/payments/paymentshistory",
-                "/payments/transfer"
+                "/payments/transfer",
+                "/users/existsbyemail",
         };
     }
         
