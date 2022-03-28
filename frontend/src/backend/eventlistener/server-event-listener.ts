@@ -1,5 +1,4 @@
 import {ReplaySubject} from "rxjs";
-import {ServerEvent} from "./events/server-event";
 import {ServerMessage} from "../server-message";
 
 export abstract class ServerEventListener {

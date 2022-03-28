@@ -6,6 +6,7 @@ import {LoginRequest} from "./request/login-request";
 import {UserState} from "../../../model/user/user-state";
 import {Currency} from "../../../model/currencies/currency";
 import {PaymentsService} from "../../payments/payments.service";
+import {ServerEventListener} from "../../eventlistener/server-event-listener";
 
 @Injectable({
   providedIn: 'root'

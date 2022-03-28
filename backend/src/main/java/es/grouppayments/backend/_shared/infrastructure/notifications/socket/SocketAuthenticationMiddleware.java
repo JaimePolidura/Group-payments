@@ -57,9 +57,7 @@ public class SocketAuthenticationMiddleware implements ChannelInterceptor {
 
     private void ensureAllNecesaryHeadersPresent(StompHeaderAccessor accessor, MessageHeaders headers){
         var containsAllHeaders = containsNavtiveHeader(accessor, "token") &&
-                containsNavtiveHeader(accessor, "userId") &&
-                containsNavtiveHeader(accessor, "groupId");
-
+                containsNavtiveHeader(accessor, "userId");
         if(!containsAllHeaders){
             throw new IllegalArgumentException("Authentication headers missing");
         }

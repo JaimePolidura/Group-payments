@@ -16,10 +16,14 @@ public final class SocketNotificationsClientDispatcher implements NotificationCl
 
     @Override
     public void send(UUID userId, NotificableClientDomainEvent event) {
-        this.socketSender.convertAndSend(
-                getRouteToNotificate(userId),
-                eventToJSON(event)
-        );
+        try{
+            this.socketSender.convertAndSend(
+                    getRouteToNotificate(userId),
+                    eventToJSON(event)
+            );
+        }catch (Exception e) {
+            //Ignore
+        }
     }
 
     private String getRouteToNotificate(UUID userIdToSend){

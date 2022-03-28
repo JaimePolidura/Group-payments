@@ -5,12 +5,13 @@ import es.grouppayments.backend._shared.domain.events.GroupDomainEvent;
 import es.jaime.javaddd.domain.event.DomainEvent;
 import lombok.AllArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
-public class GroupMemberLeft extends DomainEvent implements GroupDomainEvent {
+public class GroupMemberLeft extends DomainEvent implements GroupDomainEvent, NotificableClientDomainEvent {
     private final UUID userId;
     private final UUID groupId;
 
@@ -30,5 +31,10 @@ public class GroupMemberLeft extends DomainEvent implements GroupDomainEvent {
                 "userId", userId,
                 "groupId", groupId
         );
+    }
+
+    @Override
+    public List<UUID> to() {
+        return new ArrayList<>();
     }
 }

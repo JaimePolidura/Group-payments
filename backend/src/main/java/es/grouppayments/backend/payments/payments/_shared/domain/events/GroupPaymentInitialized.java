@@ -1,14 +1,17 @@
 package es.grouppayments.backend.payments.payments._shared.domain.events;
 
 import es.grouppayments.backend._shared.domain.events.GroupDomainEvent;
+import es.grouppayments.backend._shared.domain.events.NotificableClientDomainEvent;
 import es.jaime.javaddd.domain.event.DomainEvent;
 import lombok.AllArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class GroupPaymentInitialized extends DomainEvent implements GroupDomainEvent {
+public final class GroupPaymentInitialized extends DomainEvent implements GroupDomainEvent, NotificableClientDomainEvent {
     private final UUID groupId;
 
     @Override
@@ -26,5 +29,10 @@ public final class GroupPaymentInitialized extends DomainEvent implements GroupD
         return Map.of(
                 "groupId", this.groupId.toString()
         );
+    }
+
+    @Override
+    public List<UUID> to() {
+        return new ArrayList<>();
     }
 }

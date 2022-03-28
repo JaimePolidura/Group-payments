@@ -82,8 +82,6 @@ export class GroupOptionsComponent implements OnInit {
   get newDescription(): AbstractControl { return <AbstractControl>this.editGroupForm.get('newDescription'); }
 
   public leaveGroup() {
-    this.serverEventListener.disconnect();
-
     this.groupsApi.leaveGroup({groupId: this.currentGroup().groupId, ignoreThis: ""}).subscribe(res => {
       this.groupState.clear();
     });
@@ -159,7 +157,6 @@ export class GroupOptionsComponent implements OnInit {
     window.alert("You have been kicked from the group!");
 
     this.groupState.clear();
-    this.serverEventListener.disconnect()
     this.refreshChangesInUI()
   }
 
@@ -178,7 +175,6 @@ export class GroupOptionsComponent implements OnInit {
   private onGroupDeleted(): void {
     this.eventSubscriber.subscribe('group-deleted', (event) => {
       this.groupState.clear();
-      this.serverEventListener.disconnect();
 
       this.refreshChangesInUI();
     });

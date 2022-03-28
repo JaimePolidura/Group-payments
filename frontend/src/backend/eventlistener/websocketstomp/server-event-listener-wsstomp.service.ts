@@ -22,9 +22,9 @@ export class ServerEventListenerWSStompService implements ServerEventListener{
   }
 
   connect(): void {
-    const severUrl: string = `${this.backendRoutes.USING}/eventstreaming/socket`;
-    const serverSocketToSubscribe: string = `/group/${this.groupState.getCurrentGroup().groupId}`;
-    const headers: AuthenticationSocketHeader = {token: this.auth.getToken(), userId: this.auth.getUserId(), groupId: this.groupState.getCurrentGroup().groupId};
+    const severUrl: string = `${this.backendRoutes.USING}/notifications/socket`;
+    const serverSocketToSubscribe: string = `/user/${this.auth.getUserId()}`;
+    const headers: AuthenticationSocketHeader = {token: this.auth.getToken(), userId: this.auth.getUserId()};
 
     const ws = new SockJS(severUrl);
     this.stompClient = Stomp.over(ws);
@@ -44,6 +44,8 @@ export class ServerEventListenerWSStompService implements ServerEventListener{
   }
 
   onNewEvent(eventRawData: unknown): void {
+    // @ts-ignore
+    console.log(JSON.parse(eventRawData.body))
     // @ts-ignore
     this.eventEmitter.next(JSON.parse(eventRawData.body));
   }

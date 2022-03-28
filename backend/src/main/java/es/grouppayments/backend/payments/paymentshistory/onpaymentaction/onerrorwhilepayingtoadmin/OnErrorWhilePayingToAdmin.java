@@ -15,6 +15,6 @@ public final class OnErrorWhilePayingToAdmin {
     @EventListener({ErrorWhilePayingToGroupAdmin.class})
     public void on(ErrorWhilePayingToGroupAdmin event){
         this.paymentHistoryService.save(event.getUserId(), event.getMoney(), event.getGroup().getDescription(),
-                PaymentType.APP_TO_USER, event.errorMessage());
+                PaymentType.APP_TO_USER, event.getErrorMessage());
     }
 }

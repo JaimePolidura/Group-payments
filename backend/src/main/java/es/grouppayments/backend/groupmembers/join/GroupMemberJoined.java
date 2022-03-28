@@ -6,12 +6,13 @@ import es.jaime.javaddd.domain.event.DomainEvent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
-public class GroupMemberJoined extends DomainEvent implements GroupDomainEvent {
+public class GroupMemberJoined extends DomainEvent implements GroupDomainEvent, NotificableClientDomainEvent {
     @Getter private final UUID userId;
     @Getter private final UUID groupId;
 
@@ -26,5 +27,10 @@ public class GroupMemberJoined extends DomainEvent implements GroupDomainEvent {
                 "userId", userId,
                 "groupId", groupId
         );
+    }
+
+    @Override
+    public List<UUID> to() {
+        return new ArrayList<>();
     }
 }

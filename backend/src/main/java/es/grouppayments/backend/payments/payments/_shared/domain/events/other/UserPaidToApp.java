@@ -1,15 +1,17 @@
 package es.grouppayments.backend.payments.payments._shared.domain.events.other;
 
+import es.grouppayments.backend._shared.domain.events.NotificableClientDomainEvent;
 import es.grouppayments.backend._shared.domain.events.SuccessfulPaymentDomainEvent;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentType;
 import es.jaime.javaddd.domain.event.DomainEvent;
 import lombok.AllArgsConstructor;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
-public class UserPaidToApp extends DomainEvent implements SuccessfulPaymentDomainEvent {
+public class UserPaidToApp extends DomainEvent implements SuccessfulPaymentDomainEvent, NotificableClientDomainEvent {
     private final double money;
     private final String currencyCode;
     private final String description;
@@ -54,5 +56,10 @@ public class UserPaidToApp extends DomainEvent implements SuccessfulPaymentDomai
     @Override
     public UUID getUserId() {
         return this.userId;
+    }
+
+    @Override
+    public List<UUID> to() {
+        return List.of(userId);
     }
 }

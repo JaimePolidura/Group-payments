@@ -54,9 +54,9 @@ public class GroupPaymentCommandHandler implements CommandHandler<GroupPaymentCo
 
                 totalMoneyPaid += moneyToPayPerMember;
 
-                this.eventBus.publish(new GroupMemberPayingAppDone(moneyToPayPerMember, currencyCodeForPayment, group.getDescription(), groupMember.getUserId(), group));
+                this.eventBus.publish(new GroupMemberPayingAppDone(group, moneyToPayPerMember, currencyCodeForPayment, group.getDescription(), groupMember.getUserId()));
             }catch (Exception e){
-                this.eventBus.publish(new ErrorWhileGroupMemberPaying(moneyToPayPerMember, currencyCodeForPayment, group.getDescription(), groupMember.getUserId(), e.getMessage(), group));
+                this.eventBus.publish(new ErrorWhileGroupMemberPaying(group, moneyToPayPerMember, currencyCodeForPayment, group.getDescription(), groupMember.getUserId(), e.getMessage()));
             }
         }
 
@@ -70,7 +70,7 @@ public class GroupPaymentCommandHandler implements CommandHandler<GroupPaymentCo
         try {
             this.paymentService.paymentAppToUser(group.getAdminUserId(), totalMoney, currencyCode);
 
-            this.eventBus.publish(new AppPayingGroupAdminDone(totalMoney, currencyCode, group.getDescription(), group.getAdminUserId(), group));
+            this.eventBus.publish(new AppPayingGroupAdminDone(group, totalMoney, currencyCode, group.getDescription(), group.getAdminUserId()));
         } catch (Exception e) {
             this.eventBus.publish(new ErrorWhilePayingToGroupAdmin(totalMoney, currencyCode, group.getDescription(), group.getAdminUserId(), e.getMessage(), group));
         }

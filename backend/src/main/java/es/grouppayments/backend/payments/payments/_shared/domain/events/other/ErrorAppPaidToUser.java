@@ -1,15 +1,17 @@
 package es.grouppayments.backend.payments.payments._shared.domain.events.other;
 
 import es.grouppayments.backend._shared.domain.events.ErrorPaymentDomainEvent;
+import es.grouppayments.backend._shared.domain.events.NotificableClientDomainEvent;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentType;
 import es.jaime.javaddd.domain.event.DomainEvent;
 import lombok.AllArgsConstructor;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
-public class ErrorAppPaidToUser extends DomainEvent implements ErrorPaymentDomainEvent {
+public class ErrorAppPaidToUser extends DomainEvent implements ErrorPaymentDomainEvent, NotificableClientDomainEvent {
     private final double money;
     private final String currencyCode;
     private final String description;
@@ -61,5 +63,10 @@ public class ErrorAppPaidToUser extends DomainEvent implements ErrorPaymentDomai
     @Override
     public String errorMessage() {
         return this.errorMessage;
+    }
+
+    @Override
+    public List<UUID> to() {
+        return List.of(userId);
     }
 }

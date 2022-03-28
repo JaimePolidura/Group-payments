@@ -3,6 +3,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Authentication} from "../../backend/users/authentication/authentication";
 import {LoginResponse} from "../../backend/users/authentication/responses/login-response";
 import {UserState} from "../../model/user/user-state";
+import {ServerEventListener} from "../../backend/eventlistener/server-event-listener";
 
 @Component({
   selector: 'app-login',
@@ -14,6 +15,7 @@ export class LoginComponent implements OnInit {
     private oauth: Authentication,
     private router: Router,
     private actualRoute: ActivatedRoute,
+    private socket: ServerEventListener,
   ){}
 
   ngOnInit(): void {
@@ -28,7 +30,7 @@ export class LoginComponent implements OnInit {
       else
         this.redirectToRegistration();
     }, () => {
-      this.oauth.logout(() => {});
+      this.oauth.logout(() => this.socket.disconnect());
       window.alert("Currency not supported, impossible to login");
 
       this.router.navigate(["/"]);
