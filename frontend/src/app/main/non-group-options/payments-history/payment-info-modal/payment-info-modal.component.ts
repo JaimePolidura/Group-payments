@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {NgbActiveModal, NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {Authentication} from "../../../../../backend/authentication/authentication";
+import {Authentication} from "../../../../../backend/users/authentication/authentication";
 import {Payment} from "../../../../../model/payments/paymenthistory/payment";
 
 @Component({

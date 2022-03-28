@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Authentication} from "../../authentication/authentication";
+import {Authentication} from "../../users/authentication/authentication";
 import {ServerEvent} from "../events/server-event";
 import {ServerEventListener} from "../server-event-listener";
 import {ReplaySubject} from "rxjs";

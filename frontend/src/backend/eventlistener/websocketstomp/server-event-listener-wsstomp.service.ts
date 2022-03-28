@@ -3,7 +3,7 @@ import {ServerEventListener} from "../server-event-listener";
 import {ReplaySubject} from "rxjs";
 import {BackendUsingRoutesService} from "../../backend-using-routes.service";
 import {GroupRepositoryService} from "../../../app/main/group-repository.service";
-import {Authentication} from "../../authentication/authentication";
+import {Authentication} from "../../users/authentication/authentication";
 import {ServerMessage} from "../../server-message";
 import {AuthenticationSocketHeader} from "./authentication-socket-header";
 

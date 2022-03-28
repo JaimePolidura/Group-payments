@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ConfirmCardSetupData, StripeElement, StripeElements} from "@stripe/stripe-js";
 import {StripeService} from "ngx-stripe";
-import {Authentication} from "../../backend/authentication/authentication";
+import {Authentication} from "../../backend/users/authentication/authentication";
 import {PaymentsService} from "../../backend/payments/payments.service";
 import {ProgressBarService} from "../progress-bar.service";
 import {UserState} from "../../model/user/user-state";

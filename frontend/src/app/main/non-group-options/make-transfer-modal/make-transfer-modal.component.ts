@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {NgbActiveModal, NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/forms";
+import {UsersService} from "../../../../backend/users/users.service";
+import {Authentication} from "../../../../backend/users/authentication/authentication";
 
 @Component({
   selector: 'app-make-transfer-modal',
@@ -9,13 +11,17 @@ import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/form
 })
 export class MakeTransferModalComponent implements OnInit {
   public makeTransferForm: FormGroup;
+  public userToMakeDesitnationFound: boolean;
 
   constructor(
     public modalService: NgbModal,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private usersService: UsersService,
+    private auth: Authentication,
   ){}
 
   ngOnInit(): void {
+    this.userToMakeDesitnationFound = false;
     this.setupTransferForm();
   }
 
@@ -43,5 +49,24 @@ export class MakeTransferModalComponent implements OnInit {
 
     const emailsDestination: string = this.to.value;
 
+    if(emailsDestination == this.auth.getEmail()){
+
+      this.to.setErrors({cannotBeTheSame: true});
+      return;
+    }else{
+      this.to.setErrors(null);
+    }
+
+    this.usersService.existsByEmail(emailsDestination).subscribe(res => {
+      console.log(res);
+
+      if(res.exists && emailsDestination != this.auth.getUserId()){
+        this.to.setErrors(null);
+        this.userToMakeDesitnationFound = true;
+      }else{
+        this.to.setErrors({userNotFound: true});
+        this.userToMakeDesitnationFound = false;
+      }
+    });
   }
 }

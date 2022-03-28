@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {PaymentsService} from "../../../../backend/payments/payments.service";
 import {Payment} from "../../../../model/payments/paymenthistory/payment";
 import {PaymentTypeSearch} from "./payment-type-search";
-import {Authentication} from "../../../../backend/authentication/authentication";
+import {Authentication} from "../../../../backend/users/authentication/authentication";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {PaymentInfoModalComponent} from "./payment-info-modal/payment-info-modal.component";
 

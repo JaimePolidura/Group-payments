@@ -25,6 +25,6 @@
   </form>
 </div>
 <div class="modal-footer transfer-confirm-options">
-  <button type="submit" class="btn btn-success" [ngClass]="{'myDisabled disabled': !makeTransferForm.valid}">✓ Transfer ✓</button>
+  <button type="submit" class="btn btn-success" [ngClass]="{'myDisabled disabled': !makeTransferForm.valid || !userToMakeDesitnationFound}">✓ Transfer ✓</button>
   <button type="submit" class="btn btn-danger" (click)="closeModal()">✘ Cancel ✘</button>
 </div>

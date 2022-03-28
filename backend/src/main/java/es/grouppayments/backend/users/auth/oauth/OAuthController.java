@@ -62,7 +62,7 @@ public class OAuthController {
 
         String newToken = jwtUtils.generateToken(user.getUserId());
 
-        return ResponseEntity.ok(new Response(newToken, user.getUserId(), user.getState().toString(), countryCode));
+        return ResponseEntity.ok(new Response(newToken, user.getUserId(), user.getState().toString(), countryCode, payload.getEmail()));
     }
 
     private User createNewUserIfNotExistsAndGetUserId(String username, String email, String phtoUrl, String country) {
@@ -104,5 +104,6 @@ public class OAuthController {
         @Getter private UUID userId;
         @Getter private String userState;
         @Getter private String countryCode;
+        @Getter private String email;
     }
 }

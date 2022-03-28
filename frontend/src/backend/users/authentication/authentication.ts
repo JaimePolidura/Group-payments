@@ -3,9 +3,9 @@ import {GoogleLoginProvider, SocialAuthService, SocialUser} from "angularx-socia
 import {HttpClient} from "@angular/common/http";
 import {LoginResponse} from "./responses/login-response";
 import {LoginRequest} from "./request/login-request";
-import {UserState} from "../../model/user/user-state";
-import {Currency} from "../../model/currencies/currency";
-import {PaymentsService} from "../payments/payments.service";
+import {UserState} from "../../../model/user/user-state";
+import {Currency} from "../../../model/currencies/currency";
+import {PaymentsService} from "../../payments/payments.service";
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +14,7 @@ export class Authentication {
   private loggedUser: SocialUser;
   private userId: string;
   private token: string;
+  private email: string;
   private userState: UserState;
   private countryCode: string;
   private currency: Currency;
@@ -34,6 +35,7 @@ export class Authentication {
       this.token = loginResponse.token;
       this.userState = loginResponse.userState;
       this.countryCode = loginResponse.countryCode;
+      this.email = loginResponse.email;
       // @ts-ignore
       this.currency = await this.getCurrencyFromApi(this.countryCode);
 
@@ -98,6 +100,10 @@ export class Authentication {
 
   public getUserId(): string {
     return this.userId;
+  }
+
+  public getEmail(): string {
+    return this.email;
   }
 
 }

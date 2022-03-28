@@ -6,7 +6,7 @@ import {
   HttpInterceptor
 } from '@angular/common/http';
 import {finalize, Observable} from 'rxjs';
-import {Authentication} from "./authentication/authentication";
+import {Authentication} from "./users/authentication/authentication";
 import {ProgressBarService} from "../app/progress-bar.service";
 
 const TOKEN_HEADER_KEY = 'Authorization';

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Authentication} from "../../backend/authentication/authentication";
+import {Authentication} from "../../backend/users/authentication/authentication";
 import {GroupsApiService} from "../../backend/groups/groups-api.service";
 import {GroupRepositoryService} from "./group-repository.service";
 import {ActivatedRoute, Router} from "@angular/router";

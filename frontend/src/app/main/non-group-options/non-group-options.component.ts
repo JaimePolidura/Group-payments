@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {Authentication} from "../../../backend/authentication/authentication";
+import {Authentication} from "../../../backend/users/authentication/authentication";
 import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/forms";
 import {GroupsApiService} from "../../../backend/groups/groups-api.service";
 import {CreateGroupRequest} from "../../../backend/groups/request/create-group-request";

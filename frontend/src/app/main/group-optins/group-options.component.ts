@@ -5,7 +5,7 @@ import {User} from "../../../model/user/user";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {GroupsApiService} from "../../../backend/groups/groups-api.service";
 import {KickGroupMemberRequest} from "../../../backend/groups/request/kick-group-member-request";
-import {Authentication} from "../../../backend/authentication/authentication";
+import {Authentication} from "../../../backend/users/authentication/authentication";
 import {GroupPaymentRequest} from "../../../backend/groups/request/group-payment-request";
 import {GetGroupMemberByUserIdRequest} from "../../../backend/groups/request/get-group-member-by-user-id-request";
 import {FrontendUsingRoutesService} from "../../../frontend-using-routes.service";
