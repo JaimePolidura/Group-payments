@@ -11,11 +11,12 @@ import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
-public class UserPaidToApp extends DomainEvent implements SuccessfulPaymentDomainEvent, NotificableClientDomainEvent {
+public class TransferAppPaidToUser extends DomainEvent implements SuccessfulPaymentDomainEvent, NotificableClientDomainEvent {
     private final double money;
     private final String currencyCode;
     private final String description;
     private final UUID userId;
+    private final String username;
 
     @Override
     public Map<String, Object> body() {
@@ -24,13 +25,14 @@ public class UserPaidToApp extends DomainEvent implements SuccessfulPaymentDomai
                 "currencyCode", this.currencyCode,
                 "description", this.description,
                 "userId", userId,
-                "state", getState()
+                "state", getState(),
+                "username", this.username
         );
     }
 
     @Override
     public String name() {
-        return "payments-sucessful-user-app";
+        return "transfer-payments-sucessful-app-user";
     }
 
     @Override
@@ -45,7 +47,7 @@ public class UserPaidToApp extends DomainEvent implements SuccessfulPaymentDomai
 
     @Override
     public PaymentType getPaymentType() {
-        return PaymentType.USER_TO_APP;
+        return PaymentType.APP_TO_USER;
     }
 
     @Override

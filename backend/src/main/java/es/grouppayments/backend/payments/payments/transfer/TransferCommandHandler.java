@@ -3,10 +3,10 @@ package es.grouppayments.backend.payments.payments.transfer;
 import es.grouppayments.backend.payments.currencies._shared.domain.CurrencyService;
 import es.grouppayments.backend.payments.payments._shared.domain.CommissionPolicy;
 import es.grouppayments.backend.payments.payments._shared.domain.PaymentMakerService;
-import es.grouppayments.backend.payments.payments._shared.domain.events.other.AppPaidToUser;
-import es.grouppayments.backend.payments.payments._shared.domain.events.other.ErrorAppPaidToUser;
-import es.grouppayments.backend.payments.payments._shared.domain.events.other.ErrorUserPaidToApp;
-import es.grouppayments.backend.payments.payments._shared.domain.events.other.UserPaidToApp;
+import es.grouppayments.backend.payments.payments._shared.domain.events.other.TransferAppPaidToUser;
+import es.grouppayments.backend.payments.payments._shared.domain.events.other.TransferErrorAppPaidToUser;
+import es.grouppayments.backend.payments.payments._shared.domain.events.other.TransferErrorUserPaidToApp;
+import es.grouppayments.backend.payments.payments._shared.domain.events.other.TransferUserPaidToApp;
 import es.grouppayments.backend.users._shared.domain.User;
 import es.grouppayments.backend.users._shared.domain.UserState;
 import es.grouppayments.backend.users._shared.domain.UsersService;
@@ -50,11 +50,11 @@ public final class TransferCommandHandler implements CommandHandler<TransferComm
         try {
             this.paymentMakerService.paymentUserToApp(command.getUserIdFrom(), command.getMoney(), currencyCode);
 
-            this.eventBus.publish(new UserPaidToApp(command.getMoney(), currencyCode, command.getDescription(), command.getUserIdFrom()));
+            this.eventBus.publish(new TransferUserPaidToApp(command.getMoney(), currencyCode, command.getDescription(), command.getUserIdFrom()));
 
             return true;
         } catch (Exception e) {
-            this.eventBus.publish(new ErrorUserPaidToApp(command.getMoney(), currencyCode, command.getDescription(), command.getUserIdFrom(), e.getMessage()));
+            this.eventBus.publish(new TransferErrorUserPaidToApp(command.getMoney(), currencyCode, command.getDescription(), command.getUserIdFrom(), e.getMessage()));
 
             return false;
         }
@@ -63,11 +63,13 @@ public final class TransferCommandHandler implements CommandHandler<TransferComm
     private void tryPaymentAppToUserTo(TransferCommand command, String currencyCode){
         try {
             double moneyDeductedCommission = this.comimssionPolicy.deductCommission(command.getMoney());
+        
             this.paymentMakerService.paymentAppToUser(command.getUserIdTo(), moneyDeductedCommission, currencyCode);
+            String userNameFrom = this.usersService.getByUserId(command.getUserIdFrom()).getUsername();
 
-            this.eventBus.publish(new AppPaidToUser(moneyDeductedCommission, currencyCode, command.getDescription(), command.getUserIdTo()));
+            this.eventBus.publish(new TransferAppPaidToUser(moneyDeductedCommission, currencyCode, command.getDescription(), command.getUserIdTo(), userNameFrom));
         } catch (Exception e) {
-            this.eventBus.publish(new ErrorAppPaidToUser(command.getMoney(), currencyCode, command.getDescription(), command.getUserIdTo(), e.getMessage()));
+            this.eventBus.publish(new TransferErrorAppPaidToUser(command.getMoney(), currencyCode, command.getDescription(), command.getUserIdTo(), e.getMessage()));
         }
     }
 

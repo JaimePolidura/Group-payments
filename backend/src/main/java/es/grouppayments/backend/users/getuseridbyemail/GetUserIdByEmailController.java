@@ -1,4 +1,4 @@
-package es.grouppayments.backend.users.userexistsbyemail;
+package es.grouppayments.backend.users.getuseridbyemail;
 
 import es.grouppayments.backend._shared.infrastructure.ApplicationController;
 import es.jaime.javaddd.domain.cqrs.query.QueryBus;
@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin
 @AllArgsConstructor
-public final class UserExistsByEmailController extends ApplicationController {
+public final class GetUserIdByEmailController extends ApplicationController {
     private final QueryBus queryBus;
 
-    @GetMapping("/users/existsbyemail")
-    public ResponseEntity<UserExistsByEmailQueryResponse> existsByEmail(@RequestParam String email){
-        return buildNewHttpResponseOK(this.queryBus.ask(new UserExistsByEmailQuery(email)));
+    @GetMapping("/users/getuseridbyemail")
+    public ResponseEntity<GetUserIdByEmailQueryResponse> existsByEmail(@RequestParam String email){
+        return buildNewHttpResponseOK(this.queryBus.ask(new GetUserIdByEmailQuery(email)));
     }
 }

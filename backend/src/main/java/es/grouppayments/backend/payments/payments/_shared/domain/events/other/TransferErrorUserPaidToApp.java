@@ -1,7 +1,7 @@
 package es.grouppayments.backend.payments.payments._shared.domain.events.other;
 
+import es.grouppayments.backend._shared.domain.events.ErrorPaymentDomainEvent;
 import es.grouppayments.backend._shared.domain.events.NotificableClientDomainEvent;
-import es.grouppayments.backend._shared.domain.events.SuccessfulPaymentDomainEvent;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentType;
 import es.jaime.javaddd.domain.event.DomainEvent;
 import lombok.AllArgsConstructor;
@@ -11,11 +11,12 @@ import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
-public class AppPaidToUser extends DomainEvent implements SuccessfulPaymentDomainEvent, NotificableClientDomainEvent {
+public class TransferErrorUserPaidToApp extends DomainEvent implements ErrorPaymentDomainEvent, NotificableClientDomainEvent {
     private final double money;
     private final String currencyCode;
     private final String description;
     private final UUID userId;
+    private final String errorMessage;
 
     @Override
     public Map<String, Object> body() {
@@ -24,13 +25,14 @@ public class AppPaidToUser extends DomainEvent implements SuccessfulPaymentDomai
                 "currencyCode", this.currencyCode,
                 "description", this.description,
                 "userId", userId,
+                "errorMessage", errorMessage,
                 "state", getState()
         );
     }
 
     @Override
     public String name() {
-        return "payments-sucessful-app-user";
+        return "transfer-payments-error-user-app";
     }
 
     @Override
@@ -45,7 +47,7 @@ public class AppPaidToUser extends DomainEvent implements SuccessfulPaymentDomai
 
     @Override
     public PaymentType getPaymentType() {
-        return PaymentType.APP_TO_USER;
+        return PaymentType.USER_TO_APP;
     }
 
     @Override
@@ -56,6 +58,11 @@ public class AppPaidToUser extends DomainEvent implements SuccessfulPaymentDomai
     @Override
     public UUID getUserId() {
         return this.userId;
+    }
+
+    @Override
+    public String errorMessage() {
+        return this.errorMessage;
     }
 
     @Override

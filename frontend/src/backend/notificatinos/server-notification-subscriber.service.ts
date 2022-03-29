@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import {ServerEvent} from "./events/server-event";
-import {ServerEventListener} from "./server-event-listener";
+import {ServerEvent} from "./notifications/server-event";
+import {ServerNotificationsListener} from "./server-notifications-listener";
 
 @Injectable({
   providedIn: 'root'
 })
-export class ServerEventsSubscriberService {
+export class ServerNotificationSubscriberService {
   protected readonly callbacks: {[name: string]: ((event: ServerEvent) => void)};
 
-  constructor(private serverEventListener: ServerEventListener,) {
+  constructor(private serverEventListener: ServerNotificationsListener) {
     this.callbacks = {};
     this.serverEventListener.getEventEmitter().subscribe(event => {
       const callbak = this.callbacks[event.name];

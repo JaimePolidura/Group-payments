@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {ServerEventListener} from "../server-event-listener";
+import {ServerNotificationsListener} from "../server-notifications-listener";
 import {ReplaySubject} from "rxjs";
 import {BackendUsingRoutesService} from "../../backend-using-routes.service";
 import {GroupRepositoryService} from "../../../app/main/group-repository.service";
@@ -13,7 +13,7 @@ declare var Stomp: any;
 @Injectable({
   providedIn: 'root'
 })
-export class ServerEventListenerWSStompService implements ServerEventListener{
+export class ServerNotificationsListenerSocketStompService implements ServerNotificationsListener{
   private stompClient: any;
   private readonly eventEmitter: ReplaySubject<ServerMessage>;
 
@@ -34,7 +34,7 @@ export class ServerEventListenerWSStompService implements ServerEventListener{
       console.log("connected");
 
       that.stompClient.subscribe(serverSocketToSubscribe, (message: any) => {
-        that.onNewEvent(message);
+        that.onNewNotification(message);
       });
     });
   }
@@ -43,7 +43,7 @@ export class ServerEventListenerWSStompService implements ServerEventListener{
     this.stompClient.disconnect();
   }
 
-  onNewEvent(eventRawData: unknown): void {
+  onNewNotification(eventRawData: unknown): void {
     // @ts-ignore
     console.log(JSON.parse(eventRawData.body))
     // @ts-ignore

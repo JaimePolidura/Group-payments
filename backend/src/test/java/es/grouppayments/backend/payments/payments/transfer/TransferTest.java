@@ -1,9 +1,9 @@
 package es.grouppayments.backend.payments.payments.transfer;
 
-import es.grouppayments.backend.payments.payments._shared.domain.events.other.AppPaidToUser;
-import es.grouppayments.backend.payments.payments._shared.domain.events.other.ErrorAppPaidToUser;
-import es.grouppayments.backend.payments.payments._shared.domain.events.other.ErrorUserPaidToApp;
-import es.grouppayments.backend.payments.payments._shared.domain.events.other.UserPaidToApp;
+import es.grouppayments.backend.payments.payments._shared.domain.events.other.TransferAppPaidToUser;
+import es.grouppayments.backend.payments.payments._shared.domain.events.other.TransferErrorAppPaidToUser;
+import es.grouppayments.backend.payments.payments._shared.domain.events.other.TransferErrorUserPaidToApp;
+import es.grouppayments.backend.payments.payments._shared.domain.events.other.TransferUserPaidToApp;
 import es.grouppayments.backend.users._shared.domain.UserState;
 import es.jaime.javaddd.domain.exceptions.*;
 import org.junit.Test;
@@ -23,7 +23,7 @@ public final class TransferTest extends TransferTestMother{
 
         execute(userIdFrom, userIdTo, MONEY);
 
-        assertEventRaised(UserPaidToApp.class, AppPaidToUser.class);
+        assertEventRaised(TransferUserPaidToApp.class, TransferAppPaidToUser.class);
         assertMoneyUsersPaidToApp(MONEY);
         assertMoneyAppPaidToUser(super.commissionPolicy().deductCommission(MONEY));
     }
@@ -37,7 +37,7 @@ public final class TransferTest extends TransferTestMother{
         super.payingUserToAppWillFail();
         execute(userIdFrom, userIdTo, MONEY);
 
-        assertEventRaised(ErrorUserPaidToApp.class);
+        assertEventRaised(TransferErrorUserPaidToApp.class);
         assertMoneyUsersPaidToApp(0);
         assertMoneyAppPaidToUser(0);
     }
@@ -51,7 +51,7 @@ public final class TransferTest extends TransferTestMother{
         super.payingTAppToUserWillFail();
         execute(userIdFrom, userIdTo, MONEY);
 
-        assertEventRaised(UserPaidToApp.class, ErrorAppPaidToUser.class);
+        assertEventRaised(TransferUserPaidToApp.class, TransferErrorAppPaidToUser.class);
         assertMoneyUsersPaidToApp(MONEY);
         assertMoneyAppPaidToUser(0);
     }

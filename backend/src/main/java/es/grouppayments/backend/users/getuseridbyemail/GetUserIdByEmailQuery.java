@@ -1,10 +1,10 @@
-package es.grouppayments.backend.users.userexistsbyemail;
+package es.grouppayments.backend.users.getuseridbyemail;
 
 import es.jaime.javaddd.domain.cqrs.query.Query;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
-public final class UserExistsByEmailQuery implements Query {
+public final class GetUserIdByEmailQuery implements Query {
     @Getter private final String email;
 }

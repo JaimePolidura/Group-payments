@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import {Authentication} from "../../users/authentication/authentication";
-import {ServerEvent} from "../events/server-event";
-import {ServerEventListener} from "../server-event-listener";
+import {Authentication} from "../../src/backend/users/authentication/authentication";
+import {ServerEvent} from "../../src/backend/eventlistener/notifications/server-event";
+import {ServerEventListener} from "../../src/backend/eventlistener/server-event-listener";
 import {ReplaySubject} from "rxjs";
-import {ServerMessage} from "../../server-message";
-import {BackendUsingRoutesService} from "../../backend-using-routes.service";
+import {ServerMessage} from "../../src/backend/server-message";
+import {BackendUsingRoutesService} from "../../src/backend/backend-using-routes.service";
 
 @Injectable({
   providedIn: 'root'

@@ -49,7 +49,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/groups/**",
                 "/payments/paymentshistory",
                 "/payments/transfer",
-                "/users/existsbyemail",
+                "/users/getuseridbyemail"
         };
     }
         
