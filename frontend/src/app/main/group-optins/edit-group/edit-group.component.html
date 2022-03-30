@@ -1,0 +1,26 @@
+<form action="" [formGroup]="editGroupForm" (ngSubmit)="editGroupForm.valid && editGroup()">
+  <div class="modal-header">
+    <h2 style="text-align: center">Edit group</h2>
+    <button class="btn-close" type="button" (click)="closeModal()"></button>
+  </div>
+  <div class="modal-body modal-body-centered">
+    <input class="form-control"
+           type="number"
+           placeholder="New money"
+           formControlName="newMoney"
+           [ngClass]="{'is-invalid': newMoney.errors && (newMoney.touched || newMoney.dirty)}" />
+    <br>
+    <input class="form-control"
+           type="text"
+           placeholder="New description"
+           formControlName="newDescription"
+           [ngClass]="{'is-invalid': newDescription.errors && (newDescription.touched || newDescription.dirty)}" />
+  </div>
+  <div class="modal-footer payment-confirm-options">
+    <button type="submit"
+            class="myButton myButton-footer"
+            [ngClass]="{'myDisabled cursor-disabled': !editGroupForm.valid}"
+            (click)="editGroupForm.valid && this.closeModal()">✓ Edit ✓
+    </button>
+  </div>
+</form>

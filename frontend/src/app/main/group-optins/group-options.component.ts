@@ -9,13 +9,10 @@ import {Authentication} from "../../../backend/users/authentication/authenticati
 import {GroupPaymentRequest} from "../../../backend/groups/request/group-payment-request";
 import {GetGroupMemberByUserIdRequest} from "../../../backend/groups/request/get-group-member-by-user-id-request";
 import {FrontendUsingRoutesService} from "../../../frontend-using-routes.service";
-import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/forms";
-import {EditGroupRequest} from "../../../backend/groups/request/edit-group-request";
 import {GroupMemberLeftEvent} from "../../../backend/notificatinos/notifications/group-member-left-event";
 import {GroupMemberJoined} from "../../../backend/notificatinos/notifications/group-member-joined";
 import {GroupEdited} from "../../../backend/notificatinos/notifications/group-edited";
 import {ServerNotificationSubscriberService} from "../../../backend/notificatinos/server-notification-subscriber.service";
-import {ServerNotificationsListener} from "../../../backend/notificatinos/server-notifications-listener";
 import {PaymentInitialized} from "../../../backend/notificatinos/notifications/payment-initialized";
 import {GroupState} from "../../../model/group/group-state";
 import {ProgressBarService} from "../../progress-bar.service";
@@ -25,6 +22,8 @@ import {ErrorWhileMemberPaying} from "../../../backend/notificatinos/notificatio
 import {AppPayingAdminDone} from "../../../backend/notificatinos/notifications/app-paying-admin-done";
 import {ErrorWhilePayingToAdmin} from "../../../backend/notificatinos/notifications/error-while-paying-to-admin";
 import {MemberPayingAppDone} from "../../../backend/notificatinos/notifications/member-paying-app-done";
+import {ShareGroupComponent} from "./share-group/share-group.component";
+import {EditGroupComponent} from "./edit-group/edit-group.component";
 
 @Component({
   selector: 'app-group-options',
@@ -35,7 +34,6 @@ export class GroupOptionsComponent implements OnInit {
   @ViewChild('errorPaymentModal') private errorPaymentModal: any;
   @ViewChild('paymentInitializedModal') private paymentInitializedModal: any;
 
-  public editGroupForm: FormGroup;
   public logEventsGroupPayments: {body: string, error: boolean}[];
   public donePaying: boolean;
   public donePayingWithoutErrors: boolean;
@@ -67,18 +65,7 @@ export class GroupOptionsComponent implements OnInit {
     this.onAppPayingAdmin();
     this.onErrorWhilePayingToAdmin();
     this.onMemberPaidToApp();
-
-    this.setUpEditGroupForm();
   }
-
-  private setUpEditGroupForm(): void {
-    this.editGroupForm = new FormGroup({
-      newMoney: new FormControl(this.currentGroup().money, [Validators.required, Validators.min(0.1), Validators.max(10000)]),
-      newDescription: new FormControl(this.currentGroup().description, [Validators.required, Validators.minLength(1), Validators.maxLength(16)])
-    });
-  }
-  get newMoney(): AbstractControl {return <AbstractControl>this.editGroupForm.get('newMoney'); }
-  get newDescription(): AbstractControl { return <AbstractControl>this.editGroupForm.get('newDescription'); }
 
   public leaveGroup() {
     this.groupsApi.leaveGroup({groupId: this.currentGroup().groupId, ignoreThis: ""}).subscribe(res => {
@@ -88,11 +75,6 @@ export class GroupOptionsComponent implements OnInit {
 
   public currentGroup(): Group {
     return this.groupState.getCurrentGroup();
-  }
-
-  public copyToClipboard(toCopy: any) {
-    navigator.clipboard.writeText(toCopy);
-    this.closeModal();
   }
 
   public closeModal(): void {
@@ -191,31 +173,6 @@ export class GroupOptionsComponent implements OnInit {
       0 ;
   }
 
-  public editGroup() {
-    if(!this.isEditGroupFormDataChanged()) return;
-
-    const request: EditGroupRequest = {
-      groupId: this.groupState.getCurrentGroup().groupId,
-      newDescription: this.newDescription.value,
-      newMoney: this.newMoney.value,
-    }
-
-    this.groupsApi.editGroup(request).subscribe(res => {
-      this.groupState.setCurrentGroup({
-        ...this.currentGroup(),
-        money: request.newMoney,
-        description: request.newDescription,
-      });
-
-      this.refreshChangesInUI();
-    });
-  }
-
-  private isEditGroupFormDataChanged(): boolean {
-    return this.newMoney.value != this.currentGroup().money ||
-      this.newDescription.value != this.currentGroup().description;
-  }
-
   private onPaymentInitialized(): void{
     this.eventSubscriber.subscribe<PaymentInitialized>('group-payment-initialized', (event) => {
       this.modalService.open(this.paymentInitializedModal);
@@ -286,9 +243,18 @@ export class GroupOptionsComponent implements OnInit {
     });
   }
 
+  public openEditGroupModal(): void {
+    this.modalService.open(EditGroupComponent);
+  }
+
   //We force angular to update
   //TODO fix
   private refreshChangesInUI(): void {
     this.applicationRef.tick();
+  }
+
+  public openShareGroupModal(): void {
+    const shareGroupModal = this.modalService.open(ShareGroupComponent);
+    shareGroupModal.componentInstance.linkGroup = this.getURLForJoiningGroup();
   }
 }

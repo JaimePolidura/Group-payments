@@ -28,8 +28,6 @@ export class MainComponent implements OnInit {
       if(res.group != undefined) {
         this.groupState.setCurrentGroup(res.group);
 
-        console.log(res.group.state == GroupState.PAYING);
-
         this.isGroupHTTPRequestDone = true;
 
         this.groupService.getGroupMembersByGroupId(res.group.groupId).subscribe(res =>  {

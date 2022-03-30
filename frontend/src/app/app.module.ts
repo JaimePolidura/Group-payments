@@ -31,6 +31,8 @@ import { ToastrModule } from 'ngx-toastr';
 import { NotificationsListenerComponent } from './notifications-listener/notifications-listener.component';
 import { JoinGroupModalComponent } from './main/non-group-options/join-group-modal/join-group-modal.component';
 import { CreateGroupModalComponent } from './main/non-group-options/create-group-modal/create-group-modal.component';
+import { ShareGroupComponent } from './main/group-optins/share-group/share-group.component';
+import { EditGroupComponent } from './main/group-optins/edit-group/edit-group.component';
 
 const STRIPE_PUBLIC_KEY = "pk_test_51KdFRuHd6M46OJ6AWkTIoAh6RRcusDTqAEin4zxmvSkAEotVSwhmD6rD02ymmU3PJCAtylGS8ARrxejFlbscO8as00icxHNy4i";
 
@@ -51,6 +53,8 @@ const STRIPE_PUBLIC_KEY = "pk_test_51KdFRuHd6M46OJ6AWkTIoAh6RRcusDTqAEin4zxmvSkA
     NotificationsListenerComponent,
     JoinGroupModalComponent,
     CreateGroupModalComponent,
+    ShareGroupComponent,
+    EditGroupComponent,
   ],
   imports: [
     BrowserModule,
