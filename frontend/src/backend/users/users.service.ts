@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {ExistsByEmailResponse} from "./response/exists-by-email-response";
 import {BackendUsingRoutesService} from "../backend-using-routes.service";
+import {GetUserIdByEmailResponse} from "./response/get-user-id-by-email-response";
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,7 @@ export class UsersService {
     private routes: BackendUsingRoutesService,
   ){}
 
-  public existsByEmail(email: string): Observable<ExistsByEmailResponse> {
-    return this.http.get<ExistsByEmailResponse>(`${this.routes.USING}/users/existsbyemail?email=${email}`);
+  public getUserIdByEmail(email: string): Observable<GetUserIdByEmailResponse> {
+    return this.http.get<GetUserIdByEmailResponse>(`${this.routes.USING}/users/getuseridbyemail?email=${email}`);
   }
 }

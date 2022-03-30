@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Authentication} from "../../backend/users/authentication/authentication";
 import {LoginResponse} from "../../backend/users/authentication/responses/login-response";
 import {UserState} from "../../model/user/user-state";
-import {ServerEventListener} from "../../backend/eventlistener/server-event-listener";
+import {ServerNotificationsListener} from "../../backend/notificatinos/server-notifications-listener";
 
 @Component({
   selector: 'app-login',
@@ -15,7 +15,8 @@ export class LoginComponent implements OnInit {
     private oauth: Authentication,
     private router: Router,
     private actualRoute: ActivatedRoute,
-    private socket: ServerEventListener,
+    private socket: ServerNotificationsListener,
+    private serverNotificationsConnection: ServerNotificationsListener,
   ){}
 
   ngOnInit(): void {
@@ -24,6 +25,8 @@ export class LoginComponent implements OnInit {
   signInWithGoogle() {
     this.oauth.signInWithGoogle((loginResponse: LoginResponse) => {
       const alreadyRegistered: boolean = loginResponse.userState == UserState.SIGNUP_ALL_COMPLETED;
+
+      this.serverNotificationsConnection.connect();
 
       if(alreadyRegistered)
         this.redirectToMain();

@@ -11,20 +11,20 @@ import {GetGroupMemberByUserIdRequest} from "../../../backend/groups/request/get
 import {FrontendUsingRoutesService} from "../../../frontend-using-routes.service";
 import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/forms";
 import {EditGroupRequest} from "../../../backend/groups/request/edit-group-request";
-import {GroupMemberLeftEvent} from "../../../backend/eventlistener/events/group-member-left-event";
-import {GroupMemberJoined} from "../../../backend/eventlistener/events/group-member-joined";
-import {GroupEdited} from "../../../backend/eventlistener/events/group-edited";
-import {ServerEventsSubscriberService} from "../../../backend/eventlistener/server-events-subscriber.service";
-import {ServerEventListener} from "../../../backend/eventlistener/server-event-listener";
-import {PaymentInitialized} from "../../../backend/eventlistener/events/payment-initialized";
+import {GroupMemberLeftEvent} from "../../../backend/notificatinos/notifications/group-member-left-event";
+import {GroupMemberJoined} from "../../../backend/notificatinos/notifications/group-member-joined";
+import {GroupEdited} from "../../../backend/notificatinos/notifications/group-edited";
+import {ServerNotificationSubscriberService} from "../../../backend/notificatinos/server-notification-subscriber.service";
+import {ServerNotificationsListener} from "../../../backend/notificatinos/server-notifications-listener";
+import {PaymentInitialized} from "../../../backend/notificatinos/notifications/payment-initialized";
 import {GroupState} from "../../../model/group/group-state";
 import {ProgressBarService} from "../../progress-bar.service";
 import {PaymentsService} from "../../../backend/payments/payments.service";
-import {PaymentDone} from "../../../backend/eventlistener/events/payment-done";
-import {ErrorWhileMemberPaying} from "../../../backend/eventlistener/events/error-while-member-paying";
-import {AppPayingAdminDone} from "../../../backend/eventlistener/events/app-paying-admin-done";
-import {ErrorWhilePayingToAdmin} from "../../../backend/eventlistener/events/error-while-paying-to-admin";
-import {MemberPayingAppDone} from "../../../backend/eventlistener/events/member-paying-app-done";
+import {PaymentDone} from "../../../backend/notificatinos/notifications/payment-done";
+import {ErrorWhileMemberPaying} from "../../../backend/notificatinos/notifications/error-while-member-paying";
+import {AppPayingAdminDone} from "../../../backend/notificatinos/notifications/app-paying-admin-done";
+import {ErrorWhilePayingToAdmin} from "../../../backend/notificatinos/notifications/error-while-paying-to-admin";
+import {MemberPayingAppDone} from "../../../backend/notificatinos/notifications/member-paying-app-done";
 
 @Component({
   selector: 'app-group-options',
@@ -38,15 +38,15 @@ export class GroupOptionsComponent implements OnInit {
   public editGroupForm: FormGroup;
   public logEventsGroupPayments: {body: string, error: boolean}[];
   public donePaying: boolean;
+  public donePayingWithoutErrors: boolean;
 
   constructor(
     public groupState: GroupRepositoryService,
     public modalService: NgbModal,
     private groupsApi: GroupsApiService,
-    private serverEventListener: ServerEventListener,
     private applicationRef: ApplicationRef,
     private frontendHost: FrontendUsingRoutesService,
-    private eventSubscriber: ServerEventsSubscriberService,
+    private eventSubscriber: ServerNotificationSubscriberService,
     private progressBar: ProgressBarService,
     private paymentService: PaymentsService,
     public auth: Authentication,
@@ -55,6 +55,7 @@ export class GroupOptionsComponent implements OnInit {
   ngOnInit(): void {
     this.logEventsGroupPayments = [];
     this.donePaying = false;
+    this.donePayingWithoutErrors = false;
 
     this.onMemberLeft();
     this.onMemberJoined();
@@ -66,8 +67,6 @@ export class GroupOptionsComponent implements OnInit {
     this.onAppPayingAdmin();
     this.onErrorWhilePayingToAdmin();
     this.onMemberPaidToApp();
-
-    this.serverEventListener.connect();
 
     this.setUpEditGroupForm();
   }
@@ -230,8 +229,10 @@ export class GroupOptionsComponent implements OnInit {
   private onMemberPaidToApp(): void {
     this.eventSubscriber.subscribe<MemberPayingAppDone>('group-payment-member-app-done', res => {
 
-      if(this.auth.getUserId() == res.groupMemberUserId)
-        this.logEventsGroupPayments.push({error: false, body: `You have been charged ${res.money}`});
+      if(this.auth.getUserId() == res.groupMemberUserId){
+        this.logEventsGroupPayments.push({error: false, body: `You have been charged ${res.money}${this.auth.getCurrency().symbol}`});
+        this.donePayingWithoutErrors = true;
+      }
     })
   }
 
@@ -249,8 +250,10 @@ export class GroupOptionsComponent implements OnInit {
 
   private onAppPayingAdmin(): void {
     this.eventSubscriber.subscribe<AppPayingAdminDone>('group-payment-app-admin-done', res => {
-      if(this.isLoggedUserAdminOfCurrentGroup())
+      if(this.isLoggedUserAdminOfCurrentGroup()){
         this.logEventsGroupPayments.push({error: false, body: `You recieved the payment ${res.money}`});
+        this.donePayingWithoutErrors = true;
+      }
     });
   }
 

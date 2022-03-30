@@ -1,4 +1,4 @@
-import {ServerEvent} from "./eventlistener/events/server-event";
+import { ServerEvent } from "./notificatinos/notifications/server-event";
 
 export interface ServerMessage {
   id: string,
