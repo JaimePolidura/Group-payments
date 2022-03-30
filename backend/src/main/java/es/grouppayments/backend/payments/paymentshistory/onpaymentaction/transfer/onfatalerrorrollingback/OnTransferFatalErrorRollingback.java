@@ -9,11 +9,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public final class OnFataErrorRollingback {
+public final class OnTransferFatalErrorRollingback {
     private final PaymentHistoryService paymentHistoryService;
 
     @EventListener({TransferFatalErrorRollingback.class})
     public void on(TransferFatalErrorRollingback event){
-        this.paymentHistoryService.save(event.getUserId(), event.getMoney(), event.getDescription(), PaymentType.APP_TO_USER);
+        this.paymentHistoryService.save(event.getUserId(), event.getMoney(), event.getDescription(),
+                PaymentType.APP_TO_USER, event.errorMessage());
     }
 }

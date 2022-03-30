@@ -1,4 +1,4 @@
-package es.grouppayments.backend.payments.paymenteshistory.onpaymentaction;
+package es.grouppayments.backend.payments.paymenteshistory;
 
 import _shared.TestMother;
 import _shared.UsingPaymentsHistory;

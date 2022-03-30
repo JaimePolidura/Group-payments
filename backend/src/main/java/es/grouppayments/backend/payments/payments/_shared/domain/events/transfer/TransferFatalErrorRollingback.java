@@ -50,7 +50,7 @@ public final class TransferFatalErrorRollingback extends DomainEvent implements 
 
     @Override
     public UUID getUserId() {
-        return this.getUserId();
+        return this.userId;
     }
 
     @Override

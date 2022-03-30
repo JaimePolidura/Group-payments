@@ -1,7 +1,8 @@
-package es.grouppayments.backend.payments.paymenteshistory.onpaymentaction;
+package es.grouppayments.backend.payments.paymenteshistory.onpaymentaction.group;
 
 import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups._shared.domain.GroupState;
+import es.grouppayments.backend.payments.paymenteshistory.PaymentHistoryTestMother;
 import es.grouppayments.backend.payments.payments._shared.domain.events.grouppayment.AppPayingGroupAdminDone;
 import es.grouppayments.backend.payments.payments._shared.domain.events.grouppayment.ErrorWhileGroupMemberPaying;
 import es.grouppayments.backend.payments.payments._shared.domain.events.grouppayment.ErrorWhilePayingToGroupAdmin;
@@ -18,7 +19,7 @@ import org.junit.Test;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public final class PaymentHistoryEventListenerTest extends PaymentHistoryTestMother{
+public final class GroupPaymentHistoryEventListenerTest extends PaymentHistoryTestMother {
     @Test
     public void shouldSaveOnAppPayingAdminDone(){
         UUID paidUserId = UUID.randomUUID(); //Admin of group

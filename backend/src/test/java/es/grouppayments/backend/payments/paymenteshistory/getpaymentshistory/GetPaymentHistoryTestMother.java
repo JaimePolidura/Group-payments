@@ -1,6 +1,6 @@
 package es.grouppayments.backend.payments.paymenteshistory.getpaymentshistory;
 
-import es.grouppayments.backend.payments.paymenteshistory.onpaymentaction.PaymentHistoryTestMother;
+import es.grouppayments.backend.payments.paymenteshistory.PaymentHistoryTestMother;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentHistoryService;
 import es.grouppayments.backend.payments.paymentshistory.getpaymentshistory.GetPaymentsHistoryQuery;
 import es.grouppayments.backend.payments.paymentshistory.getpaymentshistory.GetPaymentsHistoryQueryHandler;
