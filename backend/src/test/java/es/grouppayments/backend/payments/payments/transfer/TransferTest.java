@@ -1,9 +1,6 @@
 package es.grouppayments.backend.payments.payments.transfer;
 
-import es.grouppayments.backend.payments.payments._shared.domain.events.transfer.TransferAppPaidToUser;
-import es.grouppayments.backend.payments.payments._shared.domain.events.transfer.TransferErrorAppPaidToUser;
-import es.grouppayments.backend.payments.payments._shared.domain.events.transfer.TransferErrorUserPaidToApp;
-import es.grouppayments.backend.payments.payments._shared.domain.events.transfer.TransferUserPaidToApp;
+import es.grouppayments.backend.payments.payments._shared.domain.events.transfer.*;
 import es.grouppayments.backend.users._shared.domain.UserState;
 import es.jaime.javaddd.domain.exceptions.*;
 import org.junit.Test;
@@ -16,6 +13,20 @@ public final class TransferTest extends TransferTestMother{
     private static final int MONEY = 10;
 
     @Test
+    public void shouldMakeTransferPaymentAppToUserFail(){
+        UUID userIdTo = UUID.randomUUID();
+        UUID userIdFrom = UUID.randomUUID();
+        addUser(userIdFrom, userIdTo);
+
+        super.payingTAppToUserWillFail();
+        execute(userIdFrom, userIdTo, MONEY);
+
+        assertEventRaised(TransferUserPaidToApp.class, TransferErrorAppPaidToUser.class, TransferRolledBack.class);
+        assertMoneyUsersPaidToApp(MONEY);
+        assertMoneyAppPaidToUser(MONEY);
+    }
+
+    @Test
     public void shouldMakeTransfer(){
         UUID userIdTo = UUID.randomUUID();
         UUID userIdFrom = UUID.randomUUID();
@@ -23,7 +34,7 @@ public final class TransferTest extends TransferTestMother{
 
         execute(userIdFrom, userIdTo, MONEY);
 
-        assertEventRaised(TransferUserPaidToApp.class, TransferAppPaidToUser.class);
+        assertEventRaised(TransferUserPaidToApp.class, TransferAppPaidToUser.class, TransferDone.class);
         assertMoneyUsersPaidToApp(MONEY);
         assertMoneyAppPaidToUser(super.commissionPolicy().deductCommission(MONEY));
     }
@@ -39,20 +50,6 @@ public final class TransferTest extends TransferTestMother{
 
         assertEventRaised(TransferErrorUserPaidToApp.class);
         assertMoneyUsersPaidToApp(0);
-        assertMoneyAppPaidToUser(0);
-    }
-
-    @Test
-    public void shouldMakeTransferPaymentAppToUserFail(){
-        UUID userIdTo = UUID.randomUUID();
-        UUID userIdFrom = UUID.randomUUID();
-        addUser(userIdFrom, userIdTo);
-
-        super.payingTAppToUserWillFail();
-        execute(userIdFrom, userIdTo, MONEY);
-
-        assertEventRaised(TransferUserPaidToApp.class, TransferErrorAppPaidToUser.class);
-        assertMoneyUsersPaidToApp(MONEY);
         assertMoneyAppPaidToUser(0);
     }
 

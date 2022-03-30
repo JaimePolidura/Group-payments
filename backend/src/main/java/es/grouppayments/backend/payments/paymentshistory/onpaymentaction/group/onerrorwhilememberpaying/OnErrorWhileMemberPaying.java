@@ -1,4 +1,4 @@
-package es.grouppayments.backend.payments.paymentshistory.onpaymentaction.onerrorwhilememberpaying;
+package es.grouppayments.backend.payments.paymentshistory.onpaymentaction.group.onerrorwhilememberpaying;
 
 import es.grouppayments.backend.payments.payments._shared.domain.events.grouppayment.ErrorWhileGroupMemberPaying;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentHistoryService;

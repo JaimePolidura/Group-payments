@@ -14,7 +14,6 @@ import es.jaime.javaddd.domain.exceptions.IllegalLength;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.IllegalState;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -45,6 +44,11 @@ public final class TransferCommandHandler implements CommandHandler<TransferComm
 
             if(!paymentStateOfPayingToUserTo.isSucess){
                 this.rollbackPaymentToUserFrom(command, currenyCode, paymentStateOfPayingToUserTo.reasonOfFailure);
+            }else{
+                double moneyDeductedCommission = this.comimssionPolicy.deductCommission(command.getMoney());
+
+                this.eventBus.publish(new TransferDone(command.getUserIdFrom(), command.getUserIdTo(), command.getMoney(), moneyDeductedCommission,
+                        currenyCode, command.getDescription()));
             }
         }
     }
@@ -86,7 +90,7 @@ public final class TransferCommandHandler implements CommandHandler<TransferComm
 
             this.eventBus.publish(new TransferRolledBack(command.getUserIdFrom(), command.getMoney(), currencyCode, command.getDescription(), reasonOfRollingBack));
         }catch (Exception e) {
-            this.eventBus.publish(new TransferFatalErrorRollingBack(command.getUserIdFrom() ,e.getMessage(), command.getMoney(), currencyCode, command.getDescription()));
+            this.eventBus.publish(new TransferFatalErrorRollingback(command.getUserIdFrom() ,e.getMessage(), command.getMoney(), currencyCode, command.getDescription()));
         }
     }
 

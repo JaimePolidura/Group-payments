@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class TransferFatalErrorRollingBack extends DomainEvent implements ErrorPaymentDomainEvent, NotificableClientDomainEvent {
+public final class TransferFatalErrorRollingback extends DomainEvent implements ErrorPaymentDomainEvent, NotificableClientDomainEvent {
     private final UUID userId;
     private final String errorMessage;
     private final double money;
