@@ -25,7 +25,6 @@ export class MakeTransferModalComponent implements OnInit {
   public makeTransferForm: FormGroup;
   public userToMakeDesitnationFound: boolean;
   public userIdToMakeTransfer: string;
-  public transferRolledbackSuccessfuly: boolean;
   public errorMessage: string;
 
   public transferStatus: TransferStatus;
@@ -42,7 +41,6 @@ export class MakeTransferModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.userToMakeDesitnationFound = false;
-    this.transferRolledbackSuccessfuly = false;
 
     this.transferStatus = TransferStatus.NOT_SENDED;
 

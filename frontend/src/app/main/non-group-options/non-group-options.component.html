@@ -3,9 +3,9 @@
   <br>
 
   <div class="options">
-    <button class="btn btn-primary" (click)="modalService.open(joinGroupModal)">Join</button>
+    <button class="btn btn-primary" (click)="openJoinGroupModal()">Join</button>
     <br>
-    <button class="btn btn-primary" (click)="modalService.open(createGroupModal)">Create</button>
+    <button class="btn btn-primary" (click)="openCreateGroupModal()">Create</button>
     <br>
     <button class="btn btn-primary" (click)="openMakeTransferModal()">Transfer</button>
     <br>
@@ -14,48 +14,3 @@
     <button class="btn btn-danger" (click)="logout()">Log out</button>
   </div>
 </div>
-
-<ng-template #joinGroupModal let-modal>
-  <form action="" [formGroup]="joinGroupForm" (ngSubmit)="joinGroupForm.valid && joinGroup()">
-    <div class="modal-header">
-      <h2 style="text-align: center">Join group</h2>
-      <button class="btn-close" type="button" (click)="modal.dismiss()"></button>
-    </div>
-    <div class="modal-body modal-body-centered">
-      <input type="text"
-             id = "groupId"
-             class="form-control"
-             placeholder="link"
-             formControlName="groupId"
-             (keyup)="checkIfGroupToJoinExists();"
-             [ngClass]="{'is-invalid': joinGroupForm.errors && (joinGroupForm.touched || joinGroupForm.dirty)}">
-    </div>
-    <div class="modal-footer">
-      <button type="submit" class="myButton myButton-footer" [ngClass]="{'myDisabled': !joinGroupForm.valid}">Join</button>
-    </div>
-  </form>
-</ng-template>
-
-<ng-template #createGroupModal let-modal>
-  <form action = "" [formGroup]="createGroupForm" (ngSubmit)="createGroupForm.valid && createGroup()">
-    <div class="modal-header">
-      <h2 style="text-align: center">Create group</h2>
-      <button class="btn-close" type="button" (click)="modal.dismiss()"></button>
-    </div>
-    <div class="modal-body modal-body-centered">
-      <input type="number"
-             class="form-control"
-             placeholder="money"
-             formControlName = "money"
-             [ngClass]="{'is-invalid': createGroupForm.errors && (createGroupForm.touched || createGroupForm.dirty)}"><br>
-      <input type="text"
-             class="form-control"
-             placeholder="title"
-             formControlName = "title"
-             [ngClass]="{'is-invalid': createGroupForm.errors && (createGroupForm.touched || createGroupForm.dirty)}">
-    </div>
-    <div class="modal-footer">
-      <button type="submit" class="myButton myButton-footer" [ngClass]="{'myDisabled': !createGroupForm.valid}">Create</button>
-    </div>
-  </form>
-</ng-template>
