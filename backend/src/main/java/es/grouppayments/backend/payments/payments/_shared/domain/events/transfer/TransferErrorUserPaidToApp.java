@@ -1,4 +1,4 @@
-package es.grouppayments.backend.payments.payments._shared.domain.events.other;
+package es.grouppayments.backend.payments.payments._shared.domain.events.transfer;
 
 import es.grouppayments.backend._shared.domain.events.ErrorPaymentDomainEvent;
 import es.grouppayments.backend._shared.domain.events.NotificableClientDomainEvent;
@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
-public class TransferErrorAppPaidToUser extends DomainEvent implements ErrorPaymentDomainEvent, NotificableClientDomainEvent {
+public class TransferErrorUserPaidToApp extends DomainEvent implements ErrorPaymentDomainEvent, NotificableClientDomainEvent {
     private final double money;
     private final String currencyCode;
     private final String description;
@@ -32,7 +32,7 @@ public class TransferErrorAppPaidToUser extends DomainEvent implements ErrorPaym
 
     @Override
     public String name() {
-        return "transfer-payments-error-app-user";
+        return "transfer-payments-error-user-app";
     }
 
     @Override
@@ -47,7 +47,7 @@ public class TransferErrorAppPaidToUser extends DomainEvent implements ErrorPaym
 
     @Override
     public PaymentType getPaymentType() {
-        return PaymentType.APP_TO_USER;
+        return PaymentType.USER_TO_APP;
     }
 
     @Override

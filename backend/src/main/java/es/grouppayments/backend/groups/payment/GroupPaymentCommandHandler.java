@@ -8,7 +8,7 @@ import es.grouppayments.backend.groups._shared.domain.GroupService;
 import es.grouppayments.backend.payments.currencies._shared.domain.CurrencyService;
 import es.grouppayments.backend.payments.payments._shared.domain.CommissionPolicy;
 import es.grouppayments.backend.payments.payments._shared.domain.PaymentMakerService;
-import es.grouppayments.backend.payments.payments._shared.domain.events.*;
+import es.grouppayments.backend.payments.payments._shared.domain.events.grouppayment.*;
 import es.grouppayments.backend.users._shared.domain.UsersService;
 import es.jaime.javaddd.domain.cqrs.command.CommandHandler;
 import es.jaime.javaddd.domain.event.EventBus;

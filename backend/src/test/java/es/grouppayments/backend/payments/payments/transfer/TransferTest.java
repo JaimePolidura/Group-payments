@@ -1,9 +1,9 @@
 package es.grouppayments.backend.payments.payments.transfer;
 
-import es.grouppayments.backend.payments.payments._shared.domain.events.other.TransferAppPaidToUser;
-import es.grouppayments.backend.payments.payments._shared.domain.events.other.TransferErrorAppPaidToUser;
-import es.grouppayments.backend.payments.payments._shared.domain.events.other.TransferErrorUserPaidToApp;
-import es.grouppayments.backend.payments.payments._shared.domain.events.other.TransferUserPaidToApp;
+import es.grouppayments.backend.payments.payments._shared.domain.events.transfer.TransferAppPaidToUser;
+import es.grouppayments.backend.payments.payments._shared.domain.events.transfer.TransferErrorAppPaidToUser;
+import es.grouppayments.backend.payments.payments._shared.domain.events.transfer.TransferErrorUserPaidToApp;
+import es.grouppayments.backend.payments.payments._shared.domain.events.transfer.TransferUserPaidToApp;
 import es.grouppayments.backend.users._shared.domain.UserState;
 import es.jaime.javaddd.domain.exceptions.*;
 import org.junit.Test;

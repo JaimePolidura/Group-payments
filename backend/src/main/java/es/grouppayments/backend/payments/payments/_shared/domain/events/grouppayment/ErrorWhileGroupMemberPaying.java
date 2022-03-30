@@ -1,4 +1,4 @@
-package es.grouppayments.backend.payments.payments._shared.domain.events;
+package es.grouppayments.backend.payments.payments._shared.domain.events.grouppayment;
 
 import es.grouppayments.backend._shared.domain.events.GroupDomainEvent;
 import es.grouppayments.backend._shared.domain.events.NotificableClientDomainEvent;
@@ -13,29 +13,30 @@ import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class ErrorWhilePayingToGroupAdmin extends DomainEvent implements GroupDomainEvent, NotificableClientDomainEvent {
+public final class ErrorWhileGroupMemberPaying extends DomainEvent implements GroupDomainEvent, NotificableClientDomainEvent {
+    @Getter private final Group group;
     @Getter private final double money;
     @Getter private final String currencyCode;
     @Getter private final String description;
     @Getter private final UUID userId;
     @Getter private final String errorMessage;
-    @Getter private final Group group;
 
     @Override
     public UUID getGroupId() {
-        return this.getGroup().getGroupId();
+        return this.group.getGroupId();
     }
 
     @Override
     public String name() {
-        return "group-payment-error-paying-admin";
+        return "group-payment-error-member-paying";
     }
 
     @Override
     public Map<String, Object> body() {
         return Map.of(
-                "groupId", this.getGroup().getGroupId(),
-                "errorMessage", this.errorMessage
+                "groupId", this.group.getGroupId(),
+                "errorMessage", errorMessage,
+                "groupMemberUserId", this.getUserId()
         );
     }
 

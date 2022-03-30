@@ -1,6 +1,6 @@
 package es.grouppayments.backend.payments.paymentshistory.onpaymentaction.onerrorwhilepayingtoadmin;
 
-import es.grouppayments.backend.payments.payments._shared.domain.events.ErrorWhilePayingToGroupAdmin;
+import es.grouppayments.backend.payments.payments._shared.domain.events.grouppayment.ErrorWhilePayingToGroupAdmin;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentHistoryService;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentType;
 import lombok.AllArgsConstructor;

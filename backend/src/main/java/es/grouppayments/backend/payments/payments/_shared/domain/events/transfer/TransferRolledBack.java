@@ -1,4 +1,4 @@
-package es.grouppayments.backend.payments.payments._shared.domain.events.other;
+package es.grouppayments.backend.payments.payments._shared.domain.events.transfer;
 
 import es.grouppayments.backend._shared.domain.events.NotificableClientDomainEvent;
 import es.grouppayments.backend._shared.domain.events.SuccessfulPaymentDomainEvent;
@@ -11,28 +11,16 @@ import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
-public class TransferAppPaidToUser extends DomainEvent implements SuccessfulPaymentDomainEvent, NotificableClientDomainEvent {
+public final class TransferRolledBack extends DomainEvent implements SuccessfulPaymentDomainEvent, NotificableClientDomainEvent {
+    private final UUID userId;
     private final double money;
     private final String currencyCode;
     private final String description;
-    private final UUID userId;
-    private final String username;
+    private final String reasonOfRollingback;
 
     @Override
-    public Map<String, Object> body() {
-        return Map.of(
-                "money", this.money,
-                "currencyCode", this.currencyCode,
-                "description", this.description,
-                "userId", userId,
-                "state", getState(),
-                "username", this.username
-        );
-    }
-
-    @Override
-    public String name() {
-        return "transfer-payments-sucessful-app-user";
+    public List<UUID> to() {
+        return null;
     }
 
     @Override
@@ -52,7 +40,7 @@ public class TransferAppPaidToUser extends DomainEvent implements SuccessfulPaym
 
     @Override
     public String getDescription() {
-        return this.description;
+        return String.format("Successfully rolledback transfer error: %s", this.description);
     }
 
     @Override
@@ -61,7 +49,17 @@ public class TransferAppPaidToUser extends DomainEvent implements SuccessfulPaym
     }
 
     @Override
-    public List<UUID> to() {
-        return List.of(userId);
+    public String name() {
+        return "transference-rolledback";
+    }
+
+    @Override
+    public Map<String, Object> body() {
+        return Map.of(
+                "money", this.money,
+                "currencyCode", this.currencyCode,
+                "userId", userId,
+                "reasonOfRollingback", this.reasonOfRollingback
+        );
     }
 }

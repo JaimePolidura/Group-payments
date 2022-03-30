@@ -1,4 +1,4 @@
-package es.grouppayments.backend.payments.payments._shared.domain.events.other;
+package es.grouppayments.backend.payments.payments._shared.domain.events.transfer;
 
 import es.grouppayments.backend._shared.domain.events.ErrorPaymentDomainEvent;
 import es.grouppayments.backend._shared.domain.events.NotificableClientDomainEvent;
@@ -11,28 +11,21 @@ import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
-public class TransferErrorUserPaidToApp extends DomainEvent implements ErrorPaymentDomainEvent, NotificableClientDomainEvent {
+public final class TransferFatalErrorRollingBack extends DomainEvent implements ErrorPaymentDomainEvent, NotificableClientDomainEvent {
+    private final UUID userId;
+    private final String errorMessage;
     private final double money;
     private final String currencyCode;
     private final String description;
-    private final UUID userId;
-    private final String errorMessage;
 
     @Override
-    public Map<String, Object> body() {
-        return Map.of(
-                "money", this.money,
-                "currencyCode", this.currencyCode,
-                "description", this.description,
-                "userId", userId,
-                "errorMessage", errorMessage,
-                "state", getState()
-        );
+    public String errorMessage() {
+        return this.errorMessage;
     }
 
     @Override
-    public String name() {
-        return "transfer-payments-error-user-app";
+    public List<UUID> to() {
+        return List.of(this.userId);
     }
 
     @Override
@@ -47,26 +40,26 @@ public class TransferErrorUserPaidToApp extends DomainEvent implements ErrorPaym
 
     @Override
     public PaymentType getPaymentType() {
-        return PaymentType.USER_TO_APP;
+        return PaymentType.APP_TO_USER;
     }
 
     @Override
     public String getDescription() {
-        return this.description;
+        return String.format("Error rolling back transference: %s", this.description);
     }
 
     @Override
     public UUID getUserId() {
-        return this.userId;
+        return this.getUserId();
     }
 
     @Override
-    public String errorMessage() {
-        return this.errorMessage;
+    public String name() {
+        return "transference-rollingback-error";
     }
 
     @Override
-    public List<UUID> to() {
-        return List.of(userId);
+    public Map<String, Object> body() {
+        return null;
     }
 }

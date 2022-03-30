@@ -3,10 +3,7 @@ package es.grouppayments.backend.payments.payments.transfer;
 import es.grouppayments.backend.payments.currencies._shared.domain.CurrencyService;
 import es.grouppayments.backend.payments.payments._shared.domain.CommissionPolicy;
 import es.grouppayments.backend.payments.payments._shared.domain.PaymentMakerService;
-import es.grouppayments.backend.payments.payments._shared.domain.events.other.TransferAppPaidToUser;
-import es.grouppayments.backend.payments.payments._shared.domain.events.other.TransferErrorAppPaidToUser;
-import es.grouppayments.backend.payments.payments._shared.domain.events.other.TransferErrorUserPaidToApp;
-import es.grouppayments.backend.payments.payments._shared.domain.events.other.TransferUserPaidToApp;
+import es.grouppayments.backend.payments.payments._shared.domain.events.transfer.*;
 import es.grouppayments.backend.users._shared.domain.User;
 import es.grouppayments.backend.users._shared.domain.UserState;
 import es.grouppayments.backend.users._shared.domain.UsersService;
@@ -17,6 +14,7 @@ import es.jaime.javaddd.domain.exceptions.IllegalLength;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.IllegalState;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -41,9 +39,14 @@ public final class TransferCommandHandler implements CommandHandler<TransferComm
         User userFrom = this.usersService.getByUserId(command.getUserIdFrom());
         String currenyCode = currencyService.getByCountryCode(userFrom.getCountry()).getCode();
 
-        var sucess = this.tryPaymentUserFromToApp(command, currenyCode);
-        if(sucess)
-            this.tryPaymentAppToUserTo(command, currenyCode);
+        var sucessUserFromPayingApp = this.tryPaymentUserFromToApp(command, currenyCode);
+        if(sucessUserFromPayingApp){
+            var paymentStateOfPayingToUserTo = this.tryPaymentAppToUserTo(command, currenyCode);
+
+            if(!paymentStateOfPayingToUserTo.isSucess){
+                this.rollbackPaymentToUserFrom(command, currenyCode, paymentStateOfPayingToUserTo.reasonOfFailure);
+            }
+        }
     }
 
     private boolean tryPaymentUserFromToApp(TransferCommand command, String currencyCode){
@@ -60,16 +63,30 @@ public final class TransferCommandHandler implements CommandHandler<TransferComm
         }
     }
 
-    private void tryPaymentAppToUserTo(TransferCommand command, String currencyCode){
+    private PaymentState tryPaymentAppToUserTo(TransferCommand command, String currencyCode){
         try {
             double moneyDeductedCommission = this.comimssionPolicy.deductCommission(command.getMoney());
-        
+
             this.paymentMakerService.paymentAppToUser(command.getUserIdTo(), moneyDeductedCommission, currencyCode);
             String userNameFrom = this.usersService.getByUserId(command.getUserIdFrom()).getUsername();
 
             this.eventBus.publish(new TransferAppPaidToUser(moneyDeductedCommission, currencyCode, command.getDescription(), command.getUserIdTo(), userNameFrom));
+
+            return new PaymentState(true, null);
         } catch (Exception e) {
             this.eventBus.publish(new TransferErrorAppPaidToUser(command.getMoney(), currencyCode, command.getDescription(), command.getUserIdTo(), e.getMessage()));
+
+            return new PaymentState(false, e.getMessage());
+        }
+    }
+
+    private void rollbackPaymentToUserFrom(TransferCommand command, String currencyCode, String reasonOfRollingBack){
+        try{
+            this.paymentMakerService.paymentAppToUser(command.getUserIdFrom(), command.getMoney(), currencyCode);
+
+            this.eventBus.publish(new TransferRolledBack(command.getUserIdFrom(), command.getMoney(), currencyCode, command.getDescription(), reasonOfRollingBack));
+        }catch (Exception e) {
+            this.eventBus.publish(new TransferFatalErrorRollingBack(command.getUserIdFrom() ,e.getMessage(), command.getMoney(), currencyCode, command.getDescription()));
         }
     }
 
@@ -96,4 +113,6 @@ public final class TransferCommandHandler implements CommandHandler<TransferComm
         if(!(user.getState() == UserState.SIGNUP_ALL_COMPLETED))
             throw new IllegalState("User still has to sign up");
     }
+
+    private record PaymentState(boolean isSucess, String reasonOfFailure){}
 }

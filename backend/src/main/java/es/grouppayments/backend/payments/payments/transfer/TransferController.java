@@ -16,12 +16,12 @@ import java.util.UUID;
 @AllArgsConstructor
 public final class TransferController extends ApplicationController {
     private final CommandBus commandBus;
-    
+
     @PostMapping("/payments/transfer")
-    public ResponseEntity<?> transfer(@RequestBody Request request){
+    public ResponseEntity<String> transfer(@RequestBody Request request){
         this.commandBus.dispatch(new TransferCommand(
                 getLoggedUsername(),
-                request.to,
+                UUID.fromString(request.to),
                 request.money,
                 request.description
         ));
@@ -31,7 +31,7 @@ public final class TransferController extends ApplicationController {
 
     @AllArgsConstructor
     private final static class Request {
-        public final UUID to;
+        public final String to;
         public final double money;
         public final String description;
     }

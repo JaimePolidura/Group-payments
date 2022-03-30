@@ -1,7 +1,7 @@
 package es.grouppayments.backend.groups.onpaymentdone;
 
 import es.grouppayments.backend.groups._shared.domain.GroupService;
-import es.grouppayments.backend.payments.payments._shared.domain.events.GroupPaymentDone;
+import es.grouppayments.backend.payments.payments._shared.domain.events.grouppayment.GroupPaymentDone;
 import lombok.AllArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;

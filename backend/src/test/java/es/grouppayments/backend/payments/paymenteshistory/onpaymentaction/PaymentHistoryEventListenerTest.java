@@ -2,10 +2,10 @@ package es.grouppayments.backend.payments.paymenteshistory.onpaymentaction;
 
 import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups._shared.domain.GroupState;
-import es.grouppayments.backend.payments.payments._shared.domain.events.AppPayingGroupAdminDone;
-import es.grouppayments.backend.payments.payments._shared.domain.events.ErrorWhileGroupMemberPaying;
-import es.grouppayments.backend.payments.payments._shared.domain.events.ErrorWhilePayingToGroupAdmin;
-import es.grouppayments.backend.payments.payments._shared.domain.events.GroupMemberPayingAppDone;
+import es.grouppayments.backend.payments.payments._shared.domain.events.grouppayment.AppPayingGroupAdminDone;
+import es.grouppayments.backend.payments.payments._shared.domain.events.grouppayment.ErrorWhileGroupMemberPaying;
+import es.grouppayments.backend.payments.payments._shared.domain.events.grouppayment.ErrorWhilePayingToGroupAdmin;
+import es.grouppayments.backend.payments.payments._shared.domain.events.grouppayment.GroupMemberPayingAppDone;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentHistoryService;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentState;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentType;

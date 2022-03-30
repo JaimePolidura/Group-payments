@@ -24,6 +24,10 @@ public final class ClientDomainEventListener {
     @Order(1)
     @EventListener({NotificableClientDomainEvent.class})
     public void onNewEvent(NotificableClientDomainEvent event){
+        System.out.println("hola");
+        System.out.println(event.name());
+        System.out.println(event.to());
+
         List<UUID> usersIdToNotify = event.to();
 
         if(event instanceof GroupDomainEvent groupDomainEvent){

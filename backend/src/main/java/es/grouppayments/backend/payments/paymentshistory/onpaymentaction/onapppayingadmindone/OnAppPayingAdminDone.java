@@ -1,6 +1,6 @@
 package es.grouppayments.backend.payments.paymentshistory.onpaymentaction.onapppayingadmindone;
 
-import es.grouppayments.backend.payments.payments._shared.domain.events.AppPayingGroupAdminDone;
+import es.grouppayments.backend.payments.payments._shared.domain.events.grouppayment.AppPayingGroupAdminDone;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentHistoryService;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentType;
 import lombok.AllArgsConstructor;
