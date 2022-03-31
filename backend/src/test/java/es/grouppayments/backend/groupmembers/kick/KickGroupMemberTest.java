@@ -20,7 +20,7 @@ public class KickGroupMemberTest extends KickGroupMemberTestMother{
         execute(userId, groupId, userIdToKick);
 
         assertMemberDeleted(userIdToKick);
-        assertEventRaised(GroupMemberLeft.class);
+        assertEventRaised(GroupMemberKicked.class);
     }
 
     @Test(expected = ResourceNotFound.class)

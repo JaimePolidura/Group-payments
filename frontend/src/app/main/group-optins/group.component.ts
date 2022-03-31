@@ -15,6 +15,7 @@ import {GroupState} from "../../../model/group/group-state";
 import {ProgressBarService} from "../../progress-bar.service";
 import {GroupPaymentComponent} from "./group-payment/group-payment.component";
 import {ConfirmPaymentComponent} from "./confirm-payment/confirm-payment.component";
+import {GroupMemberKicked} from "../../../backend/notificatinos/notifications/group-member-kicked";
 
 @Component({
   selector: 'app-group',
@@ -39,6 +40,7 @@ export class GroupComponent implements OnInit {
     this.onGroupDeleted();
     this.onGroupEdited();
     this.onPaymentInitialized();
+    this.onGroupMemberKicked();
   }
 
   public closeModal(): void {
@@ -69,22 +71,21 @@ export class GroupComponent implements OnInit {
 
   private onMemberLeft(): void {
     this.eventSubscriber.subscribe<GroupMemberLeftEvent>('group-member-left', (groupMemberLeft) => {
-      const userId: string = groupMemberLeft.userId;
-
-      if(userId == this.auth.getUserId()){
-        this.onKicked();
-      }else{
-        this.groupState.deleteGroupMemberById(userId);
-      }
-
+      this.groupState.deleteGroupMemberById(groupMemberLeft.userId);
       this.refreshChangesInUI();
     });
   }
 
-  private onKicked(): void {
-    this.groupState.clear();
-
-    window.alert("You have been kicked from the group!");
+  private onGroupMemberKicked(): void {
+    this.eventSubscriber.subscribe<GroupMemberKicked>('group-member-kicked', res => {
+      if(res.userId != this.auth.getUserId()){ //Other member has been kicked
+        this.groupState.deleteGroupMemberById(res.userId);
+        this.refreshChangesInUI();
+      }else{ //User authenticated has been kicked
+        window.alert("You have been kicked!");
+        this.groupState.clear();
+      }
+    });
   }
 
   private onMemberJoined(): void {

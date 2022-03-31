@@ -27,7 +27,7 @@ public class KickGroupMemberCommandHandler implements CommandHandler<KickGroupMe
         ensureUserToKickInGroup(command.getUserIdToKick(), group.getGroupId());
         ensureAdminNotKickingHimself(command.getUserIdToKick(), command.getUserId());
 
-        groupMemberService.deleteByUserId(command.getUserIdToKick());
+        groupMemberService.kickMember(command.getUserIdToKick());
     }
 
     private Group ensureGroupExistsAndGet(UUID groupId){

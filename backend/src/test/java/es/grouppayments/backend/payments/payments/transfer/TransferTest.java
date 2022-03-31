@@ -34,7 +34,9 @@ public final class TransferTest extends TransferTestMother{
 
         execute(userIdFrom, userIdTo, MONEY);
 
-        assertEventRaised(TransferUserPaidToApp.class, TransferAppPaidToUser.class, TransferDone.class);
+        assertEventRaised();
+
+        assertEventRaised(TransferUserPaidToApp.class, TransferDone.class);
         assertMoneyUsersPaidToApp(MONEY);
         assertMoneyAppPaidToUser(super.commissionPolicy().deductCommission(MONEY));
     }

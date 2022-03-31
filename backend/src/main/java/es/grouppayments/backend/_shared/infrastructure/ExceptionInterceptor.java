@@ -15,14 +15,13 @@ import java.util.Optional;
 
 @ControllerAdvice
 public class ExceptionInterceptor {
+
     @ExceptionHandler
     public ResponseEntity<Map<Object, Object>> processSupportedExceptions(Throwable throwable) {
         Optional<ResponseEntity<Map<Object, Object>>> supportedException = Arrays.stream(SupportedException.values())
                 .filter(supportedEx -> hasSameClass(supportedEx, throwable))
                 .map(supportedExcep -> createResponseFromException(supportedExcep, throwable.getMessage()))
                 .findFirst();
-
-        throwable.printStackTrace();
 
         if(supportedException.isEmpty()) throwable.printStackTrace();
 

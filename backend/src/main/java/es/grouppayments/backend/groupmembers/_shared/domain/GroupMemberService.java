@@ -1,6 +1,7 @@
 package es.grouppayments.backend.groupmembers._shared.domain;
 
 import es.grouppayments.backend.groupmembers._shared.domain.events.GroupMemberLeft;
+import es.grouppayments.backend.groupmembers.kick.GroupMemberKicked;
 import es.jaime.javaddd.domain.event.EventBus;
 import es.jaime.javaddd.domain.exceptions.ResourceNotFound;
 import lombok.AllArgsConstructor;
@@ -36,6 +37,15 @@ public class GroupMemberService {
         this.groupMembers.deleteByUserId(userId);
 
         eventBus.publish(new GroupMemberLeft(userId, groupId));
+    }
+
+    public void kickMember(UUID userId) {
+        UUID groupId = this.findGroupMemberByUserIdOrThrowException(userId)
+                .getGroupId();
+
+        this.groupMembers.deleteByUserId(userId);
+
+        this.eventBus.publish(new GroupMemberKicked(userId, groupId));
     }
 
     public void deleteByGroupId(UUID groupId) {
