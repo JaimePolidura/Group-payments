@@ -1,14 +1,6 @@
 <div class="group-container div-config-dif-background">
   <div class="group-options">
-    <div class="group-options-stats">
-      <div class="group-desc">
-        <h3 class="group-desc">{{currentGroup().description}}- &nbsp;&nbsp;&nbsp;&nbsp;</h3>
-      </div>
-      <div class="group-data">
-        <h3 *ngIf="!groupState.isGroupInPayingState()">Total {{currentGroup().money}}{{auth.getCurrency().symbol}} &nbsp;&nbsp;Total/Member ~ {{groupState.calculateTotalMoneyPerMember()}}{{auth.getCurrency().symbol}}</h3>
-        <h3 *ngIf="groupState.isGroupInPayingState()">Paying in progress...</h3>
-      </div>
-    </div>
+    <app-group-description></app-group-description>
     <div class="group-options-options" *ngIf="!groupState.isGroupInPayingState()">
       <div ngbDropdown class="dropdown dropleft" placement="bottom-right">
         <button ngbDropdownToggle class="group-option-button" type="button" id="dropdownMenuButton1">

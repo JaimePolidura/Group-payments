@@ -13,16 +13,9 @@
   grid-template-rows: 5% 5% auto;
 }
 
-.group-options-stats {
-  display: flex;
-  flex-direction: row;
-  margin-left: 2.5%
-}
-
 .cursor-disabled {
   cursor: default;
 }
-
 
 .group-container .group-options {
   margin-top: 1%;
@@ -85,21 +78,8 @@
 }
 
 @media screen and (max-width: 900px){
-  .group-desc h3{
-    display: none;
-  }
-
-  .group-data{
-    margin-top: 4%;
-  }
-
-  .group-data h3{
-    font-size: 17px;
-  }
-
   .payment-container button {
     width: 70%;
     height: 100%;
   }
-
 }
