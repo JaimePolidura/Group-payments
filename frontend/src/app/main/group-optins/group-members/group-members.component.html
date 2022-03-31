@@ -1,0 +1,5 @@
+<div class="group-members">
+  <div *ngFor="let member of groupState.getCurrentGroupMembers()">
+    <app-group-member [groupMember]="member" (onKick)="kickGroupMember($event)"></app-group-member>
+  </div>
+</div>

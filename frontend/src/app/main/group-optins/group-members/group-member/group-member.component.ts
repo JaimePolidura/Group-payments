@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {User} from "../../../../model/user/user";
-import {GroupRepositoryService} from "../../group-repository.service";
-import {Authentication} from "../../../../backend/users/authentication/authentication";
+import {User} from "../../../../../model/user/user";
+import {GroupRepositoryService} from "../../../group-repository.service";
+import {Authentication} from "../../../../../backend/users/authentication/authentication";
 
 @Component({
   selector: 'app-group-member',

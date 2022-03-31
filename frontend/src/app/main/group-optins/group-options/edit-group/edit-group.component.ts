@@ -1,10 +1,10 @@
 import {ApplicationRef, Component, OnInit} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/forms";
-import {Group} from "../../../../model/group/group";
-import {GroupRepositoryService} from "../../group-repository.service";
+import {Group} from "../../../../../model/group/group";
+import {GroupRepositoryService} from "../../../group-repository.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {EditGroupRequest} from "../../../../backend/groups/request/edit-group-request";
-import {GroupsApiService} from "../../../../backend/groups/groups-api.service";
+import {EditGroupRequest} from "../../../../../backend/groups/request/edit-group-request";
+import {GroupsApiService} from "../../../../../backend/groups/groups-api.service";
 
 @Component({
   selector: 'app-edit-group',

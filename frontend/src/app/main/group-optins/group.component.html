@@ -1,0 +1,17 @@
+<div class="group-container div-config-dif-background">
+  <div class="group-options">
+    <app-group-description></app-group-description>
+    <app-group-options></app-group-options>
+  </div>
+
+  <div class="group-separator"><hr></div>
+
+  <app-group-members></app-group-members>
+</div>
+
+<div class="payment-container">
+  <button class="btn btn-success"
+          [ngClass]="{'myDisabled disabled': !isLoggedUserAdminOfCurrentGroup() || groupState.getCurrentGroupMembers().length == 1 || groupState.isGroupInPayingState()}"
+          (click)="openModalConfirmPayment()">
+    ✓ Pay ✓</button>
+</div>

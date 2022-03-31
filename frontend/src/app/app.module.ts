@@ -11,7 +11,7 @@ import {MainComponent} from "./main/main.component";
 import {NavigationBarComponent} from "./navigation-bar/navigation-bar.component";
 import {GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule} from "angularx-social-login";
 import {HttpRequestInterceptor} from "../backend/http-request-interceptor.service";
-import { GroupOptionsComponent } from './main/group-optins/group-options.component';
+import { GroupComponent } from './main/group-optins/group.component';
 import {NonGroupOptionsComponent} from "./main/non-group-options/non-group-options.component";
 import { JoinGroupComponent } from './join-group/join-group.component';
 import {ServerNotificationsListener} from "../backend/notificatinos/server-notifications-listener";
@@ -31,12 +31,14 @@ import { ToastrModule } from 'ngx-toastr';
 import { NotificationsListenerComponent } from './notifications-listener/notifications-listener.component';
 import { JoinGroupModalComponent } from './main/non-group-options/join-group-modal/join-group-modal.component';
 import { CreateGroupModalComponent } from './main/non-group-options/create-group-modal/create-group-modal.component';
-import { ShareGroupComponent } from './main/group-optins/share-group/share-group.component';
-import { EditGroupComponent } from './main/group-optins/edit-group/edit-group.component';
+import { ShareGroupComponent } from './main/group-optins/group-options/share-group/share-group.component';
+import { EditGroupComponent } from './main/group-optins/group-options/edit-group/edit-group.component';
 import { GroupPaymentComponent } from './main/group-optins/group-payment/group-payment.component';
 import { ConfirmPaymentComponent } from './main/group-optins/confirm-payment/confirm-payment.component';
-import { GroupMemberComponent } from './main/group-optins/group-member/group-member.component';
+import { GroupMemberComponent } from './main/group-optins/group-members/group-member/group-member.component';
 import { GroupDescriptionComponent } from './main/group-optins/group-description/group-description.component';
+import { GroupOptionsComponent } from './main/group-optins/group-options/group-options.component';
+import { GroupMembersComponent } from './main/group-optins/group-members/group-members.component';
 
 const STRIPE_PUBLIC_KEY = "pk_test_51KdFRuHd6M46OJ6AWkTIoAh6RRcusDTqAEin4zxmvSkAEotVSwhmD6rD02ymmU3PJCAtylGS8ARrxejFlbscO8as00icxHNy4i";
 
@@ -47,7 +49,7 @@ const STRIPE_PUBLIC_KEY = "pk_test_51KdFRuHd6M46OJ6AWkTIoAh6RRcusDTqAEin4zxmvSkA
     MainComponent,
     NavigationBarComponent,
     NonGroupOptionsComponent,
-    GroupOptionsComponent,
+    GroupComponent,
     JoinGroupComponent,
     RegisterCardDetailsComponent,
     LoadingProgressBarComponent,
@@ -63,6 +65,8 @@ const STRIPE_PUBLIC_KEY = "pk_test_51KdFRuHd6M46OJ6AWkTIoAh6RRcusDTqAEin4zxmvSkA
     ConfirmPaymentComponent,
     GroupMemberComponent,
     GroupDescriptionComponent,
+    GroupOptionsComponent,
+    GroupMembersComponent,
   ],
   imports: [
     BrowserModule,
