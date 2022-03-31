@@ -101,14 +101,19 @@ export class GroupOptionsComponent implements OnInit {
 
   private onMemberLeft(): void {
     this.eventSubscriber.subscribe<GroupMemberLeftEvent>('group-member-left', (groupMemberLeft) => {
-      const userId = groupMemberLeft.userId;
+      const userId: string = groupMemberLeft.userId;
+
+      console.log("Hola");
+      console.log(userId)
+      console.log(this.auth.getUserId());
 
       if(userId == this.auth.getUserId()){
         this.onKicked();
       }else{
         this.groupState.deleteGroupMemberById(userId);
-        this.refreshChangesInUI();
       }
+
+      this.refreshChangesInUI();
     });
   }
 
@@ -116,7 +121,6 @@ export class GroupOptionsComponent implements OnInit {
     window.alert("You have been kicked from the group!");
 
     this.groupState.clear();
-    this.refreshChangesInUI()
   }
 
   private onMemberJoined(): void {

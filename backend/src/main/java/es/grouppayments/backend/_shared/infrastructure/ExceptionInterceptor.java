@@ -22,6 +22,8 @@ public class ExceptionInterceptor {
                 .map(supportedExcep -> createResponseFromException(supportedExcep, throwable.getMessage()))
                 .findFirst();
 
+        throwable.printStackTrace();
+
         if(supportedException.isEmpty()) throwable.printStackTrace();
 
         return supportedException.orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));

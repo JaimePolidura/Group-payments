@@ -46,9 +46,10 @@ public final class TransferCommandHandler implements CommandHandler<TransferComm
                 this.rollbackPaymentToUserFrom(command, currenyCode, paymentStateOfPayingToUserTo.reasonOfFailure);
             }else{
                 double moneyDeductedCommission = this.comimssionPolicy.deductCommission(command.getMoney());
+                String userNameFrom = this.usersService.getByUserId(command.getUserIdFrom()).getUsername();
 
-                this.eventBus.publish(new TransferDone(command.getUserIdFrom(), command.getUserIdTo(), command.getMoney(), moneyDeductedCommission,
-                        currenyCode, command.getDescription()));
+                this.eventBus.publish(new TransferDone(command.getUserIdFrom(), userNameFrom,command.getUserIdTo(), command.getMoney(),
+                        moneyDeductedCommission, currenyCode, command.getDescription()));
             }
         }
     }
@@ -72,9 +73,6 @@ public final class TransferCommandHandler implements CommandHandler<TransferComm
             double moneyDeductedCommission = this.comimssionPolicy.deductCommission(command.getMoney());
 
             this.paymentMakerService.paymentAppToUser(command.getUserIdTo(), moneyDeductedCommission, currencyCode);
-            String userNameFrom = this.usersService.getByUserId(command.getUserIdFrom()).getUsername();
-
-            this.eventBus.publish(new TransferAppPaidToUser(moneyDeductedCommission, currencyCode, command.getDescription(), command.getUserIdTo(), userNameFrom));
 
             return new PaymentState(true, null);
         } catch (Exception e) {

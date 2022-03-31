@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
-public class TransferUserPaidToApp extends DomainEvent implements SuccessfulPaymentDomainEvent, NotificableClientDomainEvent {
+public class TransferUserPaidToApp extends DomainEvent implements SuccessfulPaymentDomainEvent {
     private final double money;
     private final String currencyCode;
     private final String description;
@@ -56,10 +56,5 @@ public class TransferUserPaidToApp extends DomainEvent implements SuccessfulPaym
     @Override
     public UUID getUserId() {
         return this.userId;
-    }
-
-    @Override
-    public List<UUID> to() {
-        return List.of(userId);
     }
 }

@@ -12,6 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public final class TransferDone extends DomainEvent implements NotificableClientDomainEvent {
     @Getter private final UUID from;
+    @Getter private final String fromUsername;
     @Getter private final UUID to;
     @Getter private final double moneyUserFromPaid;
     @Getter private final double moneyUserToGotPaid;
@@ -33,6 +34,7 @@ public final class TransferDone extends DomainEvent implements NotificableClient
         return Map.of(
             "from", this.from,
             "to", this.to,
+            "fromUsername", this.fromUsername,
             "moneyUserFromPaid", this.moneyUserFromPaid,
             "moneyUserToGotPaid", this.moneyUserToGotPaid,
             "currencyCode", this.currencyCode,

@@ -1,0 +1,14 @@
+<div class="group-member">
+  <div class="group-member-option">
+    <button class="btn btn-danger"
+            [ngClass]="{'myDisabled disabled': !isLoggedUserAdminOfCurrentGroup() || isAdmin() || groupState.isGroupInPayingState()}"
+            (click)="kickGroupMember()">
+      x</button>
+  </div>
+  <div class="group-member-image">
+    <img src="{{groupMember.photoUrl}}" class="rounded-circle">
+  </div>
+  <div class="group-member-name">
+    <h6 [ngClass]="{'red' : isAdmin()}">{{groupMember.username}}</h6>
+  </div>
+</div>

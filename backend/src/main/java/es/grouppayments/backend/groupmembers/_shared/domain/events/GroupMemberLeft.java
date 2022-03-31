@@ -35,6 +35,8 @@ public class GroupMemberLeft extends DomainEvent implements GroupDomainEvent, No
 
     @Override
     public List<UUID> to() {
-        return new ArrayList<>();
+        return new ArrayList<>() {{
+            add(userId);
+        }};
     }
 }

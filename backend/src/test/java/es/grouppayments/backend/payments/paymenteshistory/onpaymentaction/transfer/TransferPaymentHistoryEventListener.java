@@ -22,7 +22,7 @@ public final class TransferPaymentHistoryEventListener extends PaymentHistoryTes
         UUID to = UUID.randomUUID();
         int money = 10;
 
-        eventListener.on(new TransferDone(from, to, money, money, "EUR", "hola"));
+        eventListener.on(new TransferDone(from, "paco", to, money, money, "EUR", "hola"));
 
         assertPaymentHistorySaved(from);
         assertContentOfPayment(from, payment -> payment.getErrorMessage() == null || payment.getErrorMessage().equals(""));

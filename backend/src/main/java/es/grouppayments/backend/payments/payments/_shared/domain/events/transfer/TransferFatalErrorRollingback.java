@@ -60,6 +60,12 @@ public final class TransferFatalErrorRollingback extends DomainEvent implements 
 
     @Override
     public Map<String, Object> body() {
-        return null;
+        return Map.of(
+                "userId", this.userId,
+                "errorMessage", this.errorMessage,
+                "money", this.money,
+                "currencyCode", this.currencyCode,
+                "description", this.description
+        );
     }
 }

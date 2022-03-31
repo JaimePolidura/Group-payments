@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
-public class TransferErrorUserPaidToApp extends DomainEvent implements ErrorPaymentDomainEvent, NotificableClientDomainEvent {
+public class TransferErrorUserPaidToApp extends DomainEvent implements ErrorPaymentDomainEvent {
     private final double money;
     private final String currencyCode;
     private final String description;
@@ -63,10 +63,5 @@ public class TransferErrorUserPaidToApp extends DomainEvent implements ErrorPaym
     @Override
     public String errorMessage() {
         return this.errorMessage;
-    }
-
-    @Override
-    public List<UUID> to() {
-        return List.of(userId);
     }
 }

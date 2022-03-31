@@ -28,20 +28,7 @@
 
   <div class="group-members">
     <div *ngFor="let member of groupState.getCurrentGroupMembers()">
-      <div class="group-member">
-        <div class="group-member-option">
-          <button class="btn btn-danger"
-                  [ngClass]="{'myDisabled disabled': !isLoggedUserAdminOfCurrentGroup() || isAdminOfCurrentGroup(member.userId) || groupState.isGroupInPayingState()}"
-                  (click)="kickGroupMember(member.userId)">
-            x</button>
-        </div>
-        <div class="group-member-image">
-          <img src="{{member.photoUrl}}" class="rounded-circle">
-        </div>
-        <div class="group-member-name">
-          <h6 [ngClass]="{'red' : isAdminOfCurrentGroup(member.userId)}">{{member.username}}</h6>
-        </div>
-      </div>
+      <app-group-member [groupMember]="member" (onKick)="kickGroupMember($event)"></app-group-member>
     </div>
   </div>
 </div>
