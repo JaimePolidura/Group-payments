@@ -84,37 +84,3 @@
   </div>
 </ng-template>
 
-<ng-template #paymentInitializedModal let-modal>
-  <div class="modal-header">
-    <h2 style="text-align: center" *ngIf="!donePaying">Group payment initialized</h2>
-    <h2 style="text-align: center" *ngIf="donePaying">Group payment done</h2>
-
-    <button class="btn-close" type="button" (click)="modal.dismiss()"></button>
-  </div>
-  <div class="modal-body modal-body-centered">
-    <p *ngIf="!donePaying">Group payment has been initalized, dont close the app yet, you are likely going to autorize the payment.</p>
-    <p *ngIf="donePaying">Group payment done, thanks for using our service!!</p>
-    <br>
-    <div *ngFor="let log of logEventsGroupPayments">
-      <div *ngIf="log.error">
-        <h6 style="color: red">ERROR</h6>
-        <p style="color: red">{{log.body}}</p>
-        <br>
-      </div>
-      <div *ngIf="!log.error">
-        <p>{{log.body}}</p>
-      </div>
-      <div class="paymentinitialized-sucessicon-container">
-        <i style="color: green" *ngIf="donePayingWithoutErrors" class="fa-solid fa-circle-check fa-7x"></i>
-      </div>
-    </div>
-  </div>
-  <div class="modal-footer">
-    <button type="submit"
-            class="myButton myButton-footer"
-            (click)="this.closeModal()"
-            [ngClass]="{'myDisabled cursor-disabled': !donePaying}">✓ Ok ✓
-    </button>
-  </div>
-</ng-template>
-
