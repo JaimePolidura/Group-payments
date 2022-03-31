@@ -20,6 +20,7 @@ import {PaymentsService} from "../../../backend/payments/payments.service";
 import {ShareGroupComponent} from "./share-group/share-group.component";
 import {EditGroupComponent} from "./edit-group/edit-group.component";
 import {GroupPaymentComponent} from "./group-payment/group-payment.component";
+import {ConfirmPaymentComponent} from "./confirm-payment/confirm-payment.component";
 
 @Component({
   selector: 'app-group-options',
@@ -142,14 +143,6 @@ export class GroupOptionsComponent implements OnInit {
     return `${this.frontendHost.USING}/join/${this.currentGroup().groupId}`;
   }
 
-  public calculateTotalMoneyPerMember(): number {
-    const notOnlyAdminInGroup: boolean = this.groupState.getCurrentGroupMembers().length - 1 > 0;
-
-    return notOnlyAdminInGroup ?
-      this.groupState.getCurrentGroup().money / (this.groupState.getCurrentGroupMembers().length - 1) :
-      0 ;
-  }
-
   private onPaymentInitialized(): void{
     this.eventSubscriber.subscribe<PaymentInitialized>('group-payment-initialized', (event) => {
       this.groupState.setGroupState(GroupState.PAYING);
@@ -187,5 +180,12 @@ export class GroupOptionsComponent implements OnInit {
 
   public openGroupPaymentInitializedModal(): void {
     this.modalService.open(GroupPaymentComponent);
+  }
+
+  public openModalConfirmPayment(): void {
+    const modal = this.modalService.open(ConfirmPaymentComponent);
+    modal.componentInstance.paymentConfirmed.subscribe(() => {
+      this.makePayment();
+    });
   }
 }

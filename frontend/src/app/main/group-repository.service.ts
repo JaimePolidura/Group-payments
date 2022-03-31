@@ -77,6 +77,14 @@ export class GroupRepositoryService {
     return undefined;
   }
 
+  public calculateTotalMoneyPerMember(): number {
+    const notOnlyAdminInGroup: boolean = this.currentGroupMembers.length - 1 > 0;
+
+    return notOnlyAdminInGroup ?
+      this.currentGroup.money / (this.currentGroupMembers.length - 1) :
+      0 ;
+  }
+
   public clear(): void {
     // @ts-ignore
     this.currentGroup = undefined;

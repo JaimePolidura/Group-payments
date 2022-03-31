@@ -5,7 +5,7 @@
         <h3 class="group-desc">{{currentGroup().description}}- &nbsp;&nbsp;&nbsp;&nbsp;</h3>
       </div>
       <div class="group-data">
-        <h3 *ngIf="!groupState.isGroupInPayingState()">Total {{currentGroup().money}}{{auth.getCurrency().symbol}} &nbsp;&nbsp;Total/Member ~ {{calculateTotalMoneyPerMember()}}{{auth.getCurrency().symbol}}</h3>
+        <h3 *ngIf="!groupState.isGroupInPayingState()">Total {{currentGroup().money}}{{auth.getCurrency().symbol}} &nbsp;&nbsp;Total/Member ~ {{groupState.calculateTotalMoneyPerMember()}}{{auth.getCurrency().symbol}}</h3>
         <h3 *ngIf="groupState.isGroupInPayingState()">Paying in progress...</h3>
       </div>
     </div>
@@ -19,20 +19,6 @@
           <li><a ngbDropdownItem (click)="leaveGroup()"><i class="fa-solid fa-arrow-right-from-bracket fa-1x"></i> Leave</a></li>
           <li *ngIf="isAdminOfCurrentGroup(auth.getUserId())" (click)="openEditGroupModal()"><a ngbDropdownItem><i class="fa-solid fa-pen-to-square fa-1x"></i> Edit</a></li>
         </ul>
-      </div>
-    </div>
-
-    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-      <div class="toast-header">
-        <img src="..." class="rounded mr-2" alt="...">
-        <strong class="mr-auto">Bootstrap</strong>
-        <small class="text-muted">just now</small>
-        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="toast-body">
-        See? Just like this.
       </div>
     </div>
 
@@ -63,24 +49,6 @@
 <div class="payment-container">
   <button class="btn btn-success"
           [ngClass]="{'myDisabled disabled': !isLoggedUserAdminOfCurrentGroup() || groupState.getCurrentGroupMembers().length == 1 || groupState.isGroupInPayingState()}"
-          (click)="modalService.open(confirmPaymentModal)">
+          (click)="openModalConfirmPayment()">
     ✓ Pay ✓</button>
 </div>
-
-<ng-template #confirmPaymentModal let-modal>
-  <div class="modal-header">
-    <h2 style="text-align: center">Confirm payment</h2>
-    <button class="btn-close" type="button" (click)="modal.dismiss()"></button>
-  </div>
-  <div class="modal-body modal-body-centered">
-    <h6>Are you sure to make the payment?</h6>
-    <br>
-    <h6>Total bill: {{currentGroup().money}}</h6>
-    <h6>Total bill/member ~ {{calculateTotalMoneyPerMember()}} {{auth.getCurrency().symbol}}</h6>
-  </div>
-  <div class="modal-footer payment-confirm-options">
-    <button type="submit" class="btn btn-success" (click)="makePayment()">✓ Pay ✓</button>
-    <button type="submit" class="btn btn-danger" (click)="closeModal()">✘ Cancel ✘</button>
-  </div>
-</ng-template>
-

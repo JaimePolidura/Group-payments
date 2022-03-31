@@ -34,6 +34,7 @@ import { CreateGroupModalComponent } from './main/non-group-options/create-group
 import { ShareGroupComponent } from './main/group-optins/share-group/share-group.component';
 import { EditGroupComponent } from './main/group-optins/edit-group/edit-group.component';
 import { GroupPaymentComponent } from './main/group-optins/group-payment/group-payment.component';
+import { ConfirmPaymentComponent } from './main/group-optins/confirm-payment/confirm-payment.component';
 
 const STRIPE_PUBLIC_KEY = "pk_test_51KdFRuHd6M46OJ6AWkTIoAh6RRcusDTqAEin4zxmvSkAEotVSwhmD6rD02ymmU3PJCAtylGS8ARrxejFlbscO8as00icxHNy4i";
 
@@ -57,6 +58,7 @@ const STRIPE_PUBLIC_KEY = "pk_test_51KdFRuHd6M46OJ6AWkTIoAh6RRcusDTqAEin4zxmvSkA
     ShareGroupComponent,
     EditGroupComponent,
     GroupPaymentComponent,
+    ConfirmPaymentComponent,
   ],
   imports: [
     BrowserModule,
