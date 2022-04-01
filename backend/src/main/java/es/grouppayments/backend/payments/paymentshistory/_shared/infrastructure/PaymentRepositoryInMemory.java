@@ -29,8 +29,8 @@ public class PaymentRepositoryInMemory implements PaymentsHistoryRepository {
     }
 
     private Predicate<? super Payment> isUserInPayment(UUID userId){
-        return payment -> payment.getPayer().equals(userId.toString()) ||
-                payment.getPaid().equals(userId.toString());
+        return payment -> payment.getFromUserId().equals(userId.toString()) ||
+                payment.getToUserId().equals(userId.toString());
     }
 
     @Override

@@ -1,6 +1,7 @@
 package es.grouppayments.backend.payments.paymentshistory._shared.domain;
 
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -13,18 +14,14 @@ import java.util.UUID;
 public class PaymentHistoryService {
     private final PaymentsHistoryRepository paymentsHistory;
 
-    public void save(UUID userId, double money, String description, PaymentType type){
-        this.paymentsHistory.save(new Payment(
-                UUID.randomUUID(), LocalDateTime.now(), type == PaymentType.APP_TO_USER ? "APP" : userId.toString(),
-                type == PaymentType.USER_TO_APP ? "APP" : userId.toString(), money, description, PaymentState.SUCCESS, type, null
-        ));
+    public void save(UUID fromUserId, UUID toUserId, String currnecy, double money, String description, PaymentType type){
+        this.paymentsHistory.save(new Payment(UUID.randomUUID(), fromUserId, toUserId, money, currnecy, LocalDateTime.now(),
+                description, PaymentState.SUCCESS, type, null));
     }
 
-    public void save(UUID userId, double money, String description, PaymentType type, String errorMessage){
-        this.paymentsHistory.save(new Payment(
-                UUID.randomUUID(), LocalDateTime.now(), type == PaymentType.APP_TO_USER ? "APP" : userId.toString(),
-                type == PaymentType.USER_TO_APP ? "APP" : userId.toString(), money, description, PaymentState.ERROR, type, errorMessage
-        ));
+    public void save(UUID fromUserId, UUID toUserId, String currnecy, double money, String description, PaymentType type, String errorMessage){
+        this.paymentsHistory.save(new Payment(UUID.randomUUID(), fromUserId, toUserId, money, currnecy, LocalDateTime.now(),
+                description, PaymentState.ERROR, type, errorMessage));
     }
 
     public List<Payment> findByUserId(UUID userId) {

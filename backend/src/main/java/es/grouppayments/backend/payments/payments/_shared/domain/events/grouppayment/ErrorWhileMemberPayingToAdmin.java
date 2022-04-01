@@ -1,4 +1,4 @@
-package es.grouppayments.backend.payments.payments._shared.domain.events.grouppayment.proro;
+package es.grouppayments.backend.payments.payments._shared.domain.events.grouppayment;
 
 import es.grouppayments.backend._shared.domain.events.GroupDomainEvent;
 import es.grouppayments.backend._shared.domain.events.NotificableClientDomainEvent;

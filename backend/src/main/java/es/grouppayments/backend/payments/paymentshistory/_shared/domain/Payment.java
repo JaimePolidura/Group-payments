@@ -14,10 +14,11 @@ import java.util.UUID;
 @ToString
 public class Payment extends Aggregate implements Comparable<Payment> {
     @Getter private final UUID paymentId;
-    @Getter private final LocalDateTime date;
-    @Getter private final String payer;
-    @Getter private final String paid;
+    @Getter private final UUID fromUserId;
+    @Getter private final UUID toUserId;
     @Getter private final double money;
+    @Getter private final String currency;
+    @Getter private final LocalDateTime date;
     @Getter private final String description;
     @Getter private final PaymentState state;
     @Getter private final PaymentType type;
@@ -27,13 +28,14 @@ public class Payment extends Aggregate implements Comparable<Payment> {
     public Map<String, Object> toPrimitives() {
         return Map.of(
                 "paymentId", this.paymentId,
-                "date", this.date.toString(),
-                "payer", this.payer,
-                "paid", this.paid,
+                "fromUserId", this.fromUserId,
+                "toUserId", this.toUserId,
                 "money", this.money,
+                "currency", this.currency,
+                "date", this.date,
                 "description", this.description,
-                "state", this.state.toString(),
-                "type", this.type.toString(),
+                "state", this.state,
+                "type", this.type,
                 "errorMessage", this.errorMessage
         );
     }

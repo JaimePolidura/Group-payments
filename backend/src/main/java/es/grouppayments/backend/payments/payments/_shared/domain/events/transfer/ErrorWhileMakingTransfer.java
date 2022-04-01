@@ -12,6 +12,11 @@ import java.util.UUID;
 @AllArgsConstructor
 public final class ErrorWhileMakingTransfer extends DomainEvent implements NotificableClientDomainEvent {
     @Getter private final UUID from;
+    @Getter private final String fromUsername;
+    @Getter private final UUID to;
+    @Getter private final double money;
+    @Getter private final String currencyCode;
+    @Getter private final String description;
     @Getter private final String errorCause;
 
     @Override

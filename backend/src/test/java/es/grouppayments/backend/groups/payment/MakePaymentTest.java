@@ -1,7 +1,8 @@
 package es.grouppayments.backend.groups.payment;
 
 import es.grouppayments.backend.groups._shared.domain.GroupState;
-import es.grouppayments.backend.payments.payments._shared.domain.events.grouppayment.*;
+import es.grouppayments.backend.payments.payments._shared.domain.events.grouppayment.GroupPaymentDone;
+import es.grouppayments.backend.payments.payments._shared.domain.events.grouppayment.GroupPaymentInitialized;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.IllegalState;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;

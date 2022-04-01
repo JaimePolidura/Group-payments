@@ -38,17 +38,18 @@ public final class TransferCommandHandler implements CommandHandler<TransferComm
 
         User userFrom = this.usersService.getByUserId(command.getUserIdFrom());
         String currenyCode = currencyService.getByCountryCode(userFrom.getCountry()).getCode();
+        String userNameFrom = this.usersService.getByUserId(command.getUserIdFrom()).getUsername();
 
         try {
             this.paymentMakerService.makePayment(userFrom.getUserId(), userTo.getUserId(), command.getMoney(), currenyCode);
 
-            String userNameFrom = this.usersService.getByUserId(command.getUserIdFrom()).getUsername();
             double moneyDeductedCommission = this.comimssionPolicy.deductCommission(command.getMoney());
 
             this.eventBus.publish(new TransferDone(command.getUserIdFrom(), userNameFrom, command.getUserIdTo(), command.getMoney(),
                     currenyCode, command.getDescription()));
         } catch (Exception e) {
-            this.eventBus.publish(new ErrorWhileMakingTransfer(command.getUserIdFrom(), e.getMessage()));
+            this.eventBus.publish(new ErrorWhileMakingTransfer(command.getUserIdFrom(), userNameFrom, command.getUserIdTo(), command.getMoney(),
+                    currenyCode, command.getDescription(), e.getMessage()));
         }
     }
 

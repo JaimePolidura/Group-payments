@@ -13,13 +13,12 @@ import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class ErrorWhileGroupMemberPaying extends DomainEvent implements GroupDomainEvent, NotificableClientDomainEvent {
+public final class MemberPaidToAdmin extends DomainEvent implements GroupDomainEvent, NotificableClientDomainEvent {
     @Getter private final Group group;
     @Getter private final double money;
     @Getter private final String currencyCode;
     @Getter private final String description;
-    @Getter private final UUID userId;
-    @Getter private final String errorMessage;
+    @Getter private final UUID memberUserId;
 
     @Override
     public UUID getGroupId() {
@@ -28,15 +27,15 @@ public final class ErrorWhileGroupMemberPaying extends DomainEvent implements Gr
 
     @Override
     public String name() {
-        return "group-payment-error-member-paying";
+        return "group-payment-member-paid-admin";
     }
 
     @Override
     public Map<String, Object> body() {
         return Map.of(
-                "groupId", this.group.getGroupId(),
-                "errorMessage", errorMessage,
-                "groupMemberUserId", this.getUserId()
+                "groupId", this.group.getAdminUserId(),
+                "adminUserId", this.group.getAdminUserId(),
+                "money", this.getMoney()
         );
     }
 
