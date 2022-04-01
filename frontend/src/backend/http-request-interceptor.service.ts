@@ -7,7 +7,7 @@ import {
 } from '@angular/common/http';
 import {finalize, Observable} from 'rxjs';
 import {Authentication} from "./users/authentication/authentication";
-import {ProgressBarService} from "../app/progress-bar.service";
+import {ProgressBarService} from "../app/loading-progress-bar/progress-bar.service";
 
 const TOKEN_HEADER_KEY = 'Authorization';
 

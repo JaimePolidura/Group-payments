@@ -3,7 +3,6 @@ import {Authentication} from "../../backend/users/authentication/authentication"
 import {GroupsApiService} from "../../backend/groups/groups-api.service";
 import {GroupRepositoryService} from "./group-repository.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {GroupState} from "../../model/group/group-state";
 
 @Component({
   selector: 'app-main',

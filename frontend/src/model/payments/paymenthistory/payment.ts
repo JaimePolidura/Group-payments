@@ -1,14 +1,14 @@
 import {PaymentState} from "./payment-state";
-import {PaymentType} from "./payment-type";
+import {PaymentContext} from "./payment-context";
 
 export interface Payment {
   paymentId: string,
   date: string,
-  payer: string,
-  paid: string,
+  fromUserId: string,
+  toUserId: string,
   money: number,
   description: string,
   state: PaymentState,
-  type: PaymentType,
+  context: PaymentContext,
   errorMessage?: string,
 }

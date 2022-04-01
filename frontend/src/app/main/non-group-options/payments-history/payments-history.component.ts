@@ -92,4 +92,12 @@ export class PaymentsHistoryComponent implements OnInit {
   private hasPaymentPageLoaded(pageNumber: number): boolean {
     return this.paymentsPages[pageNumber] != undefined;
   }
+
+  public isPayer(payment: Payment): boolean {
+    return payment.fromUserId == this.auth.getUserId();
+  }
+
+  public isPaid(payment: Payment): boolean {
+    return payment.toUserId == this.auth.getUserId();
+  }
 }

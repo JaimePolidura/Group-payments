@@ -24,5 +24,11 @@ export class PaymentInfoModalComponent implements OnInit {
     return Math.round(number);
   }
 
+  isPayer(): boolean {
+    return this.payment.fromUserId == this.auth.getUserId();
+  }
 
+  isPaid(): boolean {
+    return this.payment.toUserId == this.auth.getUserId();
+  }
 }

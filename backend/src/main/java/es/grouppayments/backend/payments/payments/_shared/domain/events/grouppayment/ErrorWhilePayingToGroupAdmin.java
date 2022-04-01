@@ -35,7 +35,8 @@ public final class ErrorWhilePayingToGroupAdmin extends DomainEvent implements G
     public Map<String, Object> body() {
         return Map.of(
                 "groupId", this.getGroup().getGroupId(),
-                "errorMessage", this.errorMessage
+                "errorMessage", this.errorMessage,
+                "userId", this.userId
         );
     }
 

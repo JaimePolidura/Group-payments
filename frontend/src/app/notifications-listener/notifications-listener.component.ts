@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Authentication} from "../../backend/users/authentication/authentication";
 import {ServerNotificationSubscriberService} from "../../backend/notificatinos/server-notification-subscriber.service";
 import { ToastrService } from 'ngx-toastr';
-import {TransferDone} from "../../backend/notificatinos/notifications/transfer-done";
+import { TransferDone } from 'src/backend/notificatinos/notifications/transfer/transfer-done';
 
 @Component({
   selector: 'app-notifications-listener',
@@ -30,7 +30,7 @@ export class NotificationsListenerComponent implements OnInit {
       if(res.to != this.auth.getUserId()) return;
 
       this.toastPublisher.success(
-        `${res.fromUsername} tranfered you ${res.moneyUserToGotPaid} ${res.currencyCode}`,
+        `${res.fromUsername} tranfered you ${res.money} ${res.currencyCode}`,
         `${res.description}`,
         {
           progressBar: true

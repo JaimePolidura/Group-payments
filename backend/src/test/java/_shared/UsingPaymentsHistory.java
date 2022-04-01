@@ -2,7 +2,7 @@ package _shared;
 
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.Payment;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentState;
-import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentType;
+import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentContext;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentsHistoryRepository;
 import es.jaime.javaddd.domain.Utils;
 
@@ -20,7 +20,7 @@ public interface UsingPaymentsHistory {
     }
 
     default void addRandom(UUID userId){
-        PaymentType paymentType = Math.random() < 0.5 ? PaymentType.TRANSFERENCE : PaymentType.GROUP_PAYMENT;
+        PaymentContext paymentType = Math.random() < 0.5 ? PaymentContext.TRANSFERENCE : PaymentContext.GROUP_PAYMENT;
         boolean isFromUser = Math.random() < 0.5;
         boolean isError = Math.random() < 0.3;
 

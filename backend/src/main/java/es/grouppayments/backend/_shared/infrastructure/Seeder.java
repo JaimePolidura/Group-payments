@@ -70,7 +70,7 @@ public class Seeder implements CommandLineRunner {
     }
 
     private void addRandomPayment(UUID userId){
-        PaymentType paymentType = Math.random() < 0.5 ? PaymentType.TRANSFERENCE : PaymentType.GROUP_PAYMENT;
+        PaymentContext paymentType = Math.random() < 0.5 ? PaymentContext.TRANSFERENCE : PaymentContext.GROUP_PAYMENT;
         boolean isUserIdAdmin = Math.random() < 0.5;
         boolean isError = Math.random() < 0.3;
 

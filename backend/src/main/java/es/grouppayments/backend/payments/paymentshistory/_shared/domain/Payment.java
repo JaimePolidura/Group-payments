@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -21,23 +21,23 @@ public class Payment extends Aggregate implements Comparable<Payment> {
     @Getter private final LocalDateTime date;
     @Getter private final String description;
     @Getter private final PaymentState state;
-    @Getter private final PaymentType type;
+    @Getter private final PaymentContext context;
     @Getter private final String errorMessage;
 
     @Override
     public Map<String, Object> toPrimitives() {
-        return Map.of(
-                "paymentId", this.paymentId,
-                "fromUserId", this.fromUserId,
-                "toUserId", this.toUserId,
-                "money", this.money,
-                "currency", this.currency,
-                "date", this.date,
-                "description", this.description,
-                "state", this.state,
-                "type", this.type,
-                "errorMessage", this.errorMessage
-        );
+        return new HashMap<>() {{
+            put("paymentId", paymentId);
+            put("fromUserId", fromUserId);
+            put("toUserId", toUserId);
+            put("money", money);
+            put("currency", currency);
+            put("date", date);
+            put("description", description);
+            put("state", state);
+            put("context", context);
+            put("errorMessage", errorMessage);
+        }};
     }
 
     @Override

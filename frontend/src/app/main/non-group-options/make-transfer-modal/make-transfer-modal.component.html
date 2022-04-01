@@ -3,8 +3,7 @@
   <h2 *ngIf="transferStatus == 'NOT_SENDED'" style="text-align: center">Make transfer</h2>
   <h2 *ngIf="transferStatus == 'PENDING'" style="text-align: center">Pending...</h2>
   <h2 *ngIf="transferStatus == 'SUCCESS'" style="text-align: center">Transfer completed</h2>
-  <h2 *ngIf="transferStatus == 'ROLLED_BACK'" style="text-align: center">Error</h2>
-  <h2 *ngIf="transferStatus == 'ERROR_ROLLINGBACK'" style="text-align: center">Fatal error</h2>
+  <h2 *ngIf="transferStatus == 'ERROR'" style="text-align: center">Error</h2>
 
   <button class="btn-close" type="button" (click)="activeModal.dismiss()"></button>
 </div>
@@ -16,12 +15,8 @@
       <i style="color: green" class="fa-solid fa-circle-check fa-7x"></i>
     </div>
   </div>
-  <div *ngIf="transferStatus == 'ROLLED_BACK'" class="red">
+  <div *ngIf="transferStatus == 'ERROR'" class="red">
     <p>An error happened, the transference wasnt completed. If you belevieve this is a bug please contanct support</p>
-    <p>Cause of error: {{errorMessage}}</p>
-  </div>
-  <div *ngIf="transferStatus == 'ERROR_ROLLINGBACK'" class="red">
-    <p>A fatal error happened, you havent lost your money, your funds have been retained, please contact support.</p>
     <p>Cause of error: {{errorMessage}}</p>
   </div>
   <div *ngIf="transferStatus == 'NOT_SENDED'" class="form">
@@ -55,6 +50,6 @@
 </div>
 </form>
 
-<div *ngIf="transferStatus == 'SUCCESS' || transferStatus == 'ROLLED_BACK' || transferStatus == 'ERROR_ROLLINGBACK'" class="modal-footer">
+<div *ngIf="transferStatus == 'SUCCESS' || transferStatus == 'ERROR'" class="modal-footer">
    <button (click)="closeModal()" class="myButton">✓ Ok ✓</button>
 </div>

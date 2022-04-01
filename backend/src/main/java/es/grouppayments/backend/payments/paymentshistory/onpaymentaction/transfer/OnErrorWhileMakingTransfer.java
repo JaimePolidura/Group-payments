@@ -2,7 +2,7 @@ package es.grouppayments.backend.payments.paymentshistory.onpaymentaction.transf
 
 import es.grouppayments.backend.payments.payments._shared.domain.events.transfer.ErrorWhileMakingTransfer;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentHistoryService;
-import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentType;
+import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentContext;
 import lombok.AllArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -15,6 +15,6 @@ public final class OnErrorWhileMakingTransfer {
     @EventListener({ErrorWhileMakingTransfer.class})
     public void on(ErrorWhileMakingTransfer event){
         this.paymentHistoryService.save(event.getFrom(), event.getTo(), event.getCurrencyCode(), event.getMoney(),
-                event.getDescription(), PaymentType.TRANSFERENCE, event.getErrorCause());
+                event.getDescription(), PaymentContext.TRANSFERENCE, event.getErrorCause());
     }
 }

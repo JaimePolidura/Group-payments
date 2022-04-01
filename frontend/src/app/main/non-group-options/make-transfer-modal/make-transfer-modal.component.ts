@@ -5,16 +5,15 @@ import {UsersService} from "../../../../backend/users/users.service";
 import {Authentication} from "../../../../backend/users/authentication/authentication";
 import {PaymentsService} from "../../../../backend/payments/payments.service";
 import {MakeTransferRquest} from "../../../../backend/payments/request/make-transfer-rquest";
-import {ProgressBarService} from "../../../progress-bar.service";
+import {ProgressBarService} from "../../../loading-progress-bar/progress-bar.service";
 import {
   ServerNotificationSubscriberService
 } from "../../../../backend/notificatinos/server-notification-subscriber.service";
-import {TransferDone} from "../../../../backend/notificatinos/notifications/transfer-done";
-import {TransferRolledBack} from "../../../../backend/notificatinos/notifications/transfer-rolled-back";
 import {TransferStatus} from "./transfer-status";
+import {TransferDone} from 'src/backend/notificatinos/notifications/transfer/transfer-done';
 import {
-  TransferFatalErrorRollingback
-} from "../../../../backend/notificatinos/notifications/transfer-fatal-error-rollingback";
+  ErrorWhileMakingTransfer
+} from "../../../../backend/notificatinos/notifications/transfer/error-while-making-transfer";
 
 @Component({
   selector: 'app-make-transfer-modal',
@@ -101,23 +100,14 @@ export class MakeTransferModalComponent implements OnInit {
 
   private registerNotificationsListener() {
     this.onTransferDone();
-    this.onTransferRolledback();
-    this.onErrorRollingback();
+    this.onTransferError();
   }
 
-  private onTransferRolledback(): void {
-    this.serverNotificationSubscriber.subscribe<TransferRolledBack>('transference-rolledback', res => {
+  private onTransferError(): void {
+    this.serverNotificationSubscriber.subscribe<ErrorWhileMakingTransfer>('transfer-error', res => {
       this.progressBar.isLoading.next(false);
-      this.transferStatus = TransferStatus.ROLLED_BACK;
-      this.errorMessage = res.reasonOfRollingback
-    });
-  }
-
-  private onErrorRollingback(): void {
-    this.serverNotificationSubscriber.subscribe<TransferFatalErrorRollingback>('transference-rollingback-error', res => {
-      this.errorMessage = res.errorMessage;
-      this.transferStatus = TransferStatus.ERROR_ROLLINGBACK;
-      this.progressBar.isLoading.next(false);
+      this.transferStatus = TransferStatus.ERROR;
+      this.errorMessage = res.errorCause;
     });
   }
 

@@ -3,7 +3,7 @@ import {ConfirmCardSetupData, StripeElement, StripeElements} from "@stripe/strip
 import {StripeService} from "ngx-stripe";
 import {Authentication} from "../../backend/users/authentication/authentication";
 import {PaymentsService} from "../../backend/payments/payments.service";
-import {ProgressBarService} from "../progress-bar.service";
+import {ProgressBarService} from "../loading-progress-bar/progress-bar.service";
 import {UserState} from "../../model/user/user-state";
 
 @Component({

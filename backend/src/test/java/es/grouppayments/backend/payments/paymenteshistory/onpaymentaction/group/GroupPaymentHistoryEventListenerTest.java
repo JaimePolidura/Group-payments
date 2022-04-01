@@ -7,7 +7,7 @@ import es.grouppayments.backend.payments.payments._shared.domain.events.grouppay
 import es.grouppayments.backend.payments.payments._shared.domain.events.grouppayment.MemberPaidToAdmin;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentHistoryService;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentState;
-import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentType;
+import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentContext;
 import es.grouppayments.backend.payments.paymentshistory.onpaymentaction.group.OnErrorWhileMemberPayingToAdmin;
 import es.grouppayments.backend.payments.paymentshistory.onpaymentaction.group.OnMemberPaidToAdmin;
 import org.junit.Test;
@@ -32,7 +32,7 @@ public final class GroupPaymentHistoryEventListenerTest extends PaymentHistoryTe
         assertContentOfPayment(toUserId, payment -> payment.getMoney() == 10);
         assertContentOfPayment(toUserId, payment -> payment.getToUserId().equals(toUserId));
         assertContentOfPayment(toUserId, payment -> payment.getState() == PaymentState.SUCCESS);
-        assertContentOfPayment(toUserId, payment -> payment.getType() == PaymentType.GROUP_PAYMENT);
+        assertContentOfPayment(toUserId, payment -> payment.getContext() == PaymentContext.GROUP_PAYMENT);
     }
 
     @Test
@@ -52,7 +52,7 @@ public final class GroupPaymentHistoryEventListenerTest extends PaymentHistoryTe
         assertContentOfPayment(userIdMember, payment -> payment.getMoney() == 10);
         assertContentOfPayment(userIdMember, payment -> payment.getFromUserId().equals(userIdMember));
         assertContentOfPayment(userIdMember, payment -> payment.getState() == PaymentState.ERROR);
-        assertContentOfPayment(userIdMember, payment -> payment.getType() == PaymentType.GROUP_PAYMENT);
+        assertContentOfPayment(userIdMember, payment -> payment.getContext() == PaymentContext.GROUP_PAYMENT);
         assertContentOfPayment(userIdMember, payment -> payment.getToUserId().equals(userIdAdmin));
     }
 }

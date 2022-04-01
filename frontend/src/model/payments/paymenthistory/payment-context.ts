@@ -1,0 +1,4 @@
+export enum PaymentContext {
+  GROUP_PAYMENT = "GROUP_PAYMENT",
+  TRANSFERENCE = "TRANSFERENCE",
+}

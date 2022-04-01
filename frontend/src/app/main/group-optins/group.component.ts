@@ -6,16 +6,16 @@ import {GroupsApiService} from "../../../backend/groups/groups-api.service";
 import {Authentication} from "../../../backend/users/authentication/authentication";
 import {GroupPaymentRequest} from "../../../backend/groups/request/group-payment-request";
 import {GetGroupMemberByUserIdRequest} from "../../../backend/groups/request/get-group-member-by-user-id-request";
-import {GroupMemberLeftEvent} from "../../../backend/notificatinos/notifications/group-member-left-event";
-import {GroupMemberJoined} from "../../../backend/notificatinos/notifications/group-member-joined";
-import {GroupEdited} from "../../../backend/notificatinos/notifications/group-edited";
+import {GroupMemberLeftEvent} from "../../../backend/notificatinos/notifications/groups/group-member-left-event";
+import {GroupMemberJoined} from "../../../backend/notificatinos/notifications/groups/group-member-joined";
+import {GroupEdited} from "../../../backend/notificatinos/notifications/groups/group-edited";
 import {ServerNotificationSubscriberService} from "../../../backend/notificatinos/server-notification-subscriber.service";
-import {PaymentInitialized} from "../../../backend/notificatinos/notifications/payment-initialized";
+import {GroupPaymentInitialized} from "../../../backend/notificatinos/notifications/groups/payment/group-payment-initialized";
 import {GroupState} from "../../../model/group/group-state";
-import {ProgressBarService} from "../../progress-bar.service";
+import {ProgressBarService} from "../../loading-progress-bar/progress-bar.service";
 import {GroupPaymentComponent} from "./group-payment/group-payment.component";
 import {ConfirmPaymentComponent} from "./confirm-payment/confirm-payment.component";
-import {GroupMemberKicked} from "../../../backend/notificatinos/notifications/group-member-kicked";
+import {GroupMemberKicked} from "../../../backend/notificatinos/notifications/groups/group-member-kicked";
 
 @Component({
   selector: 'app-group',
@@ -109,7 +109,7 @@ export class GroupComponent implements OnInit {
   }
 
   private onPaymentInitialized(): void{
-    this.eventSubscriber.subscribe<PaymentInitialized>('group-payment-initialized', (event) => {
+    this.eventSubscriber.subscribe<GroupPaymentInitialized>('group-payment-initialized', (event) => {
       this.groupState.setGroupState(GroupState.PAYING);
       this.progressBar.isLoading.next(true);
 

@@ -5,7 +5,7 @@ import es.grouppayments.backend.payments.payments._shared.domain.events.transfer
 import es.grouppayments.backend.payments.payments._shared.domain.events.transfer.TransferDone;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentHistoryService;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentState;
-import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentType;
+import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentContext;
 import es.grouppayments.backend.payments.paymentshistory.onpaymentaction.transfer.OnErrorWhileMakingTransfer;
 import es.grouppayments.backend.payments.paymentshistory.onpaymentaction.transfer.OnTransferDone;
 import org.junit.Test;
@@ -29,14 +29,14 @@ public final class TransferPaymentHistoryEventListener extends PaymentHistoryTes
         assertContentOfPayment(from, payment -> payment.getMoney() == money);
         assertContentOfPayment(from, payment -> payment.getToUserId().equals(to));
         assertContentOfPayment(from, payment -> payment.getState() == PaymentState.SUCCESS);
-        assertContentOfPayment(from, payment -> payment.getType() == PaymentType.TRANSFERENCE);
+        assertContentOfPayment(from, payment -> payment.getContext() == PaymentContext.TRANSFERENCE);
 
         assertPaymentHistorySaved(to);
         assertContentOfPayment(to, payment -> payment.getErrorMessage() == null || payment.getErrorMessage().equals(""));
         assertContentOfPayment(to, payment -> payment.getMoney() == money);
         assertContentOfPayment(to, payment -> payment.getFromUserId().equals(from));
         assertContentOfPayment(to, payment -> payment.getState() == PaymentState.SUCCESS);
-        assertContentOfPayment(to, payment -> payment.getType() == PaymentType.TRANSFERENCE);
+        assertContentOfPayment(to, payment -> payment.getContext() == PaymentContext.TRANSFERENCE);
     }
 
     @Test
@@ -53,7 +53,7 @@ public final class TransferPaymentHistoryEventListener extends PaymentHistoryTes
         assertContentOfPayment(userIdFrom, payment -> payment.getErrorMessage().equals("error"));
         assertContentOfPayment(userIdFrom, payment -> payment.getMoney() == 10);
         assertContentOfPayment(userIdFrom, payment -> payment.getState() == PaymentState.ERROR);
-        assertContentOfPayment(userIdFrom, payment -> payment.getType() == PaymentType.TRANSFERENCE);
+        assertContentOfPayment(userIdFrom, payment -> payment.getContext() == PaymentContext.TRANSFERENCE);
         assertContentOfPayment(userIdFrom, payment -> payment.getFromUserId().equals(userIdFrom));
     }
 }

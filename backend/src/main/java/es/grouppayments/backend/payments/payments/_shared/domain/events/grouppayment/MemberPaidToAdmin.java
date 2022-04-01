@@ -35,7 +35,8 @@ public final class MemberPaidToAdmin extends DomainEvent implements GroupDomainE
         return Map.of(
                 "groupId", this.group.getAdminUserId(),
                 "adminUserId", this.group.getAdminUserId(),
-                "money", this.getMoney()
+                "money", this.getMoney(),
+                "userId", this.memberUserId
         );
     }
 
