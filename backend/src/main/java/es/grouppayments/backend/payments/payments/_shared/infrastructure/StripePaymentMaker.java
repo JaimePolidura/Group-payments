@@ -1,9 +1,8 @@
 package es.grouppayments.backend.payments.payments._shared.infrastructure;
 
 import com.stripe.model.PaymentIntent;
-import com.stripe.model.Transfer;
 import com.stripe.param.PaymentIntentCreateParams;
-import com.stripe.param.TransferCreateParams;
+import es.grouppayments.backend.payments.payments._shared.domain.CommissionPolicy;
 import es.grouppayments.backend.payments.payments._shared.domain.PaymentMakerService;
 import es.grouppayments.backend.payments.userpaymentsinfo._shared.domain.StripeUser;
 import es.grouppayments.backend.payments.userpaymentsinfo._shared.application.StripeUsersService;
@@ -18,38 +17,29 @@ import java.util.UUID;
 public final class StripePaymentMaker implements PaymentMakerService {
     private final StripeUsersService stripeUsersService;
     private final StripeService stripeService;
+    private final CommissionPolicy commissionPolicy;
 
     @Override
-    public String paymentUserToApp(UUID userId, double money, String currencyCode) throws Exception {
-        StripeUser stripeUser = this.stripeUsersService.getdByUserId(userId);
-        String consumerId = stripeUser.getCustomerId();
-        String paymentMethodId = stripeUser.getPaymentMethod();
+    public String makePayment(UUID fromUserId, UUID toUserId, double money, String currencyCode) throws Exception {
+        StripeUser fromConnectedAccount = this.stripeUsersService.getdByUserId(fromUserId);
+        StripeUser toConnectedAccount = this.stripeUsersService.getdByUserId(toUserId);
+        long totalFee = (long) this.commissionPolicy.collecteFee(money);
 
-        return PaymentIntent.create(
+        PaymentIntent paymentIntent = PaymentIntent.create(
                 PaymentIntentCreateParams.builder()
                         .setAmount((long) (money * 100))
-                        .setCurrency(currencyCode.toLowerCase())
                         .addPaymentMethodType("card")
-                        .setCustomer(consumerId)
-                        .setPaymentMethod(paymentMethodId)
-                        .setConfirm(true)
-                        .setOffSession(false)
-                        .build()
-        ).toJson();
-    }
+                        .setCurrency(currencyCode)
+                        .setApplicationFeeAmount(totalFee)
+                        .setCustomer(fromConnectedAccount.getCustomerId())
+                        .setPaymentMethod(fromConnectedAccount.getPaymentMethod())
+                        .setTransferData(PaymentIntentCreateParams.TransferData.builder()
+                                .setDestination(toConnectedAccount.getConnectedAccountId())
+                                .build())
+                        .build());
 
-    @Override
-    public String paymentAppToUser(UUID userId, double money, String currencyCode) throws Exception {
-        String stripeConnectedAccountId = this.stripeUsersService.getdByUserId(userId)
-                .getConnectedAccountId();
+        paymentIntent.confirm();
 
-        return Transfer.create(
-                TransferCreateParams.builder()
-                        .setAmount((long) (money * 100))
-                        .setCurrency(currencyCode.toLowerCase())
-                        .setDestination(stripeConnectedAccountId)
-                        .setTransferGroup("order#1")
-                        .build()
-        ).toJson();
+        return paymentIntent.toJson();
     }
 }
