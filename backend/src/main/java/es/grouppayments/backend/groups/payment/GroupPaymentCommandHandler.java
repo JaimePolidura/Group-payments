@@ -1,5 +1,6 @@
 package es.grouppayments.backend.groups.payment;
 
+import es.grouppayments.backend._shared.domain.ThreadRunner;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMember;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberRole;
 import es.grouppayments.backend.groupmembers._shared.domain.GroupMemberService;
@@ -9,6 +10,7 @@ import es.grouppayments.backend.payments.currencies._shared.domain.CurrencyServi
 import es.grouppayments.backend.payments.payments._shared.domain.CommissionPolicy;
 import es.grouppayments.backend.payments.payments._shared.domain.PaymentMakerService;
 import es.grouppayments.backend.payments.payments._shared.domain.events.grouppayment.*;
+import es.grouppayments.backend.payments.payments._shared.domain.events.grouppayment.proro.MemberPaidToAdmin;
 import es.grouppayments.backend.users._shared.domain.UsersService;
 import es.jaime.javaddd.domain.cqrs.command.CommandHandler;
 import es.jaime.javaddd.domain.event.EventBus;
@@ -20,12 +22,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class GroupPaymentCommandHandler implements CommandHandler<GroupPaymentCommand> {
+    private final ThreadRunner threadRunner;
     private final CommissionPolicy commissionPolicy;
     private final GroupService groupService;
     private final GroupMemberService groupMembers;
@@ -39,40 +43,46 @@ public class GroupPaymentCommandHandler implements CommandHandler<GroupPaymentCo
         Group group = this.ensureGroupExistsAndGet(command.getGruopId());
         this.ensureGroupAbleToMakePayments(group);
         this.ensureAdminOfGroup(group, command.getUserId());
-
         List<GroupMember> groupMembersWithoutAdmin = this.ensureAtLeastOneMemberExceptAdminAndGet(group);
-        double moneyToPayPerMember = group.getMoney() / groupMembersWithoutAdmin.size();
+
+        int numberOfMembers = groupMembersWithoutAdmin.size();
+        double moneyToPayPerMember = group.getMoney() / numberOfMembers;
         String currencyCodeForPayment = this.getCurrencyCodeForUser(group.getAdminUserId());
 
         this.eventBus.publish(new GroupPaymentInitialized(group.getGroupId()));
+        AtomicInteger numberOfPayments = new AtomicInteger();
 
-        double totalMoneyPaid = 0;
+        for(GroupMember member : groupMembersWithoutAdmin){
+            this.threadRunner.run(() -> {
+                makePaymentGroupMemberToAdmin(group, moneyToPayPerMember, currencyCodeForPayment, member);
 
-        for (GroupMember groupMember : groupMembersWithoutAdmin) {
-            try{
-                this.paymentService.paymentUserToApp(groupMember.getUserId(), moneyToPayPerMember, currencyCodeForPayment);
+                numberOfPayments.getAndIncrement();
 
-                totalMoneyPaid += moneyToPayPerMember;
+                if(isLastGroupMemberToPay(numberOfPayments, numberOfMembers))
+                    publishGroupPaymentDoneEvent(group, groupMembersWithoutAdmin, moneyToPayPerMember);
 
-                this.eventBus.publish(new GroupMemberPayingAppDone(group, moneyToPayPerMember, currencyCodeForPayment, group.getDescription(), groupMember.getUserId()));
-            }catch (Exception e){
-                this.eventBus.publish(new ErrorWhileGroupMemberPaying(group, moneyToPayPerMember, currencyCodeForPayment, group.getDescription(), groupMember.getUserId(), e.getMessage()));
-            }
+            });
         }
+    }
 
-        this.makePaymentAppToAdmin(group, this.commissionPolicy.deductCommission(totalMoneyPaid), currencyCodeForPayment);
-
+    private void publishGroupPaymentDoneEvent(Group group, List<GroupMember> groupMembersWithoutAdmin, double moneyToPayPerMember) {
         this.eventBus.publish(new GroupPaymentDone(group.getGroupId(), groupMembersWithoutAdmin.stream().map(GroupMember::getUserId).toList(),
                 group.getAdminUserId(), group.getDescription(), moneyToPayPerMember));
     }
 
-    private void makePaymentAppToAdmin(Group group, double totalMoney, String currencyCode){
-        try {
-            this.paymentService.paymentAppToUser(group.getAdminUserId(), totalMoney, currencyCode);
+    private boolean isLastGroupMemberToPay(AtomicInteger numberOfPayments, int numberOfMembers){
+        return numberOfPayments.get() == numberOfMembers;
+    }
 
-            this.eventBus.publish(new AppPayingGroupAdminDone(group, totalMoney, currencyCode, group.getDescription(), group.getAdminUserId()));
+    private void makePaymentGroupMemberToAdmin(Group group, double moneyToPayPerMember, String currencyCodeForPayment, GroupMember member) {
+        try {
+            this.paymentService.makePayment(member.getUserId(), group.getAdminUserId(), moneyToPayPerMember, currencyCodeForPayment);
+
+            this.eventBus.publish(new MemberPaidToAdmin(group, moneyToPayPerMember, currencyCodeForPayment, group.getDescription(),
+                    member.getUserId()));
         } catch (Exception e) {
-            this.eventBus.publish(new ErrorWhilePayingToGroupAdmin(totalMoney, currencyCode, group.getDescription(), group.getAdminUserId(), e.getMessage(), group));
+            this.eventBus.publish(new ErrorWhilePayingToGroupAdmin(moneyToPayPerMember, currencyCodeForPayment, group.getDescription(),
+                    member.getUserId(), e.getMessage(), group));
         }
     }
 

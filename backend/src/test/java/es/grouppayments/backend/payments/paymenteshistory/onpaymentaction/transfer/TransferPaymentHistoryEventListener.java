@@ -1,8 +1,7 @@
 package es.grouppayments.backend.payments.paymenteshistory.onpaymentaction.transfer;
 
 import es.grouppayments.backend.payments.paymenteshistory.PaymentHistoryTestMother;
-import es.grouppayments.backend.payments.payments._shared.domain.events.transfer.TransferFatalErrorRollingback;
-import es.grouppayments.backend.payments.payments._shared.domain.events.transfer.porro.TransferDone;
+import es.grouppayments.backend.payments.payments._shared.domain.events.transfer.TransferDone;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentHistoryService;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentState;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentType;

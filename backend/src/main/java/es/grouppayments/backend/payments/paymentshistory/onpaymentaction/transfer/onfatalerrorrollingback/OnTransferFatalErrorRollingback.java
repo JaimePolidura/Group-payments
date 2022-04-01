@@ -1,6 +1,5 @@
 package es.grouppayments.backend.payments.paymentshistory.onpaymentaction.transfer.onfatalerrorrollingback;
 
-import es.grouppayments.backend.payments.payments._shared.domain.events.transfer.TransferFatalErrorRollingback;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentHistoryService;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentType;
 import lombok.AllArgsConstructor;

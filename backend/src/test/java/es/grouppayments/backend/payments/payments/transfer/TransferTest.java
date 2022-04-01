@@ -1,7 +1,6 @@
 package es.grouppayments.backend.payments.payments.transfer;
 
-import es.grouppayments.backend.payments.payments._shared.domain.events.transfer.*;
-import es.grouppayments.backend.payments.payments._shared.domain.events.transfer.porro.TransferDone;
+import es.grouppayments.backend.payments.payments._shared.domain.events.transfer.TransferDone;
 import es.grouppayments.backend.users._shared.domain.UserState;
 import es.jaime.javaddd.domain.exceptions.*;
 import org.junit.Test;

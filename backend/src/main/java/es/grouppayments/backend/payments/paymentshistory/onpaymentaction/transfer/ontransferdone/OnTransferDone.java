@@ -1,6 +1,6 @@
 package es.grouppayments.backend.payments.paymentshistory.onpaymentaction.transfer.ontransferdone;
 
-import es.grouppayments.backend.payments.payments._shared.domain.events.transfer.porro.TransferDone;
+import es.grouppayments.backend.payments.payments._shared.domain.events.transfer.TransferDone;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentHistoryService;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentType;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package es.grouppayments.backend.payments.payments._shared.domain.events.transfer.porro;
+package es.grouppayments.backend.payments.payments._shared.domain.events.transfer;
 
 import es.grouppayments.backend._shared.domain.events.NotificableClientDomainEvent;
 import es.jaime.javaddd.domain.event.DomainEvent;
