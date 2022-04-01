@@ -4,6 +4,8 @@ import es.grouppayments.backend.payments.currencies._shared.domain.CurrencyServi
 import es.grouppayments.backend.payments.payments._shared.domain.CommissionPolicy;
 import es.grouppayments.backend.payments.payments._shared.domain.PaymentMakerService;
 import es.grouppayments.backend.payments.payments._shared.domain.events.transfer.*;
+import es.grouppayments.backend.payments.payments._shared.domain.events.transfer.porro.ErrorWhileMakingTransfer;
+import es.grouppayments.backend.payments.payments._shared.domain.events.transfer.porro.TransferDone;
 import es.grouppayments.backend.users._shared.domain.User;
 import es.grouppayments.backend.users._shared.domain.UserState;
 import es.grouppayments.backend.users._shared.domain.UsersService;
@@ -38,57 +40,16 @@ public final class TransferCommandHandler implements CommandHandler<TransferComm
         User userFrom = this.usersService.getByUserId(command.getUserIdFrom());
         String currenyCode = currencyService.getByCountryCode(userFrom.getCountry()).getCode();
 
-        var sucessUserFromPayingApp = this.tryPaymentUserFromToApp(command, currenyCode);
-        if(sucessUserFromPayingApp){
-            var paymentStateOfPayingToUserTo = this.tryPaymentAppToUserTo(command, currenyCode);
-
-            if(!paymentStateOfPayingToUserTo.isSucess){
-                this.rollbackPaymentToUserFrom(command, currenyCode, paymentStateOfPayingToUserTo.reasonOfFailure);
-            }else{
-                double moneyDeductedCommission = this.comimssionPolicy.deductCommission(command.getMoney());
-                String userNameFrom = this.usersService.getByUserId(command.getUserIdFrom()).getUsername();
-
-                this.eventBus.publish(new TransferDone(command.getUserIdFrom(), userNameFrom,command.getUserIdTo(), command.getMoney(),
-                        moneyDeductedCommission, currenyCode, command.getDescription()));
-            }
-        }
-    }
-
-    private boolean tryPaymentUserFromToApp(TransferCommand command, String currencyCode){
         try {
-            this.paymentMakerService.paymentUserToApp(command.getUserIdFrom(), command.getMoney(), currencyCode);
+            this.paymentMakerService.makePayment(userFrom.getUserId(), userTo.getUserId(), command.getMoney(), currenyCode);
 
-            this.eventBus.publish(new TransferUserPaidToApp(command.getMoney(), currencyCode, command.getDescription(), command.getUserIdFrom()));
-
-            return true;
-        } catch (Exception e) {
-            this.eventBus.publish(new TransferErrorUserPaidToApp(command.getMoney(), currencyCode, command.getDescription(), command.getUserIdFrom(), e.getMessage()));
-
-            return false;
-        }
-    }
-
-    private PaymentState tryPaymentAppToUserTo(TransferCommand command, String currencyCode){
-        try {
+            String userNameFrom = this.usersService.getByUserId(command.getUserIdFrom()).getUsername();
             double moneyDeductedCommission = this.comimssionPolicy.deductCommission(command.getMoney());
 
-            this.paymentMakerService.paymentAppToUser(command.getUserIdTo(), moneyDeductedCommission, currencyCode);
-
-            return new PaymentState(true, null);
+            this.eventBus.publish(new TransferDone(command.getUserIdFrom(), userNameFrom, command.getUserIdTo(), command.getMoney(),
+                    currenyCode, command.getDescription()));
         } catch (Exception e) {
-            this.eventBus.publish(new TransferErrorAppPaidToUser(command.getMoney(), currencyCode, command.getDescription(), command.getUserIdTo(), e.getMessage()));
-
-            return new PaymentState(false, e.getMessage());
-        }
-    }
-
-    private void rollbackPaymentToUserFrom(TransferCommand command, String currencyCode, String reasonOfRollingBack){
-        try{
-            this.paymentMakerService.paymentAppToUser(command.getUserIdFrom(), command.getMoney(), currencyCode);
-
-            this.eventBus.publish(new TransferRolledBack(command.getUserIdFrom(), command.getMoney(), currencyCode, command.getDescription(), reasonOfRollingBack));
-        }catch (Exception e) {
-            this.eventBus.publish(new TransferFatalErrorRollingback(command.getUserIdFrom() ,e.getMessage(), command.getMoney(), currencyCode, command.getDescription()));
+            this.eventBus.publish(new ErrorWhileMakingTransfer(command.getUserIdFrom(), e.getMessage()));
         }
     }
 

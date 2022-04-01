@@ -1,4 +1,4 @@
-package es.grouppayments.backend.payments.payments.transfer;
+package es.grouppayments.backend.payments.payments._shared.domain.events.transfer.porro;
 
 import es.grouppayments.backend._shared.domain.events.NotificableClientDomainEvent;
 import es.jaime.javaddd.domain.event.DomainEvent;
@@ -14,8 +14,7 @@ public final class TransferDone extends DomainEvent implements NotificableClient
     @Getter private final UUID from;
     @Getter private final String fromUsername;
     @Getter private final UUID to;
-    @Getter private final double moneyUserFromPaid;
-    @Getter private final double moneyUserToGotPaid;
+    @Getter private final double money;
     @Getter private final String currencyCode;
     @Getter private final String description;
 
@@ -35,8 +34,7 @@ public final class TransferDone extends DomainEvent implements NotificableClient
             "from", this.from,
             "to", this.to,
             "fromUsername", this.fromUsername,
-            "moneyUserFromPaid", this.moneyUserFromPaid,
-            "moneyUserToGotPaid", this.moneyUserToGotPaid,
+            "money", this.money,
             "currencyCode", this.currencyCode,
             "description", this.description
         );
