@@ -8,6 +8,7 @@ import es.grouppayments.backend.groups._shared.domain.Group;
 import es.grouppayments.backend.groups._shared.domain.GroupService;
 import es.grouppayments.backend.payments.currencies._shared.domain.CurrencyService;
 import es.grouppayments.backend.payments.payments._shared.domain.PaymentMakerService;
+import es.grouppayments.backend.payments.payments._shared.domain.events.grouppayment.ErrorWhilePayingToGroupAdmin;
 import es.grouppayments.backend.payments.payments._shared.domain.events.grouppayment.GroupPaymentDone;
 import es.grouppayments.backend.payments.payments._shared.domain.events.grouppayment.GroupPaymentInitialized;
 import es.grouppayments.backend.payments.payments._shared.domain.events.grouppayment.MemberPaidToAdmin;

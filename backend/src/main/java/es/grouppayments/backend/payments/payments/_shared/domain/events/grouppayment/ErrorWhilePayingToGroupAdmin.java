@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
-public final class ErrorWhileMemberPayingToAdmin extends DomainEvent implements GroupDomainEvent, NotificableClientDomainEvent {
+public final class ErrorWhilePayingToGroupAdmin extends DomainEvent implements GroupDomainEvent, NotificableClientDomainEvent {
     @Getter private final double money;
     @Getter private final String currencyCode;
     @Getter private final String description;

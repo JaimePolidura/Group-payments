@@ -1,8 +1,10 @@
 package es.grouppayments.backend.groups.payment;
 
 import es.grouppayments.backend.groups._shared.domain.GroupState;
+import es.grouppayments.backend.payments.payments._shared.domain.events.grouppayment.ErrorWhilePayingToGroupAdmin;
 import es.grouppayments.backend.payments.payments._shared.domain.events.grouppayment.GroupPaymentDone;
 import es.grouppayments.backend.payments.payments._shared.domain.events.grouppayment.GroupPaymentInitialized;
+import es.grouppayments.backend.payments.payments._shared.domain.events.grouppayment.MemberPaidToAdmin;
 import es.jaime.javaddd.domain.exceptions.IllegalQuantity;
 import es.jaime.javaddd.domain.exceptions.IllegalState;
 import es.jaime.javaddd.domain.exceptions.NotTheOwner;
@@ -24,46 +26,26 @@ public final class MakePaymentTest extends MakePaymentTestMother{
 
         execute(groupId, adminUserId);
 
-        assertEventRaised(GroupPaymentInitialized.class, GroupMemberPayingAppDone.class, GroupPaymentDone.class, AppPayingGroupAdminDone.class);
+        assertEventRaised(GroupPaymentInitialized.class, MemberPaidToAdmin.class, GroupPaymentDone.class, GroupPaymentDone.class);
         assertContentOfEventEquals(GroupPaymentDone.class, GroupPaymentDone::getMoneyPaidPerMember, deductFrom(moneyOfGroup, FEE));
         assertNumebrOfTimesMembersPaid(2);
-        assertMoneyAppPaidToUser(deductFrom(moneyOfGroup, FEE));
-        assertMoneyUsersPaidToApp(moneyOfGroup);
+        assertMoneyPaid(moneyOfGroup);
     }
 
     @Test
-    public void shouldMakePaymentButPaymentToAdminWillFail(){
+    public void shouldMakePaymentButPaymentWillFail(){
         final double moneyOfGroup = 20;
         UUID groupId = UUID.randomUUID();
         UUID adminUserId = UUID.randomUUID();
         addGroup(groupId, adminUserId, moneyOfGroup, UUID.randomUUID(), UUID.randomUUID());
 
-        payingTAppToUserWillFail();
+        super.willFail();
         execute(groupId, adminUserId);
 
-        assertEventRaised(GroupPaymentInitialized.class, GroupMemberPayingAppDone.class, GroupPaymentDone.class, ErrorWhilePayingToGroupAdmin.class);
-        assertContentOfEventEquals(GroupPaymentDone.class, GroupPaymentDone::getMoneyPaidPerMember, deductFrom(moneyOfGroup, FEE));
-        assertNumebrOfTimesMembersPaid(2);
-        assertMoneyAppPaidToUser(0);
-        assertMoneyUsersPaidToApp(moneyOfGroup);
-    }
-
-    @Test
-    public void shouldMakePaymentButPaymentMemberToAppWillFail(){
-        final double moneyOfGroup = 20;
-        UUID groupId = UUID.randomUUID();
-        UUID adminUserId = UUID.randomUUID();
-        addGroup(groupId, adminUserId, moneyOfGroup, UUID.randomUUID(), UUID.randomUUID());
-
-        //Only one member will fail
-        payingUserToAppWillFail();
-        execute(groupId, adminUserId);
-
-        assertEventRaised(GroupPaymentInitialized.class, GroupMemberPayingAppDone.class, GroupPaymentDone.class, AppPayingGroupAdminDone.class, ErrorWhileGroupMemberPaying.class);
+        assertEventRaised(GroupPaymentInitialized.class, GroupPaymentDone.class, ErrorWhilePayingToGroupAdmin.class);
         assertContentOfEventEquals(GroupPaymentDone.class, GroupPaymentDone::getMoneyPaidPerMember, deductFrom(moneyOfGroup, FEE));
         assertNumebrOfTimesMembersPaid(1);
-        assertMoneyAppPaidToUser(deductFrom(moneyOfGroup/2, FEE));
-        assertMoneyUsersPaidToApp(moneyOfGroup/2);
+        assertMoneyPaid(moneyOfGroup/2);
     }
 
     @Test(expected = ResourceNotFound.class)

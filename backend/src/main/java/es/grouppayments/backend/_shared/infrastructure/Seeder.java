@@ -70,16 +70,17 @@ public class Seeder implements CommandLineRunner {
     }
 
     private void addRandomPayment(UUID userId){
-        PaymentType paymentType = Math.random() < 0.5 ? PaymentType.APP_TO_USER : PaymentType.USER_TO_APP;
+        PaymentType paymentType = Math.random() < 0.5 ? PaymentType.TRANSFERENCE : PaymentType.GROUP_PAYMENT;
         boolean isUserIdAdmin = Math.random() < 0.5;
         boolean isError = Math.random() < 0.3;
 
         this.paymentsHistoryRepository.save(new Payment(
                 UUID.randomUUID(),
-                LocalDateTime.now(),
-                paymentType == PaymentType.APP_TO_USER ? "APP" : userId.toString(),
-                paymentType == PaymentType.USER_TO_APP ? "APP" : userId.toString(),
+                UUID.randomUUID(),
+                UUID.randomUUID(),
                 Math.random() * 100,
+                "EUR",
+                LocalDateTime.now(),
                 "Payment",
                 isError ? PaymentState.ERROR : PaymentState.SUCCESS,
                 paymentType,

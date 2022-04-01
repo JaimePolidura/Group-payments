@@ -3,45 +3,26 @@ package _shared;
 import java.util.UUID;
 
 public final class FakeTestPaymentMakerService implements TestPaymentMaker {
-    private double moneyPaidToAdmin;
-    private double allMoneyMembersPaidToApp;
+    private double allMoneyPaid;
     private int numebrOfTimesMembersPaid;
-    private boolean paymentToAdminWillFail;
-    private boolean paymentMembersToAppWillFail;
+    private boolean willFail;
 
     @Override
-    public String paymentUserToApp(UUID userId, double money, String currencyCode) throws Exception {
-        if(paymentMembersToAppWillFail){
-            this.paymentMembersToAppWillFail = false;
+    public String makePayment(UUID fromUserId, UUID toUserId, double money, String currencyCode) throws Exception {
+        if(willFail){
+            this.willFail = false;
             throw new Exception();
         }
 
         this.numebrOfTimesMembersPaid++;
-        this.allMoneyMembersPaidToApp += money;
+        this.allMoneyPaid += money;
 
         return null;
     }
 
     @Override
-    public String paymentAppToUser(UUID userId, double money, String currencyCode) throws Exception {
-        if(paymentToAdminWillFail){
-            this.paymentToAdminWillFail = false;
-            throw new Exception();
-        }
-
-        this.moneyPaidToAdmin =+ money;
-
-        return null;
-    }
-
-    @Override
-    public double getMoneyPaidToAdmin() {
-        return this.moneyPaidToAdmin;
-    }
-
-    @Override
-    public double getAllMoneyMembersPaidToApp() {
-        return this.allMoneyMembersPaidToApp;
+    public double getAllMoneyPaid() {
+        return this.allMoneyPaid;
     }
 
     @Override
@@ -50,12 +31,7 @@ public final class FakeTestPaymentMakerService implements TestPaymentMaker {
     }
 
     @Override
-    public void payingToAdminWillFail() {
-        this.paymentToAdminWillFail = true;
-    }
-
-    @Override
-    public void payingMembersToAppWillFail() {
-        this.paymentMembersToAppWillFail = true;
+    public void willFail() {
+        this.willFail = true;
     }
 }

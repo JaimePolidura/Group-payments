@@ -1,6 +1,5 @@
 package es.grouppayments.backend.payments.paymenteshistory.getpaymentshistory;
 
-import com.google.common.base.Optional;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.Payment;
 import es.grouppayments.backend.payments.paymentshistory.getpaymentshistory.GetPaymentsHistoryQuery;
 import es.grouppayments.backend.payments.paymentshistory.getpaymentshistory.SearchPaymentByType;
@@ -18,7 +17,7 @@ public final class GetPaymentHistoryTest extends GetPaymentHistoryTestMother{
         UUID userId = UUID.randomUUID();
         addRandoms(userId, 20);
 
-        List<Payment> paymentsFirstPage = execute(GetPaymentsHistoryQuery.of(userId, 1, totalPaymentsOfTheUser, SearchPaymentByType.APP_TO_ADMIN))
+        List<Payment> paymentsFirstPage = execute(GetPaymentsHistoryQuery.of(userId, 1, totalPaymentsOfTheUser, SearchPaymentByType.GROUP_PAYMENT))
                 .getPayments();
         assertCollectionNotEmpty(paymentsFirstPage);
     }

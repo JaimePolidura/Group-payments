@@ -1,5 +1,6 @@
 package es.grouppayments.backend.payments.payments.transfer;
 
+import es.grouppayments.backend.payments.payments._shared.domain.events.transfer.ErrorWhileMakingTransfer;
 import es.grouppayments.backend.payments.payments._shared.domain.events.transfer.TransferDone;
 import es.grouppayments.backend.users._shared.domain.UserState;
 import es.jaime.javaddd.domain.exceptions.*;
@@ -13,20 +14,6 @@ public final class TransferTest extends TransferTestMother{
     private static final int MONEY = 10;
 
     @Test
-    public void shouldMakeTransferPaymentAppToUserFail(){
-        UUID userIdTo = UUID.randomUUID();
-        UUID userIdFrom = UUID.randomUUID();
-        addUser(userIdFrom, userIdTo);
-
-        super.payingTAppToUserWillFail();
-        execute(userIdFrom, userIdTo, MONEY);
-
-        assertEventRaised(TransferUserPaidToApp.class, TransferErrorAppPaidToUser.class, TransferRolledBack.class);
-        assertMoneyUsersPaidToApp(MONEY);
-        assertMoneyAppPaidToUser(MONEY);
-    }
-
-    @Test
     public void shouldMakeTransfer(){
         UUID userIdTo = UUID.randomUUID();
         UUID userIdFrom = UUID.randomUUID();
@@ -36,23 +23,21 @@ public final class TransferTest extends TransferTestMother{
 
         assertEventRaised();
 
-        assertEventRaised(TransferUserPaidToApp.class, TransferDone.class);
-        assertMoneyUsersPaidToApp(MONEY);
-        assertMoneyAppPaidToUser(super.commissionPolicy().deductCommission(MONEY));
+        assertEventRaised(TransferDone.class);
+        assertMoneyPaid(super.commissionPolicy().deductCommission(MONEY));
     }
 
     @Test
-    public void shoulndtdMakeTransferPaymentUserToAppFail(){
+    public void shouldMakeTransferButItWillFail(){
         UUID userIdTo = UUID.randomUUID();
         UUID userIdFrom = UUID.randomUUID();
         addUser(userIdFrom, userIdTo);
 
-        super.payingUserToAppWillFail();
+        super.willFail();
         execute(userIdFrom, userIdTo, MONEY);
 
-        assertEventRaised(TransferErrorUserPaidToApp.class);
-        assertMoneyUsersPaidToApp(0);
-        assertMoneyAppPaidToUser(0);
+        assertEventRaised(ErrorWhileMakingTransfer.class);
+        assertMoneyPaid(0);
     }
 
     @Test(expected = CannotBeYourself.class)

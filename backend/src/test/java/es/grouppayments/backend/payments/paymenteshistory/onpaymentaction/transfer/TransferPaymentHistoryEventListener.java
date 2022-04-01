@@ -1,12 +1,13 @@
 package es.grouppayments.backend.payments.paymenteshistory.onpaymentaction.transfer;
 
 import es.grouppayments.backend.payments.paymenteshistory.PaymentHistoryTestMother;
+import es.grouppayments.backend.payments.payments._shared.domain.events.transfer.ErrorWhileMakingTransfer;
 import es.grouppayments.backend.payments.payments._shared.domain.events.transfer.TransferDone;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentHistoryService;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentState;
 import es.grouppayments.backend.payments.paymentshistory._shared.domain.PaymentType;
-import es.grouppayments.backend.payments.paymentshistory.onpaymentaction.transfer.onfatalerrorrollingback.OnTransferFatalErrorRollingback;
-import es.grouppayments.backend.payments.paymentshistory.onpaymentaction.transfer.ontransferdone.OnTransferDone;
+import es.grouppayments.backend.payments.paymentshistory.onpaymentaction.transfer.OnErrorWhileMakingTransfer;
+import es.grouppayments.backend.payments.paymentshistory.onpaymentaction.transfer.OnTransferDone;
 import org.junit.Test;
 
 import java.util.UUID;
@@ -21,37 +22,38 @@ public final class TransferPaymentHistoryEventListener extends PaymentHistoryTes
         UUID to = UUID.randomUUID();
         int money = 10;
 
-        eventListener.on(new TransferDone(from, "paco", to, money, money, "EUR", "hola"));
+        eventListener.on(new TransferDone(from, "paco", to, money, "EUR", "hola"));
 
         assertPaymentHistorySaved(from);
         assertContentOfPayment(from, payment -> payment.getErrorMessage() == null || payment.getErrorMessage().equals(""));
         assertContentOfPayment(from, payment -> payment.getMoney() == money);
-        assertContentOfPayment(from, payment -> payment.getPaid().equals("APP"));
+        assertContentOfPayment(from, payment -> payment.getToUserId().equals(to));
         assertContentOfPayment(from, payment -> payment.getState() == PaymentState.SUCCESS);
-        assertContentOfPayment(from, payment -> payment.getType() == PaymentType.USER_TO_APP);
+        assertContentOfPayment(from, payment -> payment.getType() == PaymentType.TRANSFERENCE);
 
         assertPaymentHistorySaved(to);
         assertContentOfPayment(to, payment -> payment.getErrorMessage() == null || payment.getErrorMessage().equals(""));
         assertContentOfPayment(to, payment -> payment.getMoney() == money);
-        assertContentOfPayment(to, payment -> payment.getPayer().equals("APP"));
+        assertContentOfPayment(to, payment -> payment.getFromUserId().equals(from));
         assertContentOfPayment(to, payment -> payment.getState() == PaymentState.SUCCESS);
-        assertContentOfPayment(to, payment -> payment.getType() == PaymentType.APP_TO_USER);
+        assertContentOfPayment(to, payment -> payment.getType() == PaymentType.TRANSFERENCE);
     }
 
     @Test
     public void shouldSaveTransferFatalError(){
-        final OnTransferFatalErrorRollingback eventListener = new OnTransferFatalErrorRollingback(
+        final OnErrorWhileMakingTransfer eventListener = new OnErrorWhileMakingTransfer(
                 new PaymentHistoryService(super.paymentsHistoryRepository())
         );
         UUID userIdFrom = UUID.randomUUID();
 
-        eventListener.on(new TransferFatalErrorRollingback(userIdFrom, "error", 10, "EUR", "hola"));
+        eventListener.on(new ErrorWhileMakingTransfer(userIdFrom, "paco", UUID.randomUUID(),10,
+                "EUR", "hola", "error"));
 
         assertPaymentHistorySaved(userIdFrom);
         assertContentOfPayment(userIdFrom, payment -> payment.getErrorMessage().equals("error"));
         assertContentOfPayment(userIdFrom, payment -> payment.getMoney() == 10);
         assertContentOfPayment(userIdFrom, payment -> payment.getState() == PaymentState.ERROR);
-        assertContentOfPayment(userIdFrom, payment -> payment.getType() == PaymentType.APP_TO_USER);
-        assertContentOfPayment(userIdFrom, payment -> payment.getPayer().equals("APP"));
+        assertContentOfPayment(userIdFrom, payment -> payment.getType() == PaymentType.TRANSFERENCE);
+        assertContentOfPayment(userIdFrom, payment -> payment.getFromUserId().equals(userIdFrom));
     }
 }

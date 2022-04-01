@@ -3,9 +3,7 @@ package _shared;
 import es.grouppayments.backend.payments.payments._shared.domain.PaymentMakerService;
 
 public interface TestPaymentMaker extends PaymentMakerService {
-    double getMoneyPaidToAdmin();
-    double getAllMoneyMembersPaidToApp();
+    double getAllMoneyPaid();
     int getNumebrOfTimesMembersPaid();
-    void payingToAdminWillFail();
-    void payingMembersToAppWillFail();
+    void willFail();
 }

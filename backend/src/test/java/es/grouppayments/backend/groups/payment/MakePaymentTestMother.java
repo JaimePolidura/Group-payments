@@ -36,13 +36,14 @@ public class MakePaymentTestMother extends TestMother implements UsingGroups, Us
         this.groupMemberRepository = new GroupMemberRepositoryInMemory();
         this.groupRepository = new GroupsRepositoryInMemory();
         this.makePaymentCommandHandler = new GroupPaymentCommandHandler(
-                new CommissionPolicyImpl(FEE),
-                new GroupService(this.groupRepository, super.testEventBus),
-                new GroupMemberService(this.groupMemberRepository, super.testEventBus),
+                new FakeThreadRunner(),
+                new GroupService(groupRepository, this.testEventBus),
+                new GroupMemberService(groupMemberRepository, this.testEventBus),
                 this.testPaymentMaker,
                 super.testEventBus,
                 new UsersService(this.userRepository),
-                new CurrencyService(this.currencyRepository()));
+                new CurrencyService(this.currencyRepository())
+        );
     }
 
     public void execute(UUID groupId, UUID userId){
