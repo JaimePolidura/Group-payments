@@ -1,0 +1,30 @@
+.pending-invitation-container {
+  display: grid;
+  grid-template-columns: auto 30%;
+}
+
+.pending-invitation-container-text{
+  grid-column: 1;
+}
+
+.pending-invitation-container-confirmbutton {
+  grid-column: 2;
+}
+
+.pending-invitation-container-text{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.pending-invitation-container-confirmbutton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: left;
+}
+
+.pending-invitation-container-confirmbutton button {
+  margin-left: 3%;
+}
+

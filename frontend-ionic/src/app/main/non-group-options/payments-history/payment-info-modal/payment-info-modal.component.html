@@ -1,0 +1,37 @@
+<div class="modal-header">
+  <h2 style="text-align: center">{{payment.description}}</h2>
+  <button class="btn-close" type="button" (click)="activeModal.dismiss()"></button>
+</div>
+<div class="modal-body modal-body-centered">
+  <span>
+    <span *ngIf="isFrom()">To: </span>
+    <span *ngIf="isTo()">From: </span>
+    <span *ngIf="username != undefined">{{username}} - {{email}}</span>
+    <span *ngIf="username == undefined">(User deleted)</span>
+  </span>
+
+  <div *ngIf="isTo()">
+    Money: <span class="green">+{{roundNumber(payment.money)}}{{auth.getCurrency().symbol}}</span>
+  </div>
+  <div *ngIf="isFrom()">
+    Money: <span class="red">-{{roundNumber(payment.money)}}{{auth.getCurrency().symbol}}</span>
+  </div>
+  <div *ngIf="payment.context == 'GROUP_PAYMENT' && isTo()">Context: You were the admin of a group</div>
+  <div *ngIf="payment.context == 'GROUP_PAYMENT' && isFrom()">Context: You were the member of a group</div>
+  <div *ngIf="payment.context == 'TRANSFERENCE' && isFrom()">Context: You made a transfer</div>
+  <div *ngIf="payment.context == 'TRANSFERENCE' && isTo()">Context: You recieved money from a transfer</div>
+  Date: {{payment.date.split("T")[0]}}<br>
+  Description: {{payment.description}}<br>
+  State: {{payment.state}}<br>
+  <div *ngIf="payment.state == 'ERROR'">
+    Reason of failure: {{payment.errorMessage}}
+  </div>
+  <br>
+  <div *ngIf="payment.state == 'ERROR'">
+    <br>
+    <p class="red">This payment failed, it wasnt completed, reason: {{payment.errorMessage}}</p>
+  </div>
+</div>
+<div class="modal-footer payment-confirm-options">
+  <button type="submit" class="myButton myButton-footer" (click)="activeModal.dismiss()">✓ Ok ✓</button>
+</div>

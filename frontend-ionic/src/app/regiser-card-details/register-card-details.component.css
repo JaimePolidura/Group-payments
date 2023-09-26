@@ -1,0 +1,39 @@
+.myContainer {
+  width: 20%;
+}
+
+.options {
+  display: flex;
+  justify-content: center;
+
+  width: 100%;
+}
+
+.option{
+  width: 100%;
+}
+
+.dob-inputs {
+  display: flex;
+  flex-direction: row;
+}
+
+.dob-inputs input{
+  text-align: center;
+  border-radius: 0;
+}
+
+.form-control:not(:last-child, :focus, .is-invalid){
+  border-right: 0;
+}
+
+.dob-inputs input:focus{
+  outline: none !important;
+  box-shadow: none;
+}
+
+@media screen and (max-width: 900px){
+  .myContainer {
+    width: 90%;
+  }
+}

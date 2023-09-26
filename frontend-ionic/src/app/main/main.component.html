@@ -1,0 +1,6 @@
+<div *ngIf="isGroupHTTPRequestDone && !groupState.isNotEmpty()">
+  <app-non-group-options></app-non-group-options>
+</div>
+<div *ngIf="isGroupHTTPRequestDone && groupState.isNotEmpty()">
+  <app-group></app-group>
+</div>

@@ -1,0 +1,34 @@
+<div class="modal-header">
+  <div class="title" >
+    <h2 style="text-align: center" *ngIf="!reqToBackednToChangeCardSended">Change card</h2>
+    <h2 style="text-align: center" *ngIf="reqToBackednToChangeCardSended">Email sended</h2>
+  </div>
+
+  <button class="btn-close" type="button" (click)="closeModal()"></button>
+</div>
+
+<div class="modal-body">
+  <div *ngIf="!reqToBackednToChangeCardSended" id="card-element" class="field"></div>
+  <div *ngIf="reqToBackednToChangeCardSended">
+    <h6>An email has been sended to your account to confirm the change of your account. Check the spam emails if you dont see it</h6>
+    <br>
+    <button class="btn btn-primary" (click)="resnedEmail()">
+      Resend
+    </button>
+  </div>
+  <br>
+</div>
+
+<div *ngIf="!reqToBackednToChangeCardSended" class="modal-footer buttons">
+  <button class="btn btn-danger" (click)="closeModal()" [ngClass]="{'myDisabled disabled': (progressBar.isLoading | async)}">
+    ✘ Cancel ✘
+  </button>
+  <button class="btn btn-success" (click)="setupChangeCard()" [ngClass]="{'myDisabled disabled': (progressBar.isLoading | async)}">
+    <span *ngIf="progressBar.isLoading | async" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    <span *ngIf="!(progressBar.isLoading | async)">✓ Change ✓</span>
+    <span *ngIf="progressBar.isLoading | async">  Loading</span>
+  </button>
+</div>
+<div *ngIf="reqToBackednToChangeCardSended" class="modal-footer">
+  <button class="myButton width60" (click)="closeModal()">Ok</button>
+</div>

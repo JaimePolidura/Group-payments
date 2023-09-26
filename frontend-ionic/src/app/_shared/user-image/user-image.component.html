@@ -1,0 +1,6 @@
+<img
+  [src]="getImageUserLink() | async"
+  [ngStyle]="stylesToApply"
+  (error)="handleMissingImage($event)"
+  class="rounded-circle"
+/>

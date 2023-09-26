@@ -1,0 +1,17 @@
+<div class="modal-header">
+  <h2 style="text-align: center" *ngIf="deleteAccountStatus == 'PENDING'">Confirm</h2>
+  <h2 style="text-align: center" *ngIf="deleteAccountStatus == 'DONE'">Account deleted</h2>
+  <h2 style="text-align: center" *ngIf="deleteAccountStatus == 'ERROR'">Error</h2>
+  <button class="btn-close" type="button" (click)="closeModal()"></button>
+</div>
+<div class="modal-body modal-body-centered">
+  <h5 style="text-align: center" *ngIf="deleteAccountStatus == 'PENDING'">Are you sure you want to delete you account?</h5>
+  <h5 style="text-align: center" *ngIf="deleteAccountStatus == 'DONE'">Your account has been deleted.</h5>
+  <h5 style="text-align: center" *ngIf="deleteAccountStatus == 'ERROR'">Error while trying to delete you account, your delete token is expired</h5>
+</div>
+<div class="modal-footer delete-account-options">
+    <button class="btn btn-danger" *ngIf="deleteAccountStatus == 'PENDING'" (click)="deleteAccount()">✓ Ok ✓</button>
+    <button class="btn btn-success" *ngIf="deleteAccountStatus == 'PENDING'" (click)="closeModal()">✘ Cancel ✘</button>
+
+    <button class="myButton" *ngIf="deleteAccountStatus == 'ERROR' || deleteAccountStatus=='DONE'" (click)="closeModal()">✓ Ok ✓</button>
+</div>

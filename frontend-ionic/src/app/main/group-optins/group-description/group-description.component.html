@@ -1,0 +1,5 @@
+<div class="group-options-stats" style="align-self: center">
+  <h3 class="group-desc">{{currentGroup().description}}- &nbsp;&nbsp;&nbsp;&nbsp;</h3>
+  <h3 *ngIf="!groupState.isGroupInPayingState()">Total {{deductFromFee(currentGroup().money)}}{{auth.getCurrency().symbol}} &nbsp;&nbsp;Total/Member ~ {{groupState.calculateTotalMoneyPerMember()}}{{auth.getCurrency().symbol}}</h3>
+  <h3 *ngIf="groupState.isGroupInPayingState()">Paying in progress...</h3>
+</div>

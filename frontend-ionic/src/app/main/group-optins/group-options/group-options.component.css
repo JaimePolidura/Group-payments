@@ -1,0 +1,14 @@
+.group-options-options {
+  margin-right: 6%;
+}
+
+.group-option-button {
+  background-color: transparent;
+  background-repeat: no-repeat;
+  border: none;
+  outline: none;
+}
+
+.dropdown ul li {
+  cursor: pointer;
+}

@@ -1,0 +1,16 @@
+.group-options-stats {
+  display: flex;
+  width: 100%;
+  margin-top: 5%;
+  margin-left: 2.5%;
+}
+
+@media screen and (max-width: 900px) {
+  .group-desc{
+    display: none;
+  }
+
+  h3{
+    font-size: 17px;
+  }
+}

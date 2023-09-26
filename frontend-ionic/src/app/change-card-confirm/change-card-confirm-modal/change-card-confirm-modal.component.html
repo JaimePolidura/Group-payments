@@ -1,0 +1,19 @@
+<div class="modal-header">
+  <h2 style="text-align: center" *ngIf="($state | async) == 'LOADING'">Loading...</h2>
+  <h2 style="text-align: center" *ngIf="($state | async) == 'ERROR'">Error</h2>
+  <h2 style="text-align: center" *ngIf="($state | async) == 'DONE'">Done</h2>
+</div>
+<div class="modal-body modal-body-centered">
+  <h5 style="text-align: center" *ngIf="($state | async) == 'LOADING'">This may take some seconds</h5>
+  <h5 style="text-align: center" *ngIf="($state | async) == 'DONE'">Your card has been changed successfuly. You will need to enter some additional data. Please login again</h5>
+  <h5 style="text-align: center" *ngIf="($state | async) == 'ERROR'">Some error occurred. The token may have expired</h5>
+</div>
+<div class="modal-footer">
+  <button style="text-align: center" *ngIf="($state | async) == 'LOADING'" class="myButton width60 myDisabled disabled">
+    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    Ok
+  </button>
+
+  <button style="text-align: center" *ngIf="($state | async) == 'DONE'" class="myButton width60" (click)="gotToHomePage()">Ok</button>
+  <button style="text-align: center" *ngIf="($state | async) == 'ERROR'" class="myButton width60" (click)="gotToHomePage()">Ok</button>
+</div>

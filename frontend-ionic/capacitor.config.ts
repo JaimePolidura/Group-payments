@@ -1,0 +1,20 @@
+import { CapacitorConfig } from '@capacitor/cli';
+
+const config: CapacitorConfig = {
+  appId: 'io.ionic.starter',
+  appName: 'frontend-ionic',
+  webDir: 'www',
+  bundledWebRuntime: false,
+  plugins: {
+    PushNotifications: {
+      presentationOptions: ["badge", "sound", "alert"]
+    },
+    GoogleAuth: {
+      scopes: ['profile', 'email'],
+      serverClientId: '135501655442-hmcu2927osmh0p6ahr18poeeacf4eu0v.apps.googleusercontent.com',
+      forceCodeForRefreshToken: true,
+    },
+  },
+};
+
+export default config;

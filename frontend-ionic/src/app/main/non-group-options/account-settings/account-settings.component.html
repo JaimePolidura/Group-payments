@@ -1,0 +1,51 @@
+<form action="" [formGroup]="editAccountForm" (ngSubmit)="editAccountForm.valid && editAccount()">
+<div class="edit-account-container">
+  <input type="file"
+         style="display: none"
+         (change)="onNewUserPhotoSelected($event)"
+         #changeUserPhotoInput />
+
+  <div class="user-profile">
+    <app-user-image [userImageId]="this.authCache.getUserImageId()"
+                    class="app-user-image"
+                    [width]="'25%'"
+                    [height]="'30%'"
+                    [otherStyles]="{margin: 'auto', display: 'block'}"
+                    (click)="changeUserPhotoInput.click()">
+    </app-user-image>
+
+    <h5 style="text-align: center" *ngIf="!(username.errors && (username.touched || username.dirty))">{{username.value}}</h5>
+    <h5 style="text-align: center" *ngIf="username.errors && (username.touched || username.dirty)">{{authCache.getUsername()}}</h5>
+  </div>
+  <br>
+  <input type="text"
+         class="form-control my-0"
+         autocomplete="off"
+         formControlName="username"
+         [ngClass]="{'is-invalid': username.errors && (username.touched || username.dirty)}" />
+  <br>
+  <select class="form-select" formControlName="currency" (change)="onCurrencyChanged($event)">
+    <option *ngFor="let currency of allCurrcies" value="{{currency.code}}">{{currency.code}}</option>
+  </select>
+  <br>
+  <select id="country-select" class="form-select" formControlName="country">
+    <option *ngFor="let country of getUsingCurrencyCountries(allCurrcies)" value="{{country}}">{{country}}</option>
+  </select>
+
+  <br>
+  <button class="btn btn-primary" (click)="changeCard()">Change card</button>
+  <br>
+  <button class="btn btn-danger" (click)="deleteAccount()">☓ Delete account ☓</button>
+  <br>
+</div>
+
+<div class="save-account-changes-container">
+  <button class="btn btn-success"
+          type="submit"
+          [ngClass]="{'myDisabled disabled': !editAccountForm.valid}">
+    ✓ Save ✓</button>
+  <button class="btn btn-danger"
+          (click)="cancel()">
+    ☓ Cancel ☓</button>
+</div>
+</form>

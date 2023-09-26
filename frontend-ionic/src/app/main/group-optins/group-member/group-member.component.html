@@ -1,0 +1,15 @@
+<div @slidelefttoright class="row align-items-center top-buffer">
+  <div class="col-1">
+    <button class="btn btn-danger"
+            [ngClass]="{'myDisabled disabled': !isLoggedUserAdminOfCurrentGroup() || isAdmin() || groupState.isGroupInPayingState()}"
+            (click)="kickGroupMember()">
+      x</button>
+  </div>
+  <div class="col-1"></div>
+  <div class="col-2 justify-content-center">
+    <app-user-image [height]="'80%'" [width]="'100%'" [userImageId]="groupMember.userImageId"></app-user-image>
+  </div>
+  <div class="col-7">
+    <h6 [ngClass]="{'red' : isAdmin()}">{{groupMember.username}}</h6>
+  </div>
+</div>

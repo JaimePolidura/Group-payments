@@ -1,0 +1,12 @@
+<div class="myContainer div-config-dif-background">
+  <h1 style="text-align: center">Login</h1>
+  <hr><br>
+  <button class="btn btn-danger btn-lg btn-block"
+          [ngClass]="{'disabled': isLoginButtonsClicked}"
+          (click)="signInWithGoogle()">
+    <span *ngIf="isLoginButtonsClicked" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    &nbsp;
+    <i class="fab fa-google"></i>
+    Enter with google
+  </button>
+</div>

@@ -1,0 +1,25 @@
+package es.grouppayments.backend._shared.infrastructure.eventstreaming.sse;
+
+import es.grouppayments.backend._shared.domain.events.GroupEvent;
+import es.grouppayments.backend.notifications.online.domain.OnlineNotificationDispatcher;
+import lombok.AllArgsConstructor;
+import org.json.JSONObject;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Service;
+
+@Service
+@AllArgsConstructor
+@ConditionalOnProperty(value = "eventsclientdispatcher.method", havingValue = "sse")
+public class SseEventDispatcher implements GroupEventClientDispatcher {
+    private final SseSubscribersRegistry subscribersRegistry;
+
+    @Override
+    public void send(GroupDomainEvent event) {
+        subscribersRegistry.sendToGroup(event.getGroupId(), toJSON(event));
+    }
+
+    private String toJSON(GroupDomainEvent event){
+        return (new JSONObject(event.toPrimitives()))
+                .toString();
+    }
+}

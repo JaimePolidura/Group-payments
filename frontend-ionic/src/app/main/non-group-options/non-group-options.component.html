@@ -1,0 +1,24 @@
+<div class="myContainer div-config-dif-background">
+  <h4 style="text-align: center">Welcome {{authCache.getUsername()}}</h4>
+  <br>
+
+  <div class="options">
+    <button class="btn btn-primary" (click)="openJoinGroupModal()" *ngIf="invitationState.size() > 0">
+      Join
+      <span *ngIf="invitationState.size() > 0">
+        <span *ngIf="invitationState.size() == 1">{{invitationState.size()}} pending invitation</span>
+        <span *ngIf="invitationState.size() > 1">{{invitationState.size()}} pending invitations</span>
+      </span>
+    </button>
+    <br>
+    <button class="btn btn-primary" (click)="openCreateGroupModal()">Create</button>
+    <br>
+    <button class="btn btn-primary" (click)="openMakeTransferModal()">Transfer</button>
+    <br>
+    <button class="btn btn-primary" (click)="goToPaymentHistory()">Payment history</button>
+    <br>
+    <button class="btn btn-primary" (click)="goToAccountSettings()">Account settings</button>
+    <br>
+    <button class="btn btn-danger" (click)="logout()">Log out</button>
+  </div>
+</div>

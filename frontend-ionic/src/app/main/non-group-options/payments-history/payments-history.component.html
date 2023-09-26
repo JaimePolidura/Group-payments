@@ -1,0 +1,63 @@
+<div class="paymenthistory-container">
+  <div class="paymenthistory-options">
+    <select class="form-select" (change)="onPaymentSearchTypeChanged($event)">
+      <option value="ALL">All</option>
+      <option value="GROUP_PAYMENT">Group</option>
+      <option value="TRANSFERENCE">Transference</option>
+    </select>
+  </div>
+
+  <div class="paymenthistory-separator">
+    <hr>
+  </div>
+
+  <div class="paymenthistory-payments">
+    <table>
+      <thead>
+        <tr class="paymenthistory-payments-table-head">
+          <th>Date</th>
+          <th>Money</th>
+          <th>State</th>
+          <th>Info</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let payment of paymentsPages[actualPage]" class="paymenthistory-payments-table-body" (click)="openModalPaymentInfo(payment)">
+          <td [ngClass]="{'gray': payment.state == 'ERROR'}">{{payment.date.split("T")[0]}}</td>
+          <td>
+            <div *ngIf="isPaid(payment)" class="green" [ngClass]="{'gray': payment.state == 'ERROR'}">
+               +{{roundNumber(payment.money)}}{{auth.getCurrency().symbol}}
+            </div>
+            <div *ngIf="isPayer(payment)" class="red" [ngClass]="{'gray': payment.state == 'ERROR'}">
+               -{{roundNumber(payment.money)}}{{auth.getCurrency().symbol}}
+            </div>
+          </td>
+          <td>
+            <div *ngIf="payment.state == 'SUCCESS'" class="green">Success</div>
+            <div *ngIf="payment.state == 'ERROR'" class="red">Error</div>
+          </td>
+          <td><i class="fa-solid fa-circle-info f2-2x"></i></td>
+        </tr>
+      </tbody>
+    </table>
+    <hr>
+    <div class="paymenthistory-payments-pageoptions">
+      <button class="paymenthistory-payments-pageoptions-button"
+              matRipple
+              [matRippleCentered]="true"
+              [matRippleDisabled]="!this.canGoBackwardInPage()"
+              [matRippleUnbounded]="false">
+        <i class="fa-solid fa-less-than" [ngClass]="{'gray': !this.canGoBackwardInPage()}" (click)="goBackwardInPage()"></i>
+      </button>
+
+      <button class="paymenthistory-payments-pageoptions-button"
+              matRipple
+              [matRippleCentered]="true"
+              [matRippleDisabled]="!this.canGoForwardInPage()"
+              [matRippleUnbounded]="false">
+        <i class="fa-solid fa-greater-than" [ngClass]="{'gray': !this.canGoForwardInPage()}" (click)="goForwardInPage()"></i>
+      </button>
+    </div>
+  </div>
+</div>

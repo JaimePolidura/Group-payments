@@ -1,0 +1,53 @@
+<form action="" [formGroup]="registerForm" (ngSubmit)="registerForm.valid && registerCarDetails()">
+<div class="myContainer div-config-dif-background">
+  <h1 *ngIf="!(httpLoader.isLoading | async)" style="text-align: center">Register</h1>
+  <h1 *ngIf="httpLoader.isLoading | async" style="text-align: center">Loading...</h1>
+  <hr>
+
+  <div *ngIf="httpLoader.isLoading | async">
+    <p style="text-align: center">This may take some seconds</p>
+    <br>
+  </div>
+
+  <span style="font-size: small">Date of birthday</span>
+  <div class="dob-inputs">
+    <input type="number"
+           #dobYearInput
+           formControlName="year"
+           placeholder="Year"
+           (keyup)="onDobYearKeyup()"
+           class="form-control my-0"
+           [ngClass]="{'is-invalid': year.errors && (year.touched || year.dirty)}">
+    <input type="number"
+           #dobMonthInput
+           formControlName="month"
+           (keyup)="onDobMonthKeyup()"
+           (keyup.backspace)="onDobMonthKeyupBackspace()"
+           placeholder="Month"
+           class="form-control my-0"
+           [ngClass]="{'is-invalid': month.errors && (month.touched || month.dirty)}">
+    <input type="number"
+           formControlName="day"
+           #dobDayInput
+           (keyup.backspace)="onDobDayKeyupBackspace()"
+           placeholder="Day"
+           class="form-control my-0"
+           [ngClass]="{'is-invalid': day.errors && (day.touched || day.dirty)}">
+  </div>
+
+  <br>
+
+  <div id="card-element" class="field"></div>
+
+  <br><hr>
+
+  <div class="options">
+      <button
+          type="submit"
+          class="btn btn-primary option"
+          [ngClass]="{'disabled cursorLoading': (this.httpLoader.isLoading | async) || !registerForm.valid}">
+        Continue
+      </button>
+  </div>
+</div>
+</form>

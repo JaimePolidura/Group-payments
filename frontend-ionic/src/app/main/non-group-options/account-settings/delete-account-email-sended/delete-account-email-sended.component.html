@@ -1,0 +1,15 @@
+<div class="modal-header">
+  <h2 style="text-align: center">An email has been sended</h2>
+  <button class="btn-close" type="button" (click)="closeModal()"></button>
+</div>
+<div class="modal-body">
+  <h6>An email has been sended to your account to confirm the deletion of your account. Check the spam emails if you dont see it</h6>
+  <br>
+  <button class="btn btn-primary" (click)="resnedEmail()">
+    Resend
+  </button>
+  <br>
+</div>
+<div class="modal-footer">
+  <button routerLink="main" class="myButton myButton-footer" (click)="closeModal()">Ok</button>
+</div>

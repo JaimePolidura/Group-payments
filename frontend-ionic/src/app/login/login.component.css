@@ -1,0 +1,14 @@
+.card-body {
+  display: flex;
+  justify-content: center;
+}
+
+.card-body button{
+  width: 90%;
+}
+
+@media screen and (max-width: 900px){
+  .myContainer {
+    width: 90%;
+  }
+}

@@ -1,0 +1,37 @@
+.search-results {
+  overflow: hidden;
+  position: absolute;
+  z-index: 1000;
+  background: white;
+  padding: 0;
+  width: 92.5%;
+}
+.search-results ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.search-result-data {
+  margin-left: 1.5%;
+}
+
+.search-results ul li {
+  display: flex;
+  align-items: center;
+  font-weight: 400;
+  padding: .5rem;
+  border-bottom: solid 2px #f1f1f1;
+  border-right: solid 2px #f1f1f1;
+  border-left: solid 2px #f1f1f1;
+}
+
+.search-results ul li .name {
+  padding: .35rem;
+  transition: all ease 150ms;
+}
+
+.search-results ul li img {
+  width: 30px;
+}

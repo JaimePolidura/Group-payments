@@ -1,0 +1,38 @@
+.edit-account-container {
+  margin-top: 3%;
+  margin-left: 2%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.edit-account-container > * {
+  width: 90%;
+  margin: auto;
+}
+
+.app-user-image:hover{
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.user-profile app-user-image {
+  display: block;
+  margin: auto;
+}
+
+.save-account-changes-container {
+  position: fixed;
+  top: 92.5%;
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.save-account-changes-container button {
+  width: 40%;
+  height: 100%;
+}

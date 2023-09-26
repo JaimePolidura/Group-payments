@@ -1,0 +1,29 @@
+package es.grouppayments.backend.payments.onpaymentdone;
+
+import GroupPaymentDone;
+import es.grouppayments.backend.payments.paymentshistory._shared.domain.Payment;
+import org.junit.Test;
+
+import java.util.List;
+import java.util.UUID;
+
+
+public class OnPaymentDoneTest extends OnPaymentDoneMother {
+    @Test
+    public void shouldSaveTransaction(){
+        UUID user1 = UUID.randomUUID();
+        UUID user2 = UUID.randomUUID();
+        UUID userAdmin = UUID.randomUUID();
+
+        execute(new PaymentDone(UUID.randomUUID() ,List.of(user1, user2), userAdmin, "payment", 10));
+
+        //It will get all transactions
+        List<Payment> transactions = paymentRepository().findByUserIdPaid(userAdmin);
+
+        assertCollectionSize(transactions, 2);
+        assertContentListMatches(transactions, transaction -> transaction.getDescription().equalsIgnoreCase("payment"));
+        assertContentListMatches(transactions, transaction -> transaction.getMoney() == 10);
+
+        assertEmptyCollection(paymentRepository().findByUserIdPaid(user1));
+    }
+}

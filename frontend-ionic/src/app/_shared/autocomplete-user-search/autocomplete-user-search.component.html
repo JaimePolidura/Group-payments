@@ -1,0 +1,10 @@
+<div class="search-results">
+  <ul>
+    <li *ngFor="let user of searchResults" class="name" (click)="onUserSelected(user)">
+      <div class="search-result-img">
+        <app-user-image [userImageId]="user.userImageId" [width]="'30px'"></app-user-image>
+      </div>
+      <div class="search-result-data">{{user.email}}</div>
+    </li>
+  </ul>
+</div>

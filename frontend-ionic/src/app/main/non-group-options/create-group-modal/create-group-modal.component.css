@@ -1,0 +1,24 @@
+.modal-footer button {
+  width: 90%;
+  margin: auto;
+}
+
+.invite-user-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+}
+
+.users-to-invite-list {
+  list-style: none;
+  margin-top: 2.5%;
+  margin-left: 5%;
+}
+
+.invite-user-container input[type="text"]{
+  box-shadow: none;
+}
+
+.invite-user-container > * {
+  border-radius: 0;
+}

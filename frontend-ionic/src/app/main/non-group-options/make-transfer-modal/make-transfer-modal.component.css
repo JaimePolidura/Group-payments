@@ -1,0 +1,17 @@
+.transfer-confirm-options {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.transfer-confirm-options button {
+  width: 40%;
+}
+
+.transfer-sucessicon-container {
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}

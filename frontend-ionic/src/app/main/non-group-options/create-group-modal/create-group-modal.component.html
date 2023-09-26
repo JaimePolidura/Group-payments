@@ -1,0 +1,49 @@
+<form action = "" [formGroup]="createGroupForm" (ngSubmit)="createGroupForm.valid && createGroup()">
+  <div class="modal-header">
+    <h2 style="text-align: center">Create group</h2>
+    <button class="btn-close" type="button" (click)="closeModal()"></button>
+  </div>
+
+  <div class="modal-body modal-body-centered">
+    <input type="number"
+           #createGroupMoneyInput
+           class="form-control my-0"
+           placeholder="money"
+           formControlName = "money"
+           [ngClass]="{'is-invalid': money.errors && (money.touched || money.dirty)}"><br>
+
+    <div class="invite-user-container">
+      <input type="text"
+             #createGroupUsersEmailToInviteInput
+             class="form-control my-0"
+             formControlName = "userEmailToInvite"
+             placeholder="Users email to invite">
+      <button class="btn btn-success"
+              [ngClass]="{'disabled': userEmailToInvite.value == ''}"
+              type="button"
+              (click)="userToInviteTyped(this.userEmailToInvite.value)">+</button>
+    </div>
+    <app-autocomplete-user-search (userSelected)="this.userToInviteTyped($event.email)"
+                                  (userFound)="this.userToInviteTyped($event.email)"
+                                  [$clear]="$clearSearchResults"
+                                  [inputText]="createGroupUsersEmailToInviteInput">
+    </app-autocomplete-user-search>
+    <div class="users-to-invite-list" *ngIf="usersEmailsToInvite.length > 0">
+      <div *ngFor="let userEmailToInvite of usersEmailsToInvite">{{userEmailToInvite}}</div>
+    </div>
+    <br>
+
+    <input type="text"
+           class="form-control my-0"
+           placeholder="title"
+           formControlName = "title"
+           [ngClass]="{'is-invalid': title.errors && (title.touched || title.dirty)}">
+  </div>
+
+  <div class="modal-footer">
+      <button type="submit"
+              class="btn btn-success"
+              [ngClass]="{'myDisabled disabled': !createGroupForm.valid}"
+      >Create</button>
+  </div>
+</form>

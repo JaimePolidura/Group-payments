@@ -1,0 +1,40 @@
+<div class="modal-header">
+  <h2 style="text-align: center" *ngIf="paymentStatus == 'PENDING'">Group payment initialized</h2>
+  <h2 style="text-align: center" *ngIf="paymentStatus != 'PENDING'">Group payment done</h2>
+
+  <button class="btn-close" type="button" (click)="closeModal()"></button>
+</div>
+<div class="modal-body modal-body-centered">
+  <p *ngIf="paymentStatus == 'PENDING'">Group payment has been initalized, dont close the app yet, you are likely going to autorize the payment.</p>
+  <p *ngIf="paymentStatus === 'DONE'">Group payment done, thanks for using our service!!</p>
+  <p *ngIf="paymentStatus === 'ERROR'">ERRO, thanks for using our service!!</p>
+  <br>
+  <div *ngFor="let log of logEventsGroupPayments">
+    <div *ngIf="log.error">
+      <h6 style="color: red">ERROR</h6>
+      <p style="color: red">{{log.body}}</p>
+      <br>
+    </div>
+    <div *ngIf="!log.error">
+      <p>{{log.body}}</p>
+    </div>
+  </div>
+  <div class="paymentinitialized-sucessicon-container">
+    <i style="color: green" *ngIf="paymentStatus == 'DONE'" class="fa-solid fa-circle-check fa-7x"></i>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button type="submit"
+          *ngIf="paymentStatus == 'PENDING'"
+          class="myButton myButton-footer myDisabled cursor-disabled"
+          (click)="closeModal()">
+    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    Paying...
+  </button>
+  <button type="submit"
+          *ngIf="paymentStatus == 'DONE' || paymentStatus == 'ERROR'"
+          class="myButton myButton-footer"
+          (click)="closeModal()">✓ Ok ✓
+  </button>
+</div>
